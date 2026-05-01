@@ -1,4 +1,4 @@
-import loaderLogo from '../assets/saturn.PNG';
+import loaderLogo from '../assets/Saturn.PNG';
 
 function PageLoader({ transitionStage, isInitialLoad }) {
   const isCovering = transitionStage === 'cover';
