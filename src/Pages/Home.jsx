@@ -5,9 +5,8 @@ import Footer from '../Components/Footer';
 import projectPreview4 from '../assets/project-preview-4.png';
 import projectPreview5 from '../assets/project-preview-5.png';
 
-import illust1 from '../assets/Illustrations/ILLUST1.MP4';
 import illust5 from '../assets/Illustrations/ILLUST5.jpeg';
-import px1 from '../assets/Illustrations/PX1.gif';
+import px1 from '../assets/Illustrations/COMS1.1.mp4';
 import px2 from '../assets/Illustrations/PX2.PNG';
 
 import gpx1 from '../assets/GPX/GPX1.png';
@@ -94,19 +93,14 @@ function Home() {
       filter: 'Illustrations',
       previewItems: [
         {
-          type: 'video',
-          src: illust1,
-          alt: 'Illust1 Preview',
-        },
-        {
           type: 'image',
           src: illust5,
           alt: 'Illust5 Preview',
         },
         {
-          type: 'image',
+          type: 'video',
           src: px1,
-          alt: 'Px1 Preview',
+          alt: 'COMS1.1 Preview',
         },
         {
           type: 'image',
@@ -117,7 +111,7 @@ function Home() {
     },
     {
       title: 'Personal GPX Designs',
-      targetProjectTitle: 'GPX1 - Personal Graphics Designs',
+      targetProjectTitle: 'GPX Design Projects',
       path: '/projects',
       filter: 'GPX Design',
       previewItems: [

@@ -105,13 +105,26 @@ function ExpandedMedia({ item, project, onClose, isDarkMode }) {
   const activeItem = isStackViewer ? stackItems[activeSlideIndex] : item;
   const isVideo = activeItem?.type === 'video';
 
-  const filteredTools = Array.isArray(project?.tools)
-    ? project.tools.filter(
-        (tool) => tool !== 'Visual Direction' && tool !== 'Layout Design'
-      )
-    : [];
+  const itemTools = Array.isArray(activeItem?.tools)
+    ? activeItem.tools
+    : Array.isArray(item?.tools)
+      ? item.tools
+      : Array.isArray(project?.tools)
+        ? project.tools
+        : [];
+
+  const filteredTools = itemTools.filter(
+    (tool) => tool !== 'Visual Direction' && tool !== 'Layout Design'
+  );
 
   const hasTools = filteredTools.length > 0;
+
+  const activeDescription =
+    activeItem?.details ||
+    item?.details ||
+    project?.details ||
+    project?.description ||
+    '';
 
   useEffect(() => {
     setActiveSlideIndex(item?.activeIndex || 0);
@@ -264,16 +277,6 @@ function ExpandedMedia({ item, project, onClose, isDarkMode }) {
                 >
                   ›
                 </button>
-
-                <div
-                  className={`absolute left-1/2 top-3 z-30 -translate-x-1/2 rounded-full px-3 py-2 text-[9px] font-black uppercase tracking-[0.18em] shadow-[0_4px_12px_rgba(0,0,0,0.2)] backdrop-blur-sm ${
-                    isDarkMode
-                      ? 'bg-black/85 text-white'
-                      : 'bg-[#d9d9d9]/90 text-black'
-                  }`}
-                >
-                  {activeSlideIndex + 1}/{stackItems.length}
-                </div>
               </>
             )}
 
@@ -351,10 +354,6 @@ function ExpandedMedia({ item, project, onClose, isDarkMode }) {
             }`}
           >
             <div>
-              <p className="mb-3 text-[10px] font-black uppercase tracking-[0.25em] text-[#FF0000]">
-                {isStackViewer ? item.label || 'Stacked Project' : 'Selected Work'}
-              </p>
-
               <h3 className="text-2xl font-black uppercase tracking-wide">
                 {activeItem.label || activeItem.alt}
               </h3>
@@ -370,7 +369,7 @@ function ExpandedMedia({ item, project, onClose, isDarkMode }) {
                   isDarkMode ? 'text-white/75' : 'text-black/75'
                 }`}
               >
-                {project.details || project.description}
+                {activeDescription}
               </p>
 
               {hasTools && (
@@ -614,6 +613,8 @@ function ProjectModal({ project, onClose }) {
     setExpandedMedia({
       type: 'stack-viewer',
       label: stackItem.label,
+      details: stackItem.details,
+      tools: stackItem.tools,
       items: stackItem.items,
       activeIndex,
     });

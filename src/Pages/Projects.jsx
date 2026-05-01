@@ -4,9 +4,7 @@ import { useLocation } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import ProjectModal from '../Components/ProjectModal';
 
-import illust1 from '../assets/Illustrations/ILLUST1.MP4';
 import illust2 from '../assets/Illustrations/ILLUST2.png';
-import illust3 from '../assets/Illustrations/ILLUST3.MP4';
 import illust4 from '../assets/Illustrations/ILLUST4.png';
 import illust5Jpeg from '../assets/Illustrations/ILLUST5.jpeg';
 import illust5Png from '../assets/Illustrations/ILLUST5.png';
@@ -209,45 +207,18 @@ function Projects() {
       },
       media: [
         {
-          type: 'stack',
-          label: 'Hanni from NewJeans',
+          type: 'image',
+          src: illust2,
+          alt: 'Digital Illustration Preview',
+          label: 'Digital Illustration',
           details:
-            'A color and style exploration inspired by Hanni from NewJeans. This piece challenged me to combine different visual elements while keeping the overall canvas cohesive.',
-          tools: ['Procreate'],
-          items: [
-            {
-              type: 'video',
-              src: illust1,
-              alt: 'Hanni from NewJeans Process',
-              label: 'Hanni from NewJeans',
-              details:
-                'A color and style exploration inspired by Hanni from NewJeans. This piece challenged me to combine different visual elements while keeping the overall canvas cohesive.',
-              tools: ['Procreate'],
-            },
-            {
-              type: 'image',
-              src: illust2,
-              alt: 'Digital Illustration Preview',
-              label: 'Digital Illustration',
-              details:
-                'A digital illustration study focused on character styling, color balance, and clean visual composition.',
-              tools: ['Procreate'],
-            },
-          ],
-        },
-        {
-          type: 'video',
-          src: illust3,
-          alt: 'Storytelling Illustration 1',
-          label: 'Storytelling Illustration',
-          details:
-            'An illustration study where I explored a storytelling style and tried to capture a specific mood through composition, pose, and visual atmosphere.',
+            'A digital illustration study focused on character styling, color balance, and clean visual composition.',
           tools: ['Procreate'],
         },
         {
           type: 'image',
           src: illust4,
-          alt: 'Storytelling Illustration 2',
+          alt: 'Storytelling Illustration',
           label: 'Storytelling Illustration',
           details:
             'An illustration study where I explored a storytelling style and tried to capture a specific mood through composition, pose, and visual atmosphere.',
@@ -300,7 +271,7 @@ function Projects() {
       },
       media: [
         {
-          type: 'image',
+          type: 'video',
           src: px1,
           alt: 'Pixel Art Animation Commission',
           label: 'Pixel Art Animation Commission',
