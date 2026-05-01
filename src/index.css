@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Neonderthaw&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Snell Roundhand';
+  src: url('./assets/SnellRoundhand.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+.font-neonderthaw {
+  font-family: 'Neonderthaw', cursive;
+}
+
+.font-snellroundhand {
+  font-family: 'Snell Roundhand', cursive;
+}
+
+/* Red laser pointer cursor */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none;
+  }
+
+  .custom-cursor-dot {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999999;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    border-radius: 9999px;
+    background: #ff0000;
+    opacity: 0;
+    transform: translate3d(50vw, 50vh, 0) translate(-50%, -50%);
+    box-shadow:
+      0 0 10px rgba(255, 0, 0, 0.95),
+      0 0 24px rgba(255, 0, 0, 0.45);
+    transition:
+      opacity 180ms ease,
+      width 180ms ease,
+      height 180ms ease,
+      box-shadow 180ms ease;
+    mix-blend-mode: normal;
+  }
+
+  .custom-cursor-dot-pressed {
+    width: 12px;
+    height: 12px;
+    box-shadow:
+      0 0 14px rgba(255, 0, 0, 1),
+      0 0 34px rgba(255, 0, 0, 0.65);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .custom-cursor-dot {
+    display: none;
+  }
+}
+
+/* Main animated background */
+.animated-bg {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #d9d9d9;
+
+  --cursor-x: 50%;
+  --cursor-y: 50%;
+  --cursor-follow-x: 50%;
+  --cursor-follow-y: 50%;
+}
+
+/* Base moving line grid */
+.animated-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -5;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.085) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.085) 1px, transparent 1px);
+  background-size: 36px 36px;
+  animation: gridDrift 24s linear infinite;
+  opacity: 0.75;
+}
+
+/* Moving dotted grid */
+.animated-bg::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: -4;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1.2px);
+  background-size: 18px 18px;
+  animation: dottedGridDrift 24s linear infinite;
+  opacity: 0.42;
+}
+
+/* Red grid highlight only on the grid lines */
+.animated-bg .red-grid-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(rgba(255, 0, 0, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.5) 1px, transparent 1px);
+
+  background-size: 36px 36px;
+  animation: gridDrift 24s linear infinite;
+
+  opacity: 0;
+
+  mask-image: radial-gradient(
+    circle 125px at var(--cursor-follow-x) var(--cursor-follow-y),
+    black 0%,
+    black 18%,
+    rgba(0, 0, 0, 0.45) 40%,
+    rgba(0, 0, 0, 0.16) 62%,
+    transparent 78%
+  );
+
+  -webkit-mask-image: radial-gradient(
+    circle 125px at var(--cursor-follow-x) var(--cursor-follow-y),
+    black 0%,
+    black 18%,
+    rgba(0, 0, 0, 0.45) 40%,
+    rgba(0, 0, 0, 0.16) 62%,
+    transparent 78%
+  );
+
+  transition:
+    opacity 0.25s ease,
+    mask-image 0.16s linear,
+    -webkit-mask-image 0.16s linear;
+}
+
+.animated-bg.is-hovered .red-grid-highlight {
+  opacity: 0.65;
+}
+
+/* Soft edge depth */
+.animated-bg .bg-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at center,
+      transparent 0%,
+      transparent 58%,
+      rgba(0, 0, 0, 0.08) 100%
+    );
+}
+
+@keyframes gridDrift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+
+  100% {
+    background-position: 36px 36px, 36px 36px;
+  }
+}
+
+@keyframes dottedGridDrift {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 18px 18px;
+  }
+}
+
+@keyframes loaderNeedle {
+  0% {
+    transform: translate(-50%, -100%) rotate(-35deg);
+  }
+
+  50% {
+    transform: translate(-50%, -100%) rotate(35deg);
+  }
+
+  100% {
+    transform: translate(-50%, -100%) rotate(-35deg);
+  }
+}
+
+/* Custom Scrollbar */
+
+/* Firefox fallback */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #ef4444 transparent;
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #000 0px,
+    #000 3px,
+    transparent 3px,
+    transparent 9px
+  );
+  background-size: 2px 9px;
+  background-repeat: repeat-y;
+  background-position: center;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ef4444;
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #dc2626;
+}
