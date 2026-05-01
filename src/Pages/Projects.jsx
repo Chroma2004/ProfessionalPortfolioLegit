@@ -12,7 +12,7 @@ import illust5Jpeg from '../assets/Illustrations/ILLUST5.jpeg';
 import illust5Png from '../assets/Illustrations/ILLUST5.png';
 import illust6 from '../assets/Illustrations/ILLUST6.png';
 
-import px1 from '../assets/Illustrations/PX1.gif';
+import px1 from '../assets/Illustrations/COMS1.1.mp4';
 import px2 from '../assets/Illustrations/PX2.PNG';
 import px3 from '../assets/Illustrations/PX3.PNG';
 import px31 from '../assets/Illustrations/PX3.1.PNG';
