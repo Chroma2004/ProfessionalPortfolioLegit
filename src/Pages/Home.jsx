@@ -15,7 +15,7 @@ import gpx3 from '../assets/GPX/GPX3.png';
 import gpx4 from '../assets/GPX/GPX4.png';
 import gpx5 from '../assets/GPX/GPX5.png';
 
-import trackEdPreview from '../assets/System/TrackEd.PNG';
+import trackEdPreview from '../assets/System/TrackEd.png';
 
 function Home() {
   const [animatingProject, setAnimatingProject] = useState(null);
