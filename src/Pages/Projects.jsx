@@ -38,8 +38,8 @@ import gpx10 from '../assets/GPX/GPX10.png';
 import gpx11 from '../assets/GPX/GPX11.jpg';
 
 import internPortfolioPreview from '../assets/System/InternPortfolio.png';
-import trackEdPreview from '../assets/System/TrackEd.PNG';
-import ctrlAltDelightPreview from '../assets/System/Ctrl+Alt+Delight.PNG';
+import trackEdPreview from '../assets/System/TrackEd.png';
+import ctrlAltDelightPreview from '../assets/System/Ctrl+Alt+Delight.png';
 
 function Projects() {
   const location = useLocation();
