@@ -8,7 +8,7 @@ import figmaIcon from '../assets/Figma.svg';
 import htmlIcon from '../assets/HTML.svg';
 import procreateIcon from '../assets/Procreate.png';
 import reactIcon from '../assets/react.svg';
-import saturnImage from '../assets/saturn.PNG';
+import saturnImage from '../assets/Saturn.PNG';
 import tailwindIcon from '../assets/TailwindCSS.svg';
 import videoIcon from '../assets/Video.svg';
 import vsCodeIcon from '../assets/VSCode.svg';
