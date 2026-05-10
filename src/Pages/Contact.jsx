@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Footer from '../Components/Footer';
 import ResumePreviewModal from '../Components/ResumePreviewModal';
 
@@ -19,6 +19,8 @@ function Contact() {
   const [isSocialOnDark, setIsSocialOnDark] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
   const [isDesktopMotion, setIsDesktopMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window === 'undefined') return false;
 
@@ -47,86 +49,95 @@ function Contact() {
 
   const emailLink = `mailto:${email}?subject=Portfolio Inquiry&body=Hi Michael,%0D%0A%0D%0AI saw your portfolio and would like to connect with you.%0D%0A%0D%0A`;
 
-  const softwareIcons = [
-    {
-      label: 'Adobe Illustrator',
-      icon: adobeIllustratorIcon,
-    },
-    {
-      label: 'Adobe Photoshop',
-      icon: adobePhotoshopIcon,
-    },
-    {
-      label: 'Canva',
-      icon: canvaIcon,
-    },
-    {
-      label: 'Figma',
-      icon: figmaIcon,
-    },
-    {
-      label: 'Procreate',
-      icon: procreateIcon,
-    },
-    {
-      label: 'Video Editing',
-      icon: videoIcon,
-    },
-    {
-      label: 'VS Code',
-      icon: vsCodeIcon,
-    },
-  ];
+  const softwareIcons = useMemo(
+    () => [
+      {
+        label: 'Adobe Illustrator',
+        icon: adobeIllustratorIcon,
+      },
+      {
+        label: 'Adobe Photoshop',
+        icon: adobePhotoshopIcon,
+      },
+      {
+        label: 'Canva',
+        icon: canvaIcon,
+      },
+      {
+        label: 'Figma',
+        icon: figmaIcon,
+      },
+      {
+        label: 'Procreate',
+        icon: procreateIcon,
+      },
+      {
+        label: 'Video Editing',
+        icon: videoIcon,
+      },
+      {
+        label: 'VS Code',
+        icon: vsCodeIcon,
+      },
+    ],
+    []
+  );
 
-  const socialLinks = [
-    {
-      label: 'Facebook',
-      href: 'https://www.facebook.com/MchaelRh',
-      rotate: 'group-hover:rotate-[-6deg]',
-      path: 'M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06Z',
-    },
-    {
-      label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/michael-gonzales-ba65a2361/',
-      rotate: 'group-hover:rotate-[6deg]',
-      path: 'M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0Z',
-    },
-    {
-      label: 'Instagram',
-      href: 'https://www.instagram.com/chromaa.png/',
-      rotate: 'group-hover:rotate-[-6deg]',
-      path: 'M7.75 2h8.5A5.76 5.76 0 0 1 22 7.75v8.5A5.76 5.76 0 0 1 16.25 22h-8.5A5.76 5.76 0 0 1 2 16.25v-8.5A5.76 5.76 0 0 1 7.75 2Zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.25-2.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z',
-    },
-    {
-      label: 'Email',
-      href: emailLink,
-      rotate: 'group-hover:rotate-[8deg]',
-      path: 'M21.86 3.45C22.1 2.75 21.42 2.08 20.72 2.33L2.95 8.58C2.16 8.86 2.08 9.94 2.83 10.33L8.53 13.26L17.38 6.66C17.67 6.45 18.04 6.82 17.82 7.1L11.13 15.9L14.2 21.22C14.61 21.94 15.68 21.83 15.96 21.05L21.86 3.45Z',
-    },
-  ];
+  const socialLinks = useMemo(
+    () => [
+      {
+        label: 'Facebook',
+        href: 'https://www.facebook.com/MchaelRh',
+        rotate: 'group-hover:rotate-[-6deg]',
+        path: 'M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06Z',
+      },
+      {
+        label: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/michael-gonzales-ba65a2361/',
+        rotate: 'group-hover:rotate-[6deg]',
+        path: 'M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0Z',
+      },
+      {
+        label: 'Instagram',
+        href: 'https://www.instagram.com/chromaa.png/',
+        rotate: 'group-hover:rotate-[-6deg]',
+        path: 'M7.75 2h8.5A5.76 5.76 0 0 1 22 7.75v8.5A5.76 5.76 0 0 1 16.25 22h-8.5A5.76 5.76 0 0 1 2 16.25v-8.5A5.76 5.76 0 0 1 7.75 2Zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.25-2.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z',
+      },
+      {
+        label: 'Email',
+        href: emailLink,
+        rotate: 'group-hover:rotate-[8deg]',
+        path: 'M21.86 3.45C22.1 2.75 21.42 2.08 20.72 2.33L2.95 8.58C2.16 8.86 2.08 9.94 2.83 10.33L8.53 13.26L17.38 6.66C17.67 6.45 18.04 6.82 17.82 7.1L11.13 15.9L14.2 21.22C14.61 21.94 15.68 21.83 15.96 21.05L21.86 3.45Z',
+      },
+    ],
+    [emailLink]
+  );
 
-  const backCardLinks = [
-    {
-      label: 'Email',
-      href: emailLink,
-      path: 'M21.86 3.45C22.1 2.75 21.42 2.08 20.72 2.33L2.95 8.58C2.16 8.86 2.08 9.94 2.83 10.33L8.53 13.26L17.38 6.66C17.67 6.45 18.04 6.82 17.82 7.1L11.13 15.9L14.2 21.22C14.61 21.94 15.68 21.83 15.96 21.05L21.86 3.45Z',
-    },
-    {
-      label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/michael-gonzales-ba65a2361/',
-      path: 'M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0Z',
-    },
-    {
-      label: 'Facebook',
-      href: 'https://www.facebook.com/MchaelRh',
-      path: 'M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06Z',
-    },
-    {
-      label: 'Instagram',
-      href: 'https://www.instagram.com/chromaa.png/',
-      path: 'M7.75 2h8.5A5.76 5.76 0 0 1 22 7.75v8.5A5.76 5.76 0 0 1 16.25 22h-8.5A5.76 5.76 0 0 1 2 16.25v-8.5A5.76 5.76 0 0 1 7.75 2Zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.25-2.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z',
-    },
-  ];
+  const backCardLinks = useMemo(
+    () => [
+      {
+        label: 'Email',
+        href: emailLink,
+        path: 'M21.86 3.45C22.1 2.75 21.42 2.08 20.72 2.33L2.95 8.58C2.16 8.86 2.08 9.94 2.83 10.33L8.53 13.26L17.38 6.66C17.67 6.45 18.04 6.82 17.82 7.1L11.13 15.9L14.2 21.22C14.61 21.94 15.68 21.83 15.96 21.05L21.86 3.45Z',
+      },
+      {
+        label: 'LinkedIn',
+        href: 'https://www.linkedin.com/in/michael-gonzales-ba65a2361/',
+        path: 'M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.21 0 22.23 0Z',
+      },
+      {
+        label: 'Facebook',
+        href: 'https://www.facebook.com/MchaelRh',
+        path: 'M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.23.2 2.23.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06Z',
+      },
+      {
+        label: 'Instagram',
+        href: 'https://www.instagram.com/chromaa.png/',
+        path: 'M7.75 2h8.5A5.76 5.76 0 0 1 22 7.75v8.5A5.76 5.76 0 0 1 16.25 22h-8.5A5.76 5.76 0 0 1 2 16.25v-8.5A5.76 5.76 0 0 1 7.75 2Zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5A3.75 3.75 0 0 0 20 16.25v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.25-2.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z',
+      },
+    ],
+    [emailLink]
+  );
 
   useEffect(() => {
     const syncTheme = () => {
@@ -145,16 +156,36 @@ function Contact() {
   }, []);
 
   useEffect(() => {
+    const reducedMotionQuery = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
+    const updateReducedMotion = () => {
+      setPrefersReducedMotion(reducedMotionQuery.matches);
+    };
+
+    updateReducedMotion();
+
+    reducedMotionQuery.addEventListener('change', updateReducedMotion);
+
+    return () => {
+      reducedMotionQuery.removeEventListener('change', updateReducedMotion);
+    };
+  }, []);
+
+  useEffect(() => {
+    const desktopMotionQuery = window.matchMedia('(min-width: 768px)');
+
     const handleMotionMode = () => {
-      setIsDesktopMotion(window.matchMedia('(min-width: 768px)').matches);
+      setIsDesktopMotion(desktopMotionQuery.matches);
     };
 
     handleMotionMode();
 
-    window.addEventListener('resize', handleMotionMode);
+    desktopMotionQuery.addEventListener('change', handleMotionMode);
 
     return () => {
-      window.removeEventListener('resize', handleMotionMode);
+      desktopMotionQuery.removeEventListener('change', handleMotionMode);
     };
   }, []);
 
@@ -179,7 +210,7 @@ function Contact() {
     pageElement.style.setProperty('--contact-cursor-x', `${centerX}px`);
     pageElement.style.setProperty('--contact-cursor-y', `${centerY}px`);
 
-    if (!isDesktopMotion) return undefined;
+    if (!isDesktopMotion || prefersReducedMotion) return undefined;
 
     const handleMouseMove = (event) => {
       cursorGridTargetRef.current = {
@@ -190,13 +221,13 @@ function Contact() {
 
     const animateCursorGrid = () => {
       cursorGridCurrentRef.current.x +=
-        (cursorGridTargetRef.current.x - cursorGridCurrentRef.current.x) * 0.055;
+        (cursorGridTargetRef.current.x - cursorGridCurrentRef.current.x) * 0.06;
       cursorGridCurrentRef.current.y +=
-        (cursorGridTargetRef.current.y - cursorGridCurrentRef.current.y) * 0.055;
+        (cursorGridTargetRef.current.y - cursorGridCurrentRef.current.y) * 0.06;
 
       cursorGridFrameRef.current += 1;
 
-      if (cursorGridFrameRef.current % 3 === 0) {
+      if (cursorGridFrameRef.current % 4 === 0) {
         pageElement.style.setProperty(
           '--contact-cursor-x',
           `${cursorGridCurrentRef.current.x}px`
@@ -216,9 +247,12 @@ function Contact() {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(cursorGridAnimationRef.current);
+
+      if (cursorGridAnimationRef.current) {
+        cancelAnimationFrame(cursorGridAnimationRef.current);
+      }
     };
-  }, [isDesktopMotion]);
+  }, [isDesktopMotion, prefersReducedMotion]);
 
   useEffect(() => {
     const calculateScrollState = () => {
@@ -297,6 +331,18 @@ function Contact() {
     };
   }, [isResumeOpen]);
 
+  useEffect(() => {
+    return () => {
+      if (cursorGridAnimationRef.current) {
+        cancelAnimationFrame(cursorGridAnimationRef.current);
+      }
+
+      if (scrollFrameRef.current) {
+        cancelAnimationFrame(scrollFrameRef.current);
+      }
+    };
+  }, []);
+
   const handleCardFlip = () => {
     setIsCardFlipped((currentState) => !currentState);
   };
@@ -313,11 +359,11 @@ function Contact() {
   const handleFloatingArrowClick = () => {
     window.scrollTo({
       top: isAtBottom ? 0 : document.documentElement.scrollHeight,
-      behavior: 'smooth',
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
     });
   };
 
-  const socialIconClass = `group flex h-8 w-8 items-center justify-center rounded-full transition-[color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:text-[#FF0000] sm:h-10 sm:w-10 sm:hover:-translate-x-1 sm:hover:translate-y-0 lg:h-auto lg:w-auto ${
+  const socialIconClass = `group flex h-8 w-8 items-center justify-center rounded-full transition-[color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:text-[#FF0000] sm:h-10 sm:w-10 sm:hover:-translate-x-1 sm:hover:translate-y-0 lg:h-auto lg:w-auto ${
     isSocialOnDark
       ? 'text-[#FF0000]'
       : isDarkMode
@@ -333,17 +379,17 @@ function Contact() {
       }`}
     >
       <div
-        className={`pointer-events-none fixed inset-0 z-0 animate-[contactGridDrift_46s_linear_infinite] ${
+        className={`pointer-events-none fixed inset-0 z-0 sm:animate-[contactGridDrift_46s_linear_infinite] motion-reduce:animate-none ${
           isDarkMode
-            ? 'bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)]'
-            : 'bg-[linear-gradient(rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)]'
-        } bg-[size:38px_38px]`}
+            ? 'bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)]'
+            : 'bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.035)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)]'
+        } bg-[size:34px_34px] sm:bg-[size:38px_38px]`}
       />
 
-      <div className="pointer-events-none fixed inset-0 z-[1] hidden animate-[contactGridDrift_46s_linear_infinite] bg-[linear-gradient(rgba(255,0,0,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,0,0.12)_1px,transparent_1px)] bg-[size:38px_38px] opacity-55 [mask-image:radial-gradient(circle_at_var(--contact-cursor-x,50%)_var(--contact-cursor-y,50%),black_0,black_44px,transparent_118px)] [-webkit-mask-image:radial-gradient(circle_at_var(--contact-cursor-x,50%)_var(--contact-cursor-y,50%),black_0,black_44px,transparent_118px)] md:block" />
+      <div className="pointer-events-none fixed inset-0 z-[1] hidden animate-[contactGridDrift_46s_linear_infinite] bg-[linear-gradient(rgba(255,0,0,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,0,0.12)_1px,transparent_1px)] bg-[size:38px_38px] opacity-55 [mask-image:radial-gradient(circle_at_var(--contact-cursor-x,50%)_var(--contact-cursor-y,50%),black_0,black_44px,transparent_118px)] [-webkit-mask-image:radial-gradient(circle_at_var(--contact-cursor-x,50%)_var(--contact-cursor-y,50%),black_0,black_44px,transparent_118px)] motion-reduce:hidden md:block" />
 
       <div
-        className={`pointer-events-none fixed inset-0 z-[2] ${
+        className={`pointer-events-none fixed inset-0 z-[2] hidden sm:block ${
           isDarkMode
             ? 'bg-[radial-gradient(circle,rgba(255,255,255,0.12)_1.1px,transparent_1.3px)] opacity-[0.14] md:opacity-[0.18]'
             : 'bg-[radial-gradient(circle,rgba(0,0,0,0.12)_1.1px,transparent_1.3px)] opacity-[0.13] md:opacity-[0.16]'
@@ -413,18 +459,18 @@ function Contact() {
             >
               <div className="[perspective:1200px]">
                 <div
-                  className={`relative min-h-[390px] w-full will-change-transform transition-transform duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] [transform-style:preserve-3d] sm:min-h-[620px] md:min-h-[500px] lg:min-h-[440px] ${
+                  className={`relative min-h-[390px] w-full transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] [transform-style:preserve-3d] motion-reduce:transition-none sm:min-h-[620px] md:min-h-[500px] md:will-change-transform lg:min-h-[440px] ${
                     isCardFlipped ? '[transform:rotateY(180deg)]' : ''
                   }`}
                 >
                   <div
-                    className={`absolute inset-0 overflow-hidden rounded-[1.35rem] border-2 border-dotted shadow-[0_18px_40px_rgba(0,0,0,0.16)] transition-colors duration-500 [backface-visibility:hidden] sm:rounded-[1.8rem] ${
+                    className={`absolute inset-0 overflow-hidden rounded-[1.35rem] border-2 border-dotted shadow-[0_18px_40px_rgba(0,0,0,0.14)] transition-colors duration-500 [backface-visibility:hidden] sm:rounded-[1.8rem] ${
                       isDarkMode
                         ? 'border-white bg-black text-white'
                         : 'border-black bg-[#f4f4f4] text-black'
                     }`}
                   >
-                    <div className="pointer-events-none absolute inset-0 opacity-[0.08]">
+                    <div className="pointer-events-none absolute inset-0 hidden opacity-[0.08] sm:block">
                       <div
                         className={`h-full w-full ${
                           isDarkMode
@@ -437,14 +483,14 @@ function Contact() {
                     <div
                       className={`pointer-events-none absolute inset-0 ${
                         isDarkMode
-                          ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.08),transparent_35%,rgba(255,0,0,0.08))]'
-                          : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.8),transparent_35%,rgba(255,0,0,0.05))]'
+                          ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.06),transparent_35%,rgba(255,0,0,0.07))]'
+                          : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.72),transparent_35%,rgba(255,0,0,0.045))]'
                       }`}
                     />
 
                     <span
                       aria-hidden="true"
-                      className="absolute right-5 top-5 z-20 text-2xl font-black leading-none text-[#FF0000] transition-transform duration-500 group-hover:rotate-180 group-hover:scale-110 sm:right-7 sm:top-7 sm:text-3xl"
+                      className="absolute right-5 top-5 z-20 text-2xl font-black leading-none text-[#FF0000] transition-transform duration-300 md:group-hover:rotate-180 md:group-hover:scale-110 sm:right-7 sm:top-7 sm:text-3xl"
                     >
                       ↻
                     </span>
@@ -463,12 +509,12 @@ function Contact() {
 
                         <div className="mt-4 grid grid-cols-[105px_1fr] items-stretch gap-3">
                           <div className="flex flex-col items-center justify-center">
-                            <div className="w-full max-w-[98px] rounded-[1.1rem] bg-transparent shadow-[0_10px_24px_rgba(0,0,0,0.14)]">
+                            <div className="w-full max-w-[98px] rounded-[1.1rem] bg-transparent shadow-[0_10px_24px_rgba(0,0,0,0.12)]">
                               <div className="aspect-[3/4] w-full overflow-hidden rounded-[0.8rem] bg-[#d9d9d9]">
                                 <img
                                   src={idPhoto}
                                   alt="Michael Rhoi Gonzales ID"
-                                  className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03]"
+                                  className="h-full w-full object-cover transition-transform duration-300 md:hover:scale-[1.03]"
                                   draggable="false"
                                   loading="eager"
                                   decoding="async"
@@ -478,7 +524,7 @@ function Contact() {
                           </div>
 
                           <div
-                            className={`rounded-2xl border-2 border-dotted px-3 py-2.5 shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-colors duration-500 ${
+                            className={`rounded-2xl border-2 border-dotted px-3 py-2.5 shadow-[0_10px_24px_rgba(0,0,0,0.1)] transition-colors duration-500 ${
                               isDarkMode
                                 ? 'border-white bg-black text-white'
                                 : 'border-black bg-white text-black'
@@ -575,7 +621,7 @@ function Contact() {
                                   src={software.icon}
                                   alt={software.label}
                                   title={software.label}
-                                  className="h-7 w-7 shrink-0 object-contain transition-transform duration-300 hover:-translate-y-1 hover:scale-110"
+                                  className="h-7 w-7 shrink-0 object-contain transition-transform duration-300 md:hover:-translate-y-1 md:hover:scale-110"
                                   draggable="false"
                                   loading="lazy"
                                   decoding="async"
@@ -594,7 +640,7 @@ function Contact() {
                             <img
                               src={idPhoto}
                               alt="Michael Rhoi Gonzales ID"
-                              className="h-full w-full object-cover transition-[filter,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] sm:grayscale sm:hover:grayscale-0"
+                              className="h-full w-full object-cover transition-[filter,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:hover:scale-[1.03] sm:grayscale sm:hover:grayscale-0"
                               draggable="false"
                               loading="eager"
                               decoding="async"
@@ -689,7 +735,7 @@ function Contact() {
                                   src={software.icon}
                                   alt={software.label}
                                   title={software.label}
-                                  className="h-9 w-9 object-contain transition-transform duration-300 hover:-translate-y-1 hover:scale-110"
+                                  className="h-9 w-9 object-contain transition-transform duration-300 md:hover:-translate-y-1 md:hover:scale-110"
                                   draggable="false"
                                   loading="lazy"
                                   decoding="async"
@@ -700,7 +746,7 @@ function Contact() {
                         </div>
 
                         <div
-                          className={`mt-7 rounded-2xl border-2 border-dotted px-5 py-4 shadow-[0_10px_24px_rgba(0,0,0,0.12)] transition-colors duration-500 lg:mt-8 ${
+                          className={`mt-7 rounded-2xl border-2 border-dotted px-5 py-4 shadow-[0_10px_24px_rgba(0,0,0,0.1)] transition-colors duration-500 lg:mt-8 ${
                             isDarkMode
                               ? 'border-white bg-black text-white'
                               : 'border-black bg-white text-black'
@@ -724,16 +770,16 @@ function Contact() {
                     </div>
                   </div>
 
-                  <div className="absolute inset-0 overflow-hidden rounded-[1.35rem] border-2 border-dotted border-white bg-black px-5 py-5 text-white shadow-[0_18px_40px_rgba(0,0,0,0.16)] [backface-visibility:hidden] [transform:rotateY(180deg)] sm:rounded-[1.8rem] sm:px-8 sm:py-9 lg:px-10">
-                    <div className="pointer-events-none absolute inset-0 opacity-[0.12]">
+                  <div className="absolute inset-0 overflow-hidden rounded-[1.35rem] border-2 border-dotted border-white bg-black px-5 py-5 text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)] [backface-visibility:hidden] [transform:rotateY(180deg)] sm:rounded-[1.8rem] sm:px-8 sm:py-9 lg:px-10">
+                    <div className="pointer-events-none absolute inset-0 hidden opacity-[0.12] sm:block">
                       <div className="h-full w-full bg-[radial-gradient(circle,#FF0000_0.9px,transparent_1px)] [background-size:20px_20px]" />
                     </div>
 
-                    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,0,0,0.22),transparent_35%,rgba(255,255,255,0.04))]" />
+                    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,0,0,0.18),transparent_35%,rgba(255,255,255,0.04))]" />
 
                     <span
                       aria-hidden="true"
-                      className="absolute right-5 top-5 z-20 text-2xl font-black leading-none text-[#FF0000] transition-transform duration-500 group-hover:-rotate-180 group-hover:scale-110 sm:right-7 sm:top-7 sm:text-3xl"
+                      className="absolute right-5 top-5 z-20 text-2xl font-black leading-none text-[#FF0000] transition-transform duration-300 md:group-hover:-rotate-180 md:group-hover:scale-110 sm:right-7 sm:top-7 sm:text-3xl"
                     >
                       ↻
                     </span>
@@ -758,14 +804,14 @@ function Contact() {
                             target={link.label === 'Email' ? undefined : '_blank'}
                             rel={link.label === 'Email' ? undefined : 'noreferrer'}
                             onClick={(event) => event.stopPropagation()}
-                            className="group/link flex items-center justify-center gap-3 rounded-2xl border-2 border-dotted border-white bg-white px-5 py-3 text-center text-black transition-[background-color,border-color,color,transform] duration-300 hover:-translate-y-1 hover:border-[#FF0000] hover:bg-[#FF0000] hover:text-white sm:py-4"
+                            className="group/link flex items-center justify-center gap-3 rounded-2xl border-2 border-dotted border-white bg-white px-5 py-3 text-center text-black transition-[background-color,border-color,color,transform] duration-300 md:hover:-translate-y-1 md:hover:border-[#FF0000] md:hover:bg-[#FF0000] md:hover:text-white sm:py-4"
                             draggable="false"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
                               fill="currentColor"
-                              className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover/link:scale-110"
+                              className="h-4 w-4 shrink-0 transition-transform duration-300 md:group-hover/link:scale-110"
                               aria-hidden="true"
                             >
                               <path d={link.path} />
@@ -780,16 +826,16 @@ function Contact() {
                         <button
                           type="button"
                           onClick={handleResumeOpen}
-                          className="group/resume relative bg-transparent px-5 py-3 text-center text-[10px] font-black uppercase tracking-[0.2em] text-white transition-[color,transform] duration-300 hover:-translate-y-1 hover:text-[#FF0000] sm:py-4 sm:text-sm"
+                          className="group/resume relative bg-transparent px-5 py-3 text-center text-[10px] font-black uppercase tracking-[0.2em] text-white transition-[color,transform] duration-300 md:hover:-translate-y-1 md:hover:text-[#FF0000] sm:py-4 sm:text-sm"
                         >
                           <span className="inline-flex items-center gap-2">
                             View Resume
-                            <span className="inline-block transition-transform duration-300 group-hover/resume:translate-x-1">
+                            <span className="inline-block transition-transform duration-300 md:group-hover/resume:translate-x-1">
                               →
                             </span>
                           </span>
 
-                          <span className="absolute bottom-2 left-1/2 h-[2px] w-0 -translate-x-1/2 bg-[#FF0000] transition-[width] duration-300 group-hover/resume:w-[calc(100%-2.5rem)] sm:bottom-3" />
+                          <span className="absolute bottom-2 left-1/2 h-[2px] w-0 -translate-x-1/2 bg-[#FF0000] transition-[width] duration-300 md:group-hover/resume:w-[calc(100%-2.5rem)] sm:bottom-3" />
                         </button>
                       </div>
                     </div>
@@ -808,7 +854,7 @@ function Contact() {
       />
 
       <div
-        className={`fixed bottom-6 right-5 z-50 flex items-center gap-2 rounded-full border-2 px-3 py-2 backdrop-blur-sm transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] sm:right-5 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:flex-col sm:gap-4 sm:px-3 sm:py-5 lg:right-6 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none ${
+        className={`fixed bottom-6 right-5 z-50 flex items-center gap-2 rounded-full border-2 px-3 py-2 backdrop-blur-sm transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:right-5 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:flex-col sm:gap-4 sm:px-3 sm:py-5 lg:right-6 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none ${
           isSocialOnDark
             ? 'border-[#FF0000] bg-black/60'
             : isDarkMode
@@ -831,7 +877,7 @@ function Contact() {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className={`h-5 w-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 ${social.rotate} sm:h-6 sm:w-6`}
+              className={`h-5 w-5 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:scale-110 ${social.rotate} sm:h-6 sm:w-6`}
             >
               <path d={social.path} />
             </svg>
@@ -843,7 +889,7 @@ function Contact() {
         type="button"
         aria-label={isAtBottom ? 'Scroll to top' : 'Scroll to bottom'}
         onClick={handleFloatingArrowClick}
-        className={`fixed bottom-6 left-1/2 z-50 flex h-11 w-11 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black backdrop-blur-sm transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[#FF0000] ${
+        className={`fixed bottom-6 left-1/2 z-50 flex h-11 w-11 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black backdrop-blur-sm transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[#FF0000] ${
           isDarkMode
             ? 'border-white bg-black/90 text-white hover:bg-white'
             : 'border-black bg-[#d9d9d9]/90 text-black hover:bg-black'
@@ -851,12 +897,12 @@ function Contact() {
           isAtBottom
             ? 'hover:-translate-y-1'
             : isDarkMode
-              ? 'after:absolute after:inset-0 after:rounded-full after:border-2 after:border-white after:opacity-30 after:animate-ping'
-              : 'after:absolute after:inset-0 after:rounded-full after:border-2 after:border-black after:opacity-30 after:animate-ping'
+              ? 'after:absolute after:inset-0 after:rounded-full after:border-2 after:border-white after:opacity-30 after:animate-ping motion-reduce:after:animate-none'
+              : 'after:absolute after:inset-0 after:rounded-full after:border-2 after:border-black after:opacity-30 after:animate-ping motion-reduce:after:animate-none'
         }`}
       >
         <span
-          className={`relative z-10 leading-none transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`relative z-10 leading-none transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isAtBottom ? 'rotate-0' : 'translate-y-[1px]'
           }`}
         >

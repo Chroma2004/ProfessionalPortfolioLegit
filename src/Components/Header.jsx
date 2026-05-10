@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 function Header({ onNavigate, isTransitioning }) {
@@ -7,6 +7,9 @@ function Header({ onNavigate, isTransitioning }) {
   const [isClosing, setIsClosing] = useState(false);
   const [isBurgerAnimating, setIsBurgerAnimating] = useState(false);
   const [isBulbFlickering, setIsBulbFlickering] = useState(false);
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window === 'undefined') return false;
 
@@ -14,6 +17,14 @@ function Header({ onNavigate, isTransitioning }) {
   });
 
   const location = useLocation();
+
+  const closeMenuTimeoutRef = useRef(null);
+  const closeResetTimeoutRef = useRef(null);
+  const openMenuTimeoutRef = useRef(null);
+  const burgerResetTimeoutRef = useRef(null);
+  const mobileNavigateTimeoutRef = useRef(null);
+  const mobileNavigateResetTimeoutRef = useRef(null);
+  const bulbResetTimeoutRef = useRef(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('portfolio-theme');
@@ -25,6 +36,28 @@ function Header({ onNavigate, isTransitioning }) {
       document.documentElement.classList.remove('dark');
       setIsDarkMode(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 767px)');
+    const reducedMotionQuery = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
+    const updateResponsiveState = () => {
+      setIsMobileScreen(mobileQuery.matches);
+      setPrefersReducedMotion(reducedMotionQuery.matches);
+    };
+
+    updateResponsiveState();
+
+    mobileQuery.addEventListener('change', updateResponsiveState);
+    reducedMotionQuery.addEventListener('change', updateResponsiveState);
+
+    return () => {
+      mobileQuery.removeEventListener('change', updateResponsiveState);
+      reducedMotionQuery.removeEventListener('change', updateResponsiveState);
+    };
   }, []);
 
   useEffect(() => {
@@ -45,6 +78,18 @@ function Header({ onNavigate, isTransitioning }) {
     );
   }, [isDarkMode]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(closeMenuTimeoutRef.current);
+      clearTimeout(closeResetTimeoutRef.current);
+      clearTimeout(openMenuTimeoutRef.current);
+      clearTimeout(burgerResetTimeoutRef.current);
+      clearTimeout(mobileNavigateTimeoutRef.current);
+      clearTimeout(mobileNavigateResetTimeoutRef.current);
+      clearTimeout(bulbResetTimeoutRef.current);
+    };
+  }, []);
+
   const toggleTheme = async (event) => {
     if (isBulbFlickering) return;
 
@@ -53,17 +98,18 @@ function Header({ onNavigate, isTransitioning }) {
     const originY = buttonRect.top + buttonRect.height / 2;
     const nextMode = !isDarkMode;
     const isTurningDark = nextMode;
+    const shouldUseLightMobileTransition = isMobileScreen || prefersReducedMotion;
+    const transitionDuration = shouldUseLightMobileTransition ? 360 : 950;
 
     setIsBulbFlickering(true);
 
-    const endRadius = Math.hypot(
-      Math.max(originX, window.innerWidth - originX),
-      Math.max(originY, window.innerHeight - originY)
-    );
+    clearTimeout(bulbResetTimeoutRef.current);
 
-    document.documentElement.dataset.themeTransition = isTurningDark
-      ? 'to-dark'
-      : 'to-light';
+    document.documentElement.dataset.themeTransition = shouldUseLightMobileTransition
+      ? 'mobile-soft'
+      : isTurningDark
+        ? 'to-dark'
+        : 'to-light';
 
     window.dispatchEvent(
       new CustomEvent('portfolio-theme-transition-start', {
@@ -71,21 +117,30 @@ function Header({ onNavigate, isTransitioning }) {
           x: originX,
           y: originY,
           nextTheme: nextMode ? 'dark' : 'light',
-          direction: isTurningDark ? 'collapse' : 'spread',
+          direction: shouldUseLightMobileTransition
+            ? 'fade'
+            : isTurningDark
+              ? 'collapse'
+              : 'spread',
         },
       })
     );
 
-    if (!document.startViewTransition) {
+    if (shouldUseLightMobileTransition || !document.startViewTransition) {
       setIsDarkMode(nextMode);
 
-      setTimeout(() => {
+      bulbResetTimeoutRef.current = setTimeout(() => {
         delete document.documentElement.dataset.themeTransition;
         setIsBulbFlickering(false);
-      }, 950);
+      }, transitionDuration);
 
       return;
     }
+
+    const endRadius = Math.hypot(
+      Math.max(originX, window.innerWidth - originX),
+      Math.max(originY, window.innerHeight - originY)
+    );
 
     const transition = document.startViewTransition(() => {
       setIsDarkMode(nextMode);
@@ -103,7 +158,7 @@ function Header({ onNavigate, isTransitioning }) {
             ],
           },
           {
-            duration: 950,
+            duration: transitionDuration,
             easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
             pseudoElement: '::view-transition-old(root)',
           }
@@ -117,7 +172,7 @@ function Header({ onNavigate, isTransitioning }) {
             ],
           },
           {
-            duration: 950,
+            duration: transitionDuration,
             easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
             pseudoElement: '::view-transition-new(root)',
           }
@@ -127,10 +182,10 @@ function Header({ onNavigate, isTransitioning }) {
       setIsDarkMode(nextMode);
     }
 
-    setTimeout(() => {
+    bulbResetTimeoutRef.current = setTimeout(() => {
       delete document.documentElement.dataset.themeTransition;
       setIsBulbFlickering(false);
-    }, 950);
+    }, transitionDuration);
   };
 
   const getDesktopLinkClass = (path) => {
@@ -148,30 +203,36 @@ function Header({ onNavigate, isTransitioning }) {
   const closeMenu = () => {
     if (isClosing) return;
 
+    clearTimeout(closeMenuTimeoutRef.current);
+    clearTimeout(closeResetTimeoutRef.current);
+
     setIsClosing(true);
 
-    setTimeout(() => {
+    closeMenuTimeoutRef.current = setTimeout(() => {
       setIsMenuOpen(false);
       setAnimatingPath(null);
 
-      setTimeout(() => {
+      closeResetTimeoutRef.current = setTimeout(() => {
         setIsClosing(false);
-      }, 300);
-    }, 420);
+      }, 220);
+    }, 280);
   };
 
   const openMenu = () => {
     if (isBurgerAnimating || isMenuOpen) return;
 
+    clearTimeout(openMenuTimeoutRef.current);
+    clearTimeout(burgerResetTimeoutRef.current);
+
     setIsBurgerAnimating(true);
 
-    setTimeout(() => {
+    openMenuTimeoutRef.current = setTimeout(() => {
       setIsMenuOpen(true);
 
-      setTimeout(() => {
+      burgerResetTimeoutRef.current = setTimeout(() => {
         setIsBurgerAnimating(false);
-      }, 260);
-    }, 360);
+      }, 180);
+    }, 220);
   };
 
   const handleDesktopNavigate = (path) => {
@@ -184,16 +245,19 @@ function Header({ onNavigate, isTransitioning }) {
   const handleMobileNavigate = (path) => {
     if (animatingPath || isClosing || isTransitioning) return;
 
+    clearTimeout(mobileNavigateTimeoutRef.current);
+    clearTimeout(mobileNavigateResetTimeoutRef.current);
+
     setAnimatingPath(path);
 
-    setTimeout(() => {
+    mobileNavigateTimeoutRef.current = setTimeout(() => {
       setIsMenuOpen(false);
       onNavigate(path);
 
-      setTimeout(() => {
+      mobileNavigateResetTimeoutRef.current = setTimeout(() => {
         setAnimatingPath(null);
-      }, 250);
-    }, 520);
+      }, 180);
+    }, 340);
   };
 
   const getMobileLinkClass = (path) => {
@@ -218,8 +282,8 @@ function Header({ onNavigate, isTransitioning }) {
 
     return `group relative overflow-hidden border-2 transition-colors duration-300 ${
       isDarkMode
-        ? 'border-white font-extrabold text-white hover:text-black'
-        : 'border-black font-extrabold text-black hover:text-white'
+        ? 'border-white font-extrabold text-white md:hover:text-black'
+        : 'border-black font-extrabold text-black md:hover:text-white'
     }`;
   };
 
@@ -230,8 +294,8 @@ function Header({ onNavigate, isTransitioning }) {
   const bulbColorClass = isDarkMode ? 'text-white' : 'text-black';
   const bulbFillClass = isDarkMode ? 'bg-white' : 'bg-black';
   const bulbHoverTextClass = isDarkMode
-    ? 'hover:text-black'
-    : 'hover:text-white';
+    ? 'md:hover:text-black'
+    : 'md:hover:text-white';
   const bulbGlowClass = isDarkMode
     ? 'before:bg-white/20 after:bg-white/20'
     : 'before:bg-[#FFD84D]/45 after:bg-[#FFD84D]/35';
@@ -242,31 +306,31 @@ function Header({ onNavigate, isTransitioning }) {
         ? 'text-black'
         : 'text-white'
       : isDarkMode
-        ? 'text-white hover:text-black'
-        : 'text-black hover:text-white';
+        ? 'text-white md:hover:text-black'
+        : 'text-black md:hover:text-white';
 
-  const bulbButtonClass = `group/light relative flex h-8 w-8 items-center justify-center transition-transform duration-300 hover:scale-110 ${bulbColorClass}`;
+  const bulbButtonClass = `group/light relative flex h-8 w-8 items-center justify-center transition-transform duration-300 md:hover:scale-110 ${bulbColorClass}`;
 
-  const mobileBulbButtonClass = `group/light relative flex h-11 w-11 items-center justify-center overflow-hidden border-2 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 ${borderClass} ${bulbColorClass} ${bulbHoverTextClass} ${
+  const mobileBulbButtonClass = `group/light relative flex h-11 w-11 items-center justify-center overflow-hidden border-2 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:hover:scale-105 ${borderClass} ${bulbColorClass} ${bulbHoverTextClass} ${
     isBulbFlickering ? 'scale-95 border-[#FF0000]' : ''
   }`;
 
-  const bulbWrapperClass = `relative flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 before:pointer-events-none before:absolute before:inset-0 before:scale-0 before:rounded-full before:blur-md before:transition-all before:duration-500 after:pointer-events-none after:absolute after:inset-1 after:scale-0 after:rounded-full after:blur-sm after:transition-all after:duration-500 group-hover/light:before:scale-100 group-hover/light:after:scale-100 ${
-    isBulbFlickering ? 'animate-[bulbFlicker_720ms_steps(1,end)]' : ''
+  const bulbWrapperClass = `relative flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 before:pointer-events-none before:absolute before:inset-0 before:scale-0 before:rounded-full before:blur-md before:transition-all before:duration-500 after:pointer-events-none after:absolute after:inset-1 after:scale-0 after:rounded-full after:blur-sm after:transition-all after:duration-500 md:group-hover/light:before:scale-100 md:group-hover/light:after:scale-100 ${
+    isBulbFlickering ? 'animate-[bulbFlicker_480ms_steps(1,end)]' : ''
   } ${
     isDarkMode
-      ? 'group-hover/light:before:opacity-40 group-hover/light:after:opacity-25'
-      : 'group-hover/light:before:opacity-100 group-hover/light:after:opacity-80'
+      ? 'md:group-hover/light:before:opacity-40 md:group-hover/light:after:opacity-25'
+      : 'md:group-hover/light:before:opacity-100 md:group-hover/light:after:opacity-80'
   } ${bulbGlowClass}`;
 
-  const bulbSvgClass = `relative z-10 h-5 w-5 origin-center transition-all duration-500 ${
+  const bulbSvgClass = `relative z-10 h-5 w-5 origin-center transition-all duration-300 ${
     isBulbFlickering
-      ? 'animate-[bulbPop_720ms_cubic-bezier(0.22,1,0.36,1)]'
+      ? 'animate-[bulbPop_480ms_cubic-bezier(0.22,1,0.36,1)]'
       : ''
   } ${
     isDarkMode
       ? 'drop-shadow-none'
-      : 'drop-shadow-[0_0_8px_rgba(255,216,77,0.75)]'
+      : 'drop-shadow-[0_0_6px_rgba(255,216,77,0.6)]'
   }`;
 
   const renderLightBulbIcon = () => (
@@ -359,12 +423,12 @@ function Header({ onNavigate, isTransitioning }) {
       className={mobileBulbButtonClass}
     >
       <span
-        className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-out ${bulbFillClass} ${
-          isBulbFlickering ? 'w-[170%]' : 'w-0 group-hover/light:w-[170%]'
+        className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out ${bulbFillClass} ${
+          isBulbFlickering ? 'w-[170%]' : 'w-0 md:group-hover/light:w-[170%]'
         }`}
       />
 
-      <span className="relative z-10 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/light:rotate-12 group-hover/light:scale-110">
+      <span className="relative z-10 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover/light:rotate-12 md:group-hover/light:scale-110">
         {renderLightBulbIcon()}
       </span>
     </button>
@@ -372,7 +436,7 @@ function Header({ onNavigate, isTransitioning }) {
 
   return (
     <header
-      className={`absolute left-0 top-0 z-50 w-full select-none px-5 py-6 transition-colors duration-500 sm:px-8 sm:py-8 ${headerTextClass}`}
+      className={`absolute left-0 top-0 z-50 w-full select-none px-5 py-6 transition-colors duration-300 sm:px-8 sm:py-8 ${headerTextClass}`}
     >
       <style>
         {`
@@ -399,45 +463,47 @@ function Header({ onNavigate, isTransitioning }) {
             z-index: 2;
           }
 
+          html[data-theme-transition='mobile-soft']::view-transition-old(root),
+          html[data-theme-transition='mobile-soft']::view-transition-new(root) {
+            animation: themeMobileSoftFade 360ms ease-out both;
+          }
+
+          @keyframes themeMobileSoftFade {
+            0% {
+              opacity: 0.82;
+              filter: brightness(0.96);
+            }
+
+            100% {
+              opacity: 1;
+              filter: brightness(1);
+            }
+          }
+
           @keyframes bulbFlicker {
             0% {
               opacity: 1;
               filter: brightness(1);
             }
 
-            8% {
-              opacity: 0.35;
-              filter: brightness(0.65);
-            }
-
-            16% {
-              opacity: 1;
-              filter: brightness(1.4);
-            }
-
-            24% {
-              opacity: 0.45;
+            12% {
+              opacity: 0.55;
               filter: brightness(0.75);
             }
 
-            34% {
+            24% {
               opacity: 1;
-              filter: brightness(1.8);
+              filter: brightness(1.35);
             }
 
-            48% {
-              opacity: 0.55;
+            42% {
+              opacity: 0.72;
               filter: brightness(0.9);
             }
 
             62% {
               opacity: 1;
-              filter: brightness(1.5);
-            }
-
-            78% {
-              opacity: 0.78;
-              filter: brightness(1);
+              filter: brightness(1.25);
             }
 
             100% {
@@ -451,24 +517,27 @@ function Header({ onNavigate, isTransitioning }) {
               transform: scale(1) rotate(0deg);
             }
 
-            18% {
-              transform: scale(0.82) rotate(-8deg);
-            }
-
-            36% {
-              transform: scale(1.16) rotate(7deg);
+            30% {
+              transform: scale(0.9) rotate(-5deg);
             }
 
             58% {
-              transform: scale(0.94) rotate(-3deg);
-            }
-
-            78% {
-              transform: scale(1.06) rotate(2deg);
+              transform: scale(1.08) rotate(4deg);
             }
 
             100% {
               transform: scale(1) rotate(0deg);
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+              animation-duration: 0.001ms !important;
+              animation-iteration-count: 1 !important;
+              scroll-behavior: auto !important;
+              transition-duration: 0.001ms !important;
             }
           }
         `}
@@ -483,7 +552,7 @@ function Header({ onNavigate, isTransitioning }) {
           <span className="flex h-7 w-7 items-center justify-center">
             <svg
               viewBox="0 0 100 100"
-              className="block h-6 w-6 origin-center animate-[spin_6s_linear_infinite] text-[#FF0000]"
+              className="block h-6 w-6 origin-center animate-[spin_6s_linear_infinite] text-[#FF0000] motion-reduce:animate-none"
               aria-hidden="true"
             >
               <line
@@ -525,7 +594,6 @@ function Header({ onNavigate, isTransitioning }) {
           </span>
         </button>
 
-        {/* Desktop Navigation */}
         <div className="hidden items-center gap-2 md:flex">
           <button
             type="button"
@@ -571,7 +639,6 @@ function Header({ onNavigate, isTransitioning }) {
             CONTACT
           </button>
 
-          {/* Desktop Theme Toggle */}
           <button
             type="button"
             onClick={toggleTheme}
@@ -585,10 +652,8 @@ function Header({ onNavigate, isTransitioning }) {
         </div>
 
         <div className="flex items-center gap-3 md:hidden">
-          {/* Mobile Theme Toggle */}
           {renderMobileLightBulbButton()}
 
-          {/* Mobile Menu Button */}
           <button
             type="button"
             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
@@ -603,10 +668,10 @@ function Header({ onNavigate, isTransitioning }) {
             className={`group relative flex h-11 w-11 items-center justify-center overflow-hidden border-2 transition-colors duration-300 md:hidden ${borderClass} ${menuIconTextClass}`}
           >
             <span
-              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-out ${menuFillClass} ${
+              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out ${menuFillClass} ${
                 isBurgerAnimating || isMenuOpen
                   ? 'w-[170%]'
-                  : 'w-0 group-hover:w-[170%]'
+                  : 'w-0 md:group-hover:w-[170%]'
               }`}
             />
 
@@ -615,7 +680,7 @@ function Header({ onNavigate, isTransitioning }) {
                 className={`absolute h-[2px] rounded-full bg-current transition-all duration-300 ease-out ${
                   isBurgerAnimating || isMenuOpen
                     ? 'w-[11px] translate-x-[3px] -translate-y-[4px] rotate-45'
-                    : 'w-5 -translate-y-[6px] rotate-0 group-hover:w-4 group-hover:translate-x-[2px]'
+                    : 'w-5 -translate-y-[6px] rotate-0 md:group-hover:w-4 md:group-hover:translate-x-[2px]'
                 }`}
               />
 
@@ -623,7 +688,7 @@ function Header({ onNavigate, isTransitioning }) {
                 className={`absolute h-[2px] rounded-full bg-current transition-all duration-300 ease-out ${
                   isBurgerAnimating || isMenuOpen
                     ? 'w-5 translate-x-0 translate-y-0'
-                    : 'w-5 translate-y-0 group-hover:w-[14px] group-hover:translate-x-[3px]'
+                    : 'w-5 translate-y-0 md:group-hover:w-[14px] md:group-hover:translate-x-[3px]'
                 }`}
               />
 
@@ -631,7 +696,7 @@ function Header({ onNavigate, isTransitioning }) {
                 className={`absolute h-[2px] rounded-full bg-current transition-all duration-300 ease-out ${
                   isBurgerAnimating || isMenuOpen
                     ? 'w-[11px] translate-x-[3px] translate-y-[4px] -rotate-45'
-                    : 'w-5 translate-y-[6px] rotate-0 group-hover:w-4 group-hover:translate-x-[2px]'
+                    : 'w-5 translate-y-[6px] rotate-0 md:group-hover:w-4 md:group-hover:translate-x-[2px]'
                 }`}
               />
             </span>
@@ -639,7 +704,6 @@ function Header({ onNavigate, isTransitioning }) {
         </div>
       </nav>
 
-      {/* Mobile Overlay */}
       <div
         className={`fixed inset-0 z-40 backdrop-blur-[2px] transition-opacity duration-300 md:hidden ${
           isDarkMode ? 'bg-white/10' : 'bg-black/30'
@@ -651,9 +715,8 @@ function Header({ onNavigate, isTransitioning }) {
         onClick={closeMenu}
       />
 
-      {/* Mobile Sidebar */}
       <aside
-        className={`fixed right-0 top-0 z-50 h-screen w-[82%] max-w-[340px] border-l-2 px-5 py-6 shadow-2xl transition-transform duration-500 ease-out md:hidden ${
+        className={`fixed right-0 top-0 z-50 h-screen w-[82%] max-w-[340px] border-l-2 px-5 py-6 shadow-2xl transition-transform duration-300 ease-out md:hidden ${
           isDarkMode
             ? 'border-white bg-black text-white'
             : 'border-black bg-[#d9d9d9] text-black'
@@ -673,7 +736,6 @@ function Header({ onNavigate, isTransitioning }) {
           <div className="flex items-center gap-3">
             {renderMobileLightBulbButton()}
 
-            {/* Close Button */}
             <button
               type="button"
               aria-label="Close menu"
@@ -682,13 +744,13 @@ function Header({ onNavigate, isTransitioning }) {
                 isClosing
                   ? 'text-white'
                   : isDarkMode
-                    ? 'text-white hover:text-white'
-                    : 'text-black hover:text-white'
+                    ? 'text-white md:hover:text-white'
+                    : 'text-black md:hover:text-white'
               }`}
             >
               <span
-                className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 transition-all duration-500 ease-out ${
-                  isClosing ? 'w-[150%]' : 'w-0 group-hover:w-[150%]'
+                className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-500 transition-all duration-300 ease-out ${
+                  isClosing ? 'w-[150%]' : 'w-0 md:group-hover:w-[150%]'
                 }`}
               />
 
@@ -697,7 +759,7 @@ function Header({ onNavigate, isTransitioning }) {
                   className={`absolute left-0 top-1/2 h-[2px] w-4 bg-current transition-all duration-300 ease-out ${
                     isClosing
                       ? 'translate-y-0 rotate-[225deg] scale-90'
-                      : 'translate-y-0 rotate-45 group-hover:rotate-[135deg]'
+                      : 'translate-y-0 rotate-45 md:group-hover:rotate-[135deg]'
                   }`}
                 />
 
@@ -705,7 +767,7 @@ function Header({ onNavigate, isTransitioning }) {
                   className={`absolute left-0 top-1/2 h-[2px] w-4 bg-current transition-all duration-300 ease-out ${
                     isClosing
                       ? 'translate-y-0 rotate-[135deg] scale-90'
-                      : 'translate-y-0 -rotate-45 group-hover:rotate-[-135deg]'
+                      : 'translate-y-0 -rotate-45 md:group-hover:rotate-[-135deg]'
                   }`}
                 />
               </span>
@@ -720,17 +782,17 @@ function Header({ onNavigate, isTransitioning }) {
             className={getMobileLinkClass('/')}
           >
             <span
-              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-out ${menuFillClass} ${
+              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out ${menuFillClass} ${
                 animatingPath === '/'
                   ? 'w-[180%]'
-                  : 'w-0 group-hover:w-[180%]'
+                  : 'w-0 md:group-hover:w-[180%]'
               }`}
             />
 
             <span className="relative z-10 flex items-center justify-between px-4 py-4">
               HOME
 
-              <span className="transition-transform duration-300 ease-out group-hover:translate-x-1">
+              <span className="transition-transform duration-300 ease-out md:group-hover:translate-x-1">
                 →
               </span>
             </span>
@@ -742,17 +804,17 @@ function Header({ onNavigate, isTransitioning }) {
             className={getMobileLinkClass('/projects')}
           >
             <span
-              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-out ${menuFillClass} ${
+              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out ${menuFillClass} ${
                 animatingPath === '/projects'
                   ? 'w-[180%]'
-                  : 'w-0 group-hover:w-[180%]'
+                  : 'w-0 md:group-hover:w-[180%]'
               }`}
             />
 
             <span className="relative z-10 flex items-center justify-between px-4 py-4">
               PROJECTS (5)
 
-              <span className="transition-transform duration-300 ease-out group-hover:translate-x-1">
+              <span className="transition-transform duration-300 ease-out md:group-hover:translate-x-1">
                 →
               </span>
             </span>
@@ -764,17 +826,17 @@ function Header({ onNavigate, isTransitioning }) {
             className={getMobileLinkClass('/design-process')}
           >
             <span
-              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-out ${menuFillClass} ${
+              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out ${menuFillClass} ${
                 animatingPath === '/design-process'
                   ? 'w-[180%]'
-                  : 'w-0 group-hover:w-[180%]'
+                  : 'w-0 md:group-hover:w-[180%]'
               }`}
             />
 
             <span className="relative z-10 flex items-center justify-between px-4 py-4">
               My Design Process
 
-              <span className="transition-transform duration-300 ease-out group-hover:translate-x-1">
+              <span className="transition-transform duration-300 ease-out md:group-hover:translate-x-1">
                 →
               </span>
             </span>
@@ -786,17 +848,17 @@ function Header({ onNavigate, isTransitioning }) {
             className={getMobileLinkClass('/contact')}
           >
             <span
-              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-out ${menuFillClass} ${
+              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out ${menuFillClass} ${
                 animatingPath === '/contact'
                   ? 'w-[180%]'
-                  : 'w-0 group-hover:w-[180%]'
+                  : 'w-0 md:group-hover:w-[180%]'
               }`}
             />
 
             <span className="relative z-10 flex items-center justify-between px-4 py-4">
               CONTACT
 
-              <span className="transition-transform duration-300 ease-out group-hover:translate-x-1">
+              <span className="transition-transform duration-300 ease-out md:group-hover:translate-x-1">
                 →
               </span>
             </span>
