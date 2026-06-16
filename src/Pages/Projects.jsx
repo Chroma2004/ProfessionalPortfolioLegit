@@ -40,6 +40,8 @@ import gpx11 from '../assets/GPX/GPX11.jpg';
 import internPortfolioPreview from '../assets/System/InternPortfolio.png';
 import trackEdPreview from '../assets/System/TrackEd.png';
 import ctrlAltDelightPreview from '../assets/System/Ctrl+Alt+Delight.png';
+import photo2yPreview from '../assets/System/Photo2y.png';
+import photo2yPreview2 from '../assets/System/Photo2y2.png';
 
 function Projects() {
   const location = useLocation();
@@ -625,15 +627,42 @@ function Projects() {
         media: [],
       },
       {
-        title: '[UPCOMING]',
-        titleClassName: 'text-[#FF0000]',
-        role: 'Photobooth / Interactive Photo Experience',
+        title: 'Photo2y',
+        role: 'Passion Project / Photobooth Web App',
         category: 'WebSystem',
-        description: '',
-        tools: ['React', 'Tailwind CSS', 'Camera API'],
+        description:
+          'A fun passion project and simple photobooth web app made for taking playful photo strips with filters, stickers, and customizable strip designs.',
+        tools: ['React', 'Tailwind CSS', 'Camera API', 'Vite'],
         details:
-          'Photobooth is an upcoming web system concept designed for a simple and enjoyable photo-taking experience. The project will focus on camera interaction, preview flow, and a playful visual interface.',
-        media: [],
+          'Photo2y is a fun passion project where I built a simple but playful photobooth web app. The goal was to create an easy photo-taking experience with live camera preview, photo strip layouts, filters, stickers, downloadable strips, and customization options. This project helped me improve how I handle camera features, mobile responsiveness, canvas-based downloads, and interactive UI details in React.',
+        liveLink: 'https://photo2y.vercel.app/',
+        preview: {
+          type: 'image',
+          src: photo2yPreview,
+          alt: 'Photo2y Photobooth Web App Preview',
+          label: 'Photo2y',
+          previewPosition: 'object-right',
+        },
+        media: [
+          {
+            type: 'image',
+            src: photo2yPreview,
+            alt: 'Photo2y main photobooth preview',
+            label: 'Photo2y Main Preview',
+            details:
+              'A preview of the Photo2y photobooth interface, showing the playful visual style and photo strip experience.',
+            tools: ['React', 'Tailwind CSS', 'Camera API'],
+          },
+          {
+            type: 'image',
+            src: photo2yPreview2,
+            alt: 'Photo2y customization preview',
+            label: 'Photo2y Customization Preview',
+            details:
+              'A preview of the customization side of Photo2y, including strip styling, stickers, and interactive photo strip editing.',
+            tools: ['React', 'Tailwind CSS', 'Canvas'],
+          },
+        ],
       },
       {
         title: 'Promotional Video',

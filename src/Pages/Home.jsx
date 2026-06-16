@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer';
 
 import projectPreview4 from '../assets/project-preview-4.png';
-import projectPreview5 from '../assets/project-preview-5.png';
 
 import illust5 from '../assets/Illustrations/ILLUST5.jpeg';
 import px1 from '../assets/Illustrations/COMS1.1.mp4';
@@ -16,6 +15,8 @@ import gpx4 from '../assets/GPX/GPX4.png';
 import gpx5 from '../assets/GPX/GPX5.png';
 
 import trackEdPreview from '../assets/System/TrackEd.png';
+import photo2yPreview from '../assets/System/Photo2y.png';
+import photo2yPreview2 from '../assets/System/Photo2y2.png';
 
 function Home() {
   const [animatingProject, setAnimatingProject] = useState(null);
@@ -173,16 +174,20 @@ function Home() {
         ],
       },
       {
-        title: '[UPCOMING]',
-        titleClassName: 'text-[#FF0000]',
-        targetProjectTitle: '[UPCOMING]',
+        title: 'Photo2y',
+        targetProjectTitle: 'Photo2y',
         path: '/projects',
         filter: 'WebSystem',
         previewItems: [
           {
             type: 'image',
-            src: projectPreview5,
-            alt: 'Upcoming Photobooth Preview',
+            src: photo2yPreview,
+            alt: 'Photo2y Preview',
+          },
+          {
+            type: 'image',
+            src: photo2yPreview2,
+            alt: 'Photo2y Preview 2',
           },
         ],
       },
