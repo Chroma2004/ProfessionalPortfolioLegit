@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import Footer from '../Components/Footer';
+import HomeContact from '../Components/HomeContact';
+import HomeCreativeWorks from '../Components/HomeCreativeWorks';
 
 import projectPreview4 from '../assets/project-preview-4.png';
 
@@ -17,6 +20,72 @@ import gpx5 from '../assets/GPX/GPX5.png';
 import trackEdPreview from '../assets/System/TrackEd.png';
 import photo2yPreview from '../assets/System/Photo2y.png';
 import photo2yPreview2 from '../assets/System/Photo2y2.png';
+
+// ============================================================
+// CONSTANTS
+// ============================================================
+
+const casualIntro = "Yo! I'm Chroma.";
+const formalIntro = "If we're being formal, I'm Michael.";
+
+const descriptionText =
+  'I create designs that leave a little piece of my personality in every detail.';
+
+const roleText = 'GPX Designer / Video Editor / UX Designer';
+
+const email = 'michaelrhoigonzales@gmail.com';
+
+const emailLink = `mailto:${email}?subject=${encodeURIComponent(
+  'Portfolio Inquiry'
+)}&body=${encodeURIComponent(
+  'Hi Michael,\n\nI saw your portfolio and would like to connect with you.\n\n'
+)}`;
+
+const DEFAULT_SLIDESHOW_INTERVAL = 1900;
+const OTHER_WORKS_SLIDESHOW_INTERVAL = 2000;
+
+// Higher = more responsive cursor following.
+// 0.35 provides smooth movement with less delay.
+const CURSOR_FOLLOW_SPEED = 0.35;
+
+// ============================================================
+// CORNER DECORATIONS
+// ============================================================
+
+function CornerDecorations({ isDarkMode }) {
+  const borderColor = isDarkMode ? 'border-white' : 'border-black';
+
+  const baseClass =
+    'pointer-events-none absolute z-20 h-7 w-7 transition-colors duration-500 sm:h-8 sm:w-8';
+
+  return (
+    <>
+      <div
+        aria-hidden="true"
+        className={`${baseClass} -left-3 -top-3 border-l-[5px] border-t-[5px] sm:border-l-[6px] sm:border-t-[6px] ${borderColor}`}
+      />
+
+      <div
+        aria-hidden="true"
+        className={`${baseClass} -right-3 -top-3 border-r-[5px] border-t-[5px] sm:border-r-[6px] sm:border-t-[6px] ${borderColor}`}
+      />
+
+      <div
+        aria-hidden="true"
+        className={`${baseClass} -bottom-3 -left-3 border-b-[5px] border-l-[5px] sm:border-b-[6px] sm:border-l-[6px] ${borderColor}`}
+      />
+
+      <div
+        aria-hidden="true"
+        className={`${baseClass} -bottom-3 -right-3 border-b-[5px] border-r-[5px] sm:border-b-[6px] sm:border-r-[6px] ${borderColor}`}
+      />
+    </>
+  );
+}
+
+// ============================================================
+// HOME COMPONENT
+// ============================================================
 
 function Home() {
   const [animatingProject, setAnimatingProject] = useState(null);
@@ -44,7 +113,10 @@ function Home() {
 
   const [hoveredProject, setHoveredProject] = useState(null);
   const [previewSlideIndex, setPreviewSlideIndex] = useState(0);
-  const [isDesktopPreviewEnabled, setIsDesktopPreviewEnabled] = useState(false);
+
+  const [isDesktopPreviewEnabled, setIsDesktopPreviewEnabled] =
+    useState(false);
+
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   const homeRef = useRef(null);
@@ -54,146 +126,151 @@ function Home() {
 
   const previewAnimationRef = useRef(null);
   const previewSlideTimerRef = useRef(null);
-  const cursorGridAnimationRef = useRef(null);
-  const cursorGridFrameRef = useRef(0);
 
-  const previewTargetRef = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  const previewCurrentRef = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  const cursorGridTargetRef = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  const cursorGridCurrentRef = useRef({
-    x: 0,
-    y: 0,
-  });
+  const previewTargetRef = useRef({ x: 0, y: 0 });
+  const previewCurrentRef = useRef({ x: 0, y: 0 });
 
   const navigate = useNavigate();
 
-  const email = 'michaelrhoigonzales@gmail.com';
+  // ============================================================
+  // PROJECT DATA
+  // ============================================================
 
-  const emailLink = `mailto:${email}?subject=Portfolio Inquiry&body=Hi Michael,%0D%0A%0D%0AI saw your portfolio and would like to connect with you.%0D%0A%0D%0A`;
+  const projects = useMemo(() => {
+    const digitalArtPreviews = [
+      {
+        type: 'image',
+        src: illust5,
+        alt: 'Digital Illustration Preview',
+      },
+      {
+        type: 'video',
+        src: px1,
+        alt: 'Digital Art Animation Preview',
+      },
+      {
+        type: 'image',
+        src: px2,
+        alt: 'Pixel Art Preview',
+      },
+    ];
 
-  const introText =
-    'Hey! I’m Michael, I create designs with that human touch';
+    const posterPreviews = [
+      {
+        type: 'image',
+        src: gpx1,
+        alt: 'Poster Design 1 Preview',
+      },
+      {
+        type: 'image',
+        src: gpx2,
+        alt: 'Poster Design 2 Preview',
+      },
+      {
+        type: 'image',
+        src: gpx3,
+        alt: 'Poster Design 3 Preview',
+      },
+      {
+        type: 'image',
+        src: gpx4,
+        alt: 'Poster Design 4 Preview',
+      },
+      {
+        type: 'image',
+        src: gpx5,
+        alt: 'Poster Design 5 Preview',
+      },
+    ];
 
-  const roleText =
-    'UX Designer / Product Designer / Graphic Designer / Video Editor';
+    const videoPreviews = [
+      {
+        type: 'video',
+        src: px1,
+        alt: 'Video Editing Preview',
+      },
+    ];
 
-  const projects = useMemo(
-    () => [
+    const webSystemPreviews = [
+      {
+        type: 'image',
+        src: trackEdPreview,
+        alt: 'TrackED Website Preview',
+      },
+      {
+        type: 'image',
+        src: photo2yPreview,
+        alt: 'Photo2y Preview',
+      },
+      {
+        type: 'image',
+        src: photo2yPreview2,
+        alt: 'Photo2y Preview 2',
+      },
+    ];
+
+    // Combine all available previews for Other Works.
+    const combinedPreviews = [
+      ...digitalArtPreviews,
+      ...posterPreviews,
+      ...videoPreviews,
+      ...webSystemPreviews,
+      {
+        type: 'image',
+        src: projectPreview4,
+        alt: 'Other Creative Works Preview',
+      },
+    ];
+
+    // Remove duplicate media.
+    const uniqueCombinedPreviews = combinedPreviews.filter(
+      (item, index, array) =>
+        array.findIndex((preview) => preview.src === item.src) === index
+    );
+
+    return [
       {
         title: 'Digital Art Projects',
         targetProjectTitle: 'Digital Projects',
         path: '/projects',
         filter: 'Illustrations',
-        previewItems: [
-          {
-            type: 'image',
-            src: illust5,
-            alt: 'Illust5 Preview',
-          },
-          {
-            type: 'video',
-            src: px1,
-            alt: 'COMS1.1 Preview',
-          },
-          {
-            type: 'image',
-            src: px2,
-            alt: 'Px2 Preview',
-          },
-        ],
+        previewItems: digitalArtPreviews,
       },
       {
-        title: 'Personal GPX Designs',
+        title: 'Posters',
         targetProjectTitle: 'GPX Design Projects',
         path: '/projects',
         filter: 'GPX Design',
-        previewItems: [
-          {
-            type: 'image',
-            src: gpx1,
-            alt: 'Personal GPX Design 1 Preview',
-          },
-          {
-            type: 'image',
-            src: gpx2,
-            alt: 'Personal GPX Design 2 Preview',
-          },
-          {
-            type: 'image',
-            src: gpx3,
-            alt: 'Personal GPX Design 3 Preview',
-          },
-          {
-            type: 'image',
-            src: gpx4,
-            alt: 'Personal GPX Design 4 Preview',
-          },
-          {
-            type: 'image',
-            src: gpx5,
-            alt: 'Personal GPX Design 5 Preview',
-          },
-        ],
+        previewItems: posterPreviews,
       },
       {
-        title: 'TrackED',
-        targetProjectTitle: 'TrackED',
+        title: 'Video Edits',
+        targetProjectTitle: 'Video Edits',
+        path: '/projects',
+        filter: 'Video Edit',
+        previewItems: videoPreviews,
+      },
+      {
+        title: 'Web Systems',
+        targetProjectTitle: 'Web Systems',
         path: '/projects',
         filter: 'WebSystem',
-        previewItems: [
-          {
-            type: 'image',
-            src: trackEdPreview,
-            alt: 'TrackED Website Preview',
-          },
-        ],
+        previewItems: webSystemPreviews,
       },
       {
-        title: 'Internship Graphics',
-        targetProjectTitle: 'Internship Graphics',
+        title: 'Other Works',
+        targetProjectTitle: 'Other Works',
         path: '/projects',
-        filter: 'GPX Design',
-        previewItems: [
-          {
-            type: 'image',
-            src: projectPreview4,
-            alt: 'Internship Graphics Preview',
-          },
-        ],
+        filter: 'All',
+        previewItems: uniqueCombinedPreviews,
+        slideshowInterval: OTHER_WORKS_SLIDESHOW_INTERVAL,
       },
-      {
-        title: 'Photo2y',
-        targetProjectTitle: 'Photo2y',
-        path: '/projects',
-        filter: 'WebSystem',
-        previewItems: [
-          {
-            type: 'image',
-            src: photo2yPreview,
-            alt: 'Photo2y Preview',
-          },
-          {
-            type: 'image',
-            src: photo2yPreview2,
-            alt: 'Photo2y Preview 2',
-          },
-        ],
-      },
-    ],
-    []
-  );
+    ];
+  }, []);
+
+  // ============================================================
+  // SOCIAL LINKS
+  // ============================================================
 
   const socialLinks = useMemo(
     () => [
@@ -222,8 +299,12 @@ function Home() {
         path: 'M21.86 3.45C22.1 2.75 21.42 2.08 20.72 2.33L2.95 8.58C2.16 8.86 2.08 9.94 2.83 10.33L8.53 13.26L17.38 6.66C17.67 6.45 18.04 6.82 17.82 7.1L11.13 15.9L14.2 21.22C14.61 21.94 15.68 21.83 15.96 21.05L21.86 3.45Z',
       },
     ],
-    [emailLink]
+    []
   );
+
+  // ============================================================
+  // REDUCED MOTION
+  // ============================================================
 
   useEffect(() => {
     const reducedMotionQuery = window.matchMedia(
@@ -243,7 +324,13 @@ function Home() {
     };
   }, []);
 
+  // ============================================================
+  // THEME TRANSITION
+  // ============================================================
+
   useEffect(() => {
+    let timeoutId;
+
     const handleThemeSpread = (event) => {
       const { x, y, nextTheme, direction } = event.detail;
 
@@ -255,14 +342,14 @@ function Home() {
         direction: direction || 'spread',
       });
 
-      const themeTimer = setTimeout(() => {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
         setThemeSpread((currentSpread) => ({
           ...currentSpread,
           isActive: false,
         }));
       }, 950);
-
-      return () => clearTimeout(themeTimer);
     };
 
     window.addEventListener(
@@ -271,12 +358,18 @@ function Home() {
     );
 
     return () => {
+      clearTimeout(timeoutId);
+
       window.removeEventListener(
         'portfolio-theme-transition-start',
         handleThemeSpread
       );
     };
   }, []);
+
+  // ============================================================
+  // THEME SYNC
+  // ============================================================
 
   useEffect(() => {
     const syncTheme = () => {
@@ -294,6 +387,10 @@ function Home() {
     };
   }, []);
 
+  // ============================================================
+  // DESKTOP PREVIEW DETECTION
+  // ============================================================
+
   useEffect(() => {
     const desktopPreviewQuery = window.matchMedia('(min-width: 768px)');
 
@@ -310,6 +407,10 @@ function Home() {
     };
   }, []);
 
+  // ============================================================
+  // OPTIMIZED CURSOR GRID
+  // ============================================================
+
   useEffect(() => {
     const homeElement = homeRef.current;
 
@@ -317,82 +418,67 @@ function Home() {
       return undefined;
     }
 
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    cursorGridTargetRef.current = {
-      x: centerX,
-      y: centerY,
-    };
-
-    cursorGridCurrentRef.current = {
-      x: centerX,
-      y: centerY,
-    };
-
-    homeElement.style.setProperty('--home-cursor-x', `${centerX}px`);
-    homeElement.style.setProperty('--home-cursor-y', `${centerY}px`);
+    let animationFrame = null;
 
     const handleMouseMove = (event) => {
-      cursorGridTargetRef.current = {
-        x: event.clientX,
-        y: event.clientY,
-      };
-    };
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
 
-    const animateCursorGrid = () => {
-      cursorGridCurrentRef.current.x +=
-        (cursorGridTargetRef.current.x - cursorGridCurrentRef.current.x) * 0.06;
-      cursorGridCurrentRef.current.y +=
-        (cursorGridTargetRef.current.y - cursorGridCurrentRef.current.y) * 0.06;
-
-      cursorGridFrameRef.current += 1;
-
-      if (cursorGridFrameRef.current % 4 === 0) {
-        homeElement.style.setProperty(
-          '--home-cursor-x',
-          `${cursorGridCurrentRef.current.x}px`
-        );
-
-        homeElement.style.setProperty(
-          '--home-cursor-y',
-          `${cursorGridCurrentRef.current.y}px`
-        );
+      if (animationFrame !== null) {
+        cancelAnimationFrame(animationFrame);
       }
 
-      cursorGridAnimationRef.current = requestAnimationFrame(animateCursorGrid);
+      animationFrame = requestAnimationFrame(() => {
+        homeElement.style.setProperty('--home-cursor-x', `${mouseX}px`);
+        homeElement.style.setProperty('--home-cursor-y', `${mouseY}px`);
+
+        animationFrame = null;
+      });
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    cursorGridAnimationRef.current = requestAnimationFrame(animateCursorGrid);
+    window.addEventListener('pointermove', handleMouseMove, {
+      passive: true,
+    });
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('pointermove', handleMouseMove);
 
-      if (cursorGridAnimationRef.current) {
-        cancelAnimationFrame(cursorGridAnimationRef.current);
+      if (animationFrame !== null) {
+        cancelAnimationFrame(animationFrame);
       }
     };
   }, [isDesktopPreviewEnabled, prefersReducedMotion]);
 
+  // ============================================================
+  // OPTIMIZED FLOATING PROJECT PREVIEW
+  // ============================================================
+
   useEffect(() => {
-    if (!isDesktopPreviewEnabled || prefersReducedMotion) {
+    if (
+      !isDesktopPreviewEnabled ||
+      prefersReducedMotion ||
+      hoveredProject === null
+    ) {
       return undefined;
     }
 
     const animatePreview = () => {
       const previewBoxElement = previewBoxRef.current;
 
-      previewCurrentRef.current.x +=
-        (previewTargetRef.current.x - previewCurrentRef.current.x) * 0.15;
-      previewCurrentRef.current.y +=
-        (previewTargetRef.current.y - previewCurrentRef.current.y) * 0.15;
+      if (!previewBoxElement) return;
 
-      if (previewBoxElement) {
-        previewBoxElement.style.transform = `translate3d(${
-          previewCurrentRef.current.x + 28
-        }px, ${previewCurrentRef.current.y - 136}px, 0)`;
-      }
+      // Faster and smoother cursor following.
+      previewCurrentRef.current.x +=
+        (previewTargetRef.current.x - previewCurrentRef.current.x) *
+        CURSOR_FOLLOW_SPEED;
+
+      previewCurrentRef.current.y +=
+        (previewTargetRef.current.y - previewCurrentRef.current.y) *
+        CURSOR_FOLLOW_SPEED;
+
+      previewBoxElement.style.transform = `translate3d(${
+        previewCurrentRef.current.x + 28
+      }px, ${previewCurrentRef.current.y - 136}px, 0)`;
 
       previewAnimationRef.current = requestAnimationFrame(animatePreview);
     };
@@ -400,100 +486,98 @@ function Home() {
     previewAnimationRef.current = requestAnimationFrame(animatePreview);
 
     return () => {
-      if (previewAnimationRef.current) {
+      if (previewAnimationRef.current !== null) {
         cancelAnimationFrame(previewAnimationRef.current);
+        previewAnimationRef.current = null;
       }
     };
-  }, [isDesktopPreviewEnabled, prefersReducedMotion]);
+  }, [hoveredProject, isDesktopPreviewEnabled, prefersReducedMotion]);
 
-  const renderTypedIntroText = () => {
-    const name = 'Michael';
-    const nameStartIndex = introText.indexOf(name);
-    const nameEndIndex = nameStartIndex + name.length;
-
-    if (nameStartIndex === -1) {
-      return typedIntroText;
-    }
-
-    const beforeName = typedIntroText.slice(0, nameStartIndex);
-    const typedName = typedIntroText.slice(nameStartIndex, nameEndIndex);
-    const afterName = typedIntroText.slice(nameEndIndex);
-
-    return (
-      <>
-        {beforeName}
-        {typedName && (
-          <span className="animate-[michaelSoftColorShift_24s_ease-in-out_infinite] font-black motion-reduce:animate-none">
-            {typedName}
-          </span>
-        )}
-        {afterName}
-      </>
-    );
-  };
+  // ============================================================
+  // TYPING ANIMATION
+  // ============================================================
 
   useEffect(() => {
-    let introIndex = 0;
-    let roleIndex = 0;
-    let introTimer;
-    let roleTimer;
-    let roleDelayTimer;
-    let doneDelayTimer;
-
-    setTypedIntroText('');
-    setTypedRoleText('');
-    setActiveTypingLine('intro');
-
     if (prefersReducedMotion) {
-      setTypedIntroText(introText);
+      setTypedIntroText(formalIntro);
       setTypedRoleText(roleText);
       setActiveTypingLine('done');
       return undefined;
     }
 
-    introTimer = setInterval(() => {
-      introIndex += 1;
-      setTypedIntroText(introText.slice(0, introIndex));
+    let timeoutId;
+    let cancelled = false;
 
-      if (introIndex >= introText.length) {
-        clearInterval(introTimer);
+    const wait = (ms) =>
+      new Promise((resolve) => {
+        timeoutId = setTimeout(resolve, ms);
+      });
 
-        roleDelayTimer = setTimeout(() => {
-          setActiveTypingLine('role');
+    const runTypingAnimation = async () => {
+      setTypedIntroText('');
+      setTypedRoleText('');
+      setActiveTypingLine('intro');
 
-          roleTimer = setInterval(() => {
-            roleIndex += 1;
-            setTypedRoleText(roleText.slice(0, roleIndex));
+      while (!cancelled) {
+        for (let index = 1; index <= casualIntro.length; index += 1) {
+          if (cancelled) return;
 
-            if (roleIndex >= roleText.length) {
-              clearInterval(roleTimer);
+          setTypedIntroText(casualIntro.slice(0, index));
+          await wait(65);
+        }
 
-              doneDelayTimer = setTimeout(() => {
-                setActiveTypingLine('done');
-              }, 450);
-            }
-          }, 24);
-        }, 280);
+        setTypedRoleText(roleText);
+        setActiveTypingLine('done');
+
+        await wait(3000);
+
+        for (let index = casualIntro.length; index >= 0; index -= 1) {
+          if (cancelled) return;
+
+          setTypedIntroText(casualIntro.slice(0, index));
+          await wait(35);
+        }
+
+        for (let index = 1; index <= formalIntro.length; index += 1) {
+          if (cancelled) return;
+
+          setTypedIntroText(formalIntro.slice(0, index));
+          await wait(55);
+        }
+
+        await wait(3000);
+
+        for (let index = formalIntro.length; index >= 0; index -= 1) {
+          if (cancelled) return;
+
+          setTypedIntroText(formalIntro.slice(0, index));
+          await wait(30);
+        }
       }
-    }, 26);
+    };
+
+    runTypingAnimation();
 
     return () => {
-      clearInterval(introTimer);
-      clearInterval(roleTimer);
-      clearTimeout(roleDelayTimer);
-      clearTimeout(doneDelayTimer);
+      cancelled = true;
+      clearTimeout(timeoutId);
     };
   }, [prefersReducedMotion]);
 
+  // ============================================================
+  // SCROLL STATE
+  // ============================================================
+
   useEffect(() => {
     let ticking = false;
+    let scrollFrame = null;
 
     const handleScrollState = () => {
       if (ticking) return;
 
       ticking = true;
 
-      requestAnimationFrame(() => {
+      scrollFrame = requestAnimationFrame(() => {
         const footerElement = footerRef.current;
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
@@ -503,6 +587,7 @@ function Home() {
 
           const isMobile = viewportWidth < 640;
           const socialCheckX = viewportWidth - 32;
+
           const socialCheckY = isMobile
             ? viewportHeight - 92
             : viewportHeight / 2;
@@ -527,17 +612,30 @@ function Home() {
 
     handleScrollState();
 
-    window.addEventListener('scroll', handleScrollState, { passive: true });
+    window.addEventListener('scroll', handleScrollState, {
+      passive: true,
+    });
+
     window.addEventListener('resize', handleScrollState);
 
     return () => {
       window.removeEventListener('scroll', handleScrollState);
       window.removeEventListener('resize', handleScrollState);
+
+      if (scrollFrame !== null) {
+        cancelAnimationFrame(scrollFrame);
+      }
     };
   }, []);
 
+  // ============================================================
+  // MOBILE PROJECT INTRO
+  // ============================================================
+
   useEffect(() => {
-    if (introHasPlayedRef.current || prefersReducedMotion) return undefined;
+    if (introHasPlayedRef.current || prefersReducedMotion) {
+      return undefined;
+    }
 
     const isMobile = window.matchMedia('(max-width: 639px)').matches;
 
@@ -566,6 +664,10 @@ function Home() {
     };
   }, [projects, prefersReducedMotion]);
 
+  // ============================================================
+  // PROJECT PREVIEW SLIDES
+  // ============================================================
+
   useEffect(() => {
     clearInterval(previewSlideTimerRef.current);
     setPreviewSlideIndex(0);
@@ -584,16 +686,30 @@ function Home() {
       return undefined;
     }
 
+    const slideshowInterval =
+      currentProject.slideshowInterval ||
+      DEFAULT_SLIDESHOW_INTERVAL;
+
     previewSlideTimerRef.current = setInterval(() => {
-      setPreviewSlideIndex((currentIndex) =>
-        (currentIndex + 1) % currentProject.previewItems.length
+      setPreviewSlideIndex(
+        (currentIndex) =>
+          (currentIndex + 1) % currentProject.previewItems.length
       );
-    }, 1900);
+    }, slideshowInterval);
 
     return () => {
       clearInterval(previewSlideTimerRef.current);
     };
-  }, [hoveredProject, isDesktopPreviewEnabled, prefersReducedMotion, projects]);
+  }, [
+    hoveredProject,
+    isDesktopPreviewEnabled,
+    prefersReducedMotion,
+    projects,
+  ]);
+
+  // ============================================================
+  // PROJECT NAVIGATION
+  // ============================================================
 
   const handleProjectNavigate = (event, project, index) => {
     event.preventDefault();
@@ -649,9 +765,9 @@ function Home() {
     const previewBoxElement = previewBoxRef.current;
 
     if (previewBoxElement) {
-      previewBoxElement.style.transform = `translate3d(${event.clientX + 28}px, ${
-        event.clientY - 136
-      }px, 0)`;
+      previewBoxElement.style.transform = `translate3d(${
+        event.clientX + 28
+      }px, ${event.clientY - 136}px, 0)`;
     }
 
     setHoveredProject(index);
@@ -665,6 +781,10 @@ function Home() {
     setPreviewSlideIndex(0);
   };
 
+  // ============================================================
+  // SCROLL BUTTON
+  // ============================================================
+
   const handleFloatingArrowClick = () => {
     window.scrollTo({
       top: isAtBottom ? 0 : document.documentElement.scrollHeight,
@@ -672,10 +792,17 @@ function Home() {
     });
   };
 
+  // ============================================================
+  // PREVIEW MEDIA
+  // ============================================================
+
   const renderPreviewMedia = () => {
     if (hoveredProject === null) return null;
 
     const currentProject = projects[hoveredProject];
+
+    if (!currentProject?.previewItems?.length) return null;
+
     const currentPreview =
       currentProject.previewItems[
         previewSlideIndex % currentProject.previewItems.length
@@ -713,6 +840,10 @@ function Home() {
     );
   };
 
+  // ============================================================
+  // SOCIAL ICON CLASSES
+  // ============================================================
+
   const socialIconClass = `group flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:text-[#FF0000] sm:h-10 sm:w-10 sm:hover:-translate-x-1 sm:hover:translate-y-0 lg:h-auto lg:w-auto ${
     isSocialOnDark
       ? 'text-[#FF0000]'
@@ -721,6 +852,10 @@ function Home() {
         : 'text-black'
   }`;
 
+  // ============================================================
+  // JSX
+  // ============================================================
+
   return (
     <div
       ref={homeRef}
@@ -728,32 +863,39 @@ function Home() {
         isDarkMode ? 'bg-black text-white' : 'bg-[#d9d9d9] text-black'
       }`}
     >
-      {themeSpread.isActive && !document.startViewTransition && (
-        <div
-          className={`pointer-events-none fixed inset-0 z-[49] motion-reduce:hidden ${
-            themeSpread.direction === 'collapse'
-              ? 'animate-[themeCircleCollapse_950ms_cubic-bezier(0.22,1,0.36,1)_forwards]'
-              : 'animate-[themeCircleSpread_950ms_cubic-bezier(0.22,1,0.36,1)_forwards]'
-          }`}
-          style={{
-            '--theme-spread-x': `${themeSpread.x}px`,
-            '--theme-spread-y': `${themeSpread.y}px`,
-            backgroundColor:
-              themeSpread.nextTheme === 'dark' ? '#000000' : '#d9d9d9',
-          }}
-        />
-      )}
+      {/* THEME TRANSITION */}
+      {themeSpread.isActive &&
+        !document.startViewTransition && (
+          <div
+            className={`pointer-events-none fixed inset-0 z-[49] motion-reduce:hidden ${
+              themeSpread.direction === 'collapse'
+                ? 'animate-[themeCircleCollapse_950ms_cubic-bezier(0.22,1,0.36,1)_forwards]'
+                : 'animate-[themeCircleSpread_950ms_cubic-bezier(0.22,1,0.36,1)_forwards]'
+            }`}
+            style={{
+              '--theme-spread-x': `${themeSpread.x}px`,
+              '--theme-spread-y': `${themeSpread.y}px`,
+              backgroundColor:
+                themeSpread.nextTheme === 'dark'
+                  ? '#000000'
+                  : '#d9d9d9',
+            }}
+          />
+        )}
 
+      {/* BACKGROUND GRID */}
       <div
         className={`pointer-events-none fixed inset-0 z-0 sm:animate-[gridDrift_46s_linear_infinite] motion-reduce:animate-none ${
           isDarkMode
             ? 'bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)]'
-            : 'bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.035)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)]'
+            : 'bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)]'
         } bg-[size:34px_34px] sm:bg-[size:38px_38px]`}
       />
 
+      {/* CURSOR GRID */}
       <div className="pointer-events-none fixed inset-0 z-[1] hidden animate-[gridDrift_46s_linear_infinite] bg-[linear-gradient(rgba(255,0,0,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,0,0.16)_1px,transparent_1px)] bg-[size:38px_38px] opacity-60 [mask-image:radial-gradient(circle_at_var(--home-cursor-x,50%)_var(--home-cursor-y,50%),black_0,black_52px,transparent_126px)] [-webkit-mask-image:radial-gradient(circle_at_var(--home-cursor-x,50%)_var(--home-cursor-y,50%),black_0,black_52px,transparent_126px)] motion-reduce:hidden md:block" />
 
+      {/* BACKGROUND TEXTURE */}
       <div
         className={`pointer-events-none fixed inset-0 z-[2] hidden sm:block ${
           isDarkMode
@@ -770,6 +912,7 @@ function Home() {
         } bg-[size:20px_20px] [mask-image:radial-gradient(circle_at_8%_18%,black_0,black_70px,transparent_235px),radial-gradient(circle_at_92%_72%,black_0,black_70px,transparent_255px)] [-webkit-mask-image:radial-gradient(circle_at_8%_18%,black_0,black_70px,transparent_235px),radial-gradient(circle_at_92%_72%,black_0,black_70px,transparent_255px)]`}
       />
 
+      {/* ANIMATIONS */}
       <style>
         {`
           @keyframes gridDrift {
@@ -813,31 +956,10 @@ function Home() {
               transform: scale(1);
             }
           }
-
-          @keyframes michaelSoftColorShift {
-            0%, 100% {
-              color: #ff0000;
-              text-shadow: 0 0 5px rgba(255, 0, 0, 0.1);
-            }
-
-            25% {
-              color: #ff7a3d;
-              text-shadow: 0 0 5px rgba(255, 122, 61, 0.09);
-            }
-
-            50% {
-              color: #d9a900;
-              text-shadow: 0 0 5px rgba(217, 169, 0, 0.08);
-            }
-
-            75% {
-              color: #4a96ff;
-              text-shadow: 0 0 5px rgba(74, 150, 255, 0.09);
-            }
-          }
         `}
       </style>
 
+      {/* INTRODUCTION */}
       <section className="relative z-10 px-5 pt-28 text-center sm:pt-32 md:pt-36">
         <h1
           className={`font-snellroundhand mb-5 text-[4.35rem] leading-[0.88] tracking-wide transition-colors duration-500 sm:mb-6 sm:text-6xl md:mb-7 md:text-7xl lg:mb-8 lg:text-8xl ${
@@ -854,38 +976,43 @@ function Home() {
               : 'border-black text-black/75'
           }`}
         >
-          Creative Work with a Human Touch
+          A Little Piece of Me in Every Design
         </p>
 
-        <p
-          className={`mx-auto mt-7 flex min-h-[96px] max-w-[800px] flex-col items-center justify-center px-1 text-[13px] font-bold leading-relaxed transition-colors duration-500 sm:min-h-[82px] sm:text-sm md:mt-8 ${
-            isDarkMode ? 'text-white' : 'text-black'
-          }`}
-        >
-          <span className="max-w-[320px] sm:max-w-none">
-            {renderTypedIntroText()}
-            {activeTypingLine === 'intro' && (
+        <div className="mx-auto mt-7 flex min-h-[112px] max-w-[800px] flex-col items-center justify-center px-1 text-center transition-colors duration-500 sm:min-h-[100px] md:mt-8">
+          <p
+            className={`min-h-[24px] text-[15px] font-black leading-tight sm:text-lg md:text-xl ${
+              isDarkMode ? 'text-white' : 'text-black'
+            }`}
+          >
+            {typedIntroText}
+
+            {activeTypingLine !== 'done' && (
               <span className="ml-1 inline-block animate-pulse text-[#FF0000] motion-reduce:animate-none">
                 |
               </span>
             )}
-          </span>
+          </p>
 
-          <span
-            className={`mt-2 max-w-[310px] text-[11px] font-black uppercase tracking-[0.08em] transition-colors duration-500 sm:mt-1 sm:max-w-none sm:text-sm sm:font-bold sm:normal-case sm:tracking-normal ${
-              isDarkMode ? 'text-white/65' : 'text-black/60'
+          <p
+            className={`mt-2 max-w-[620px] text-[12px] font-bold leading-[1.5] sm:text-sm ${
+              isDarkMode ? 'text-white/80' : 'text-black/75'
+            }`}
+          >
+            {descriptionText}
+          </p>
+
+          <p
+            className={`mt-1 max-w-[700px] text-[10px] font-bold uppercase leading-[1.4] tracking-[0.08em] transition-colors duration-500 sm:text-xs ${
+              isDarkMode ? 'text-white/50' : 'text-black/50'
             }`}
           >
             {typedRoleText}
-            {activeTypingLine === 'role' && (
-              <span className="ml-1 inline-block animate-pulse text-[#FF0000] motion-reduce:animate-none">
-                |
-              </span>
-            )}
-          </span>
-        </p>
+          </p>
+        </div>
       </section>
 
+      {/* FLOATING PROJECT PREVIEW */}
       <div
         ref={previewBoxRef}
         className={`pointer-events-none fixed left-0 top-0 z-[9998] hidden h-[260px] w-[330px] overflow-hidden border-2 border-dotted p-2 shadow-2xl backdrop-blur-sm transition-[opacity,scale,background-color,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform md:block ${
@@ -903,6 +1030,7 @@ function Home() {
         </div>
       </div>
 
+      {/* FLOATING SOCIAL LINKS */}
       <div
         className={`fixed bottom-6 right-5 z-50 flex items-center gap-2 rounded-full border-2 px-3 py-2 backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:right-5 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:flex-col sm:gap-4 sm:px-3 sm:py-5 lg:right-6 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none ${
           isSocialOnDark
@@ -917,7 +1045,11 @@ function Home() {
             key={social.label}
             href={social.href}
             target={social.label === 'Email' ? undefined : '_blank'}
-            rel={social.label === 'Email' ? undefined : 'noopener noreferrer'}
+            rel={
+              social.label === 'Email'
+                ? undefined
+                : 'noopener noreferrer'
+            }
             aria-label={social.label}
             className={socialIconClass}
             draggable="false"
@@ -934,6 +1066,7 @@ function Home() {
         ))}
       </div>
 
+      {/* FLOATING SCROLL BUTTON */}
       <button
         type="button"
         aria-label={isAtBottom ? 'Scroll to top' : 'Scroll to bottom'}
@@ -959,48 +1092,22 @@ function Home() {
         </span>
       </button>
 
+      {/* FEATURED PROJECTS */}
       <section
         className={`relative z-10 mx-auto mt-10 min-h-[390px] w-[90%] border-2 border-dotted px-4 pb-24 pt-8 transition-colors duration-500 sm:mt-16 sm:w-[92%] sm:px-6 sm:pb-28 md:mt-20 md:w-[94%] md:min-h-[390px] md:pb-28 md:pt-9 lg:pb-24 ${
           isDarkMode ? 'border-white' : 'border-black'
         }`}
       >
-        <div
-          className={`absolute -left-3 -top-3 h-7 w-7 border-l-[5px] border-t-[5px] transition-colors duration-500 sm:h-8 sm:w-8 sm:border-l-[6px] sm:border-t-[6px] ${
-            isDarkMode ? 'border-white' : 'border-black'
-          }`}
-        />
-        <div
-          className={`absolute -right-3 -top-3 h-7 w-7 border-r-[5px] border-t-[5px] transition-colors duration-500 sm:h-8 sm:w-8 sm:border-r-[6px] sm:border-t-[6px] ${
-            isDarkMode ? 'border-white' : 'border-black'
-          }`}
-        />
-        <div
-          className={`absolute -bottom-3 -left-3 h-7 w-7 border-b-[5px] border-l-[5px] transition-colors duration-500 sm:h-8 sm:w-8 sm:border-b-[6px] sm:border-l-[6px] ${
-            isDarkMode ? 'border-white' : 'border-black'
-          }`}
-        />
-        <div
-          className={`absolute -bottom-3 -right-3 h-7 w-7 border-b-[5px] border-r-[5px] transition-colors duration-500 sm:h-8 sm:w-8 sm:border-b-[6px] sm:border-r-[6px] ${
-            isDarkMode ? 'border-white' : 'border-black'
-          }`}
-        />
+        <CornerDecorations isDarkMode={isDarkMode} />
 
         <div className="mb-9 text-center sm:mb-14 md:mb-20">
           <h2
-            className={`text-xs font-black uppercase tracking-[0.24em] transition-colors duration-500 ${
+            className={`text-xs font-black uppercase tracking-[0.24em] transition-colors duration-500 sm:text-sm ${
               isDarkMode ? 'text-white' : 'text-black'
             }`}
           >
-            My Works
+            FEATURED PROJECTS
           </h2>
-
-          <p
-            className={`mt-2 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors duration-500 ${
-              isDarkMode ? 'text-white/45' : 'text-black/45'
-            }`}
-          >
-            Selected Projects
-          </p>
         </div>
 
         <div className="mx-auto flex w-full max-w-[805px] flex-col gap-3 sm:gap-2.5">
@@ -1018,9 +1125,15 @@ function Home() {
                   projectTitle: project.targetProjectTitle,
                   scrollToProject: true,
                 }}
-                onClick={(event) => handleProjectNavigate(event, project, index)}
-                onMouseMove={(event) => handleProjectMouseMove(event, index)}
-                onMouseEnter={(event) => handleProjectMouseEnter(event, index)}
+                onClick={(event) =>
+                  handleProjectNavigate(event, project, index)
+                }
+                onMouseMove={(event) =>
+                  handleProjectMouseMove(event, index)
+                }
+                onMouseEnter={(event) =>
+                  handleProjectMouseEnter(event, index)
+                }
                 onMouseLeave={handleProjectMouseLeave}
                 draggable="false"
                 className={`group relative flex min-h-[62px] items-center justify-between overflow-hidden border-2 bg-transparent px-4 py-4 text-left text-xs font-black transition-[transform,color,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:min-h-0 sm:px-8 sm:py-5 md:px-16 md:text-sm ${
@@ -1035,6 +1148,7 @@ function Home() {
                       : 'text-black md:hover:scale-[1.01] md:hover:text-white'
                 }`}
               >
+                {/* HOVER FILL */}
                 <span
                   className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isDarkMode ? 'bg-white' : 'bg-black'
@@ -1045,6 +1159,7 @@ function Home() {
                   }`}
                 />
 
+                {/* PROJECT TITLE */}
                 <span className="relative z-10 flex items-center gap-3 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2">
                   <span
                     className={`inline-flex h-4 min-w-6 items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
@@ -1069,6 +1184,7 @@ function Home() {
                   </span>
                 </span>
 
+                {/* ARROW */}
                 <span
                   className={`relative z-10 text-xl transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:text-2xl ${
                     shouldFill
@@ -1084,6 +1200,15 @@ function Home() {
         </div>
       </section>
 
+      {/* CONTACT SECTION — NO DOTTED RECTANGLE */}
+      <div className="relative z-10 mx-auto mb-12 mt-10 w-full sm:mb-16 sm:mt-14 md:mt-16">
+        <HomeContact isDarkMode={isDarkMode} compact />
+      </div>
+
+      {/* CREATIVE WORKS SECTION */}
+      <HomeCreativeWorks isDarkMode={isDarkMode} />
+
+      {/* FOOTER */}
       <div className="relative z-10" ref={footerRef}>
         <Footer />
       </div>

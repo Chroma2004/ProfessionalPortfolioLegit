@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Neonderthaw&display=swap');
 @import "tailwindcss";
 
+/* ========================================
+   CUSTOM FONTS
+======================================== */
+
 @font-face {
   font-family: 'Snell Roundhand';
   src: url('./assets/SnellRoundhand.otf') format('opentype');
@@ -9,10 +13,16 @@
   font-display: swap;
 }
 
+/* ========================================
+   GLOBAL STYLES
+======================================== */
+
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
   margin: 0;
   padding: 0;
 }
@@ -25,109 +35,204 @@ body {
   font-family: 'Snell Roundhand', cursive;
 }
 
-/* Red laser pointer cursor */
+/* ========================================
+   RED LASER POINTER CURSOR
+======================================== */
+
 @media (hover: hover) and (pointer: fine) {
-  * {
-    cursor: none;
+  html,
+  body,
+  body * {
+    cursor: none !important;
   }
 
   .custom-cursor-dot {
     position: fixed;
+
     left: 0;
     top: 0;
+
     z-index: 999999;
+
     width: 8px;
     height: 8px;
+
     pointer-events: none;
+
     border-radius: 9999px;
+
     background: #ff0000;
+
     opacity: 0;
-    transform: translate3d(50vw, 50vh, 0) translate(-50%, -50%);
+
+    transform:
+      translate3d(50vw, 50vh, 0)
+      translate(-50%, -50%);
+
+    /* GPU acceleration */
+    will-change: transform;
+
+    backface-visibility: hidden;
+
+    -webkit-backface-visibility: hidden;
+
+    /* Keep appearance animations only */
+    transition:
+      opacity 120ms ease,
+      width 120ms ease,
+      height 120ms ease,
+      box-shadow 120ms ease;
+
     box-shadow:
       0 0 10px rgba(255, 0, 0, 0.95),
       0 0 24px rgba(255, 0, 0, 0.45);
-    transition:
-      opacity 180ms ease,
-      width 180ms ease,
-      height 180ms ease,
-      box-shadow 180ms ease;
+
     mix-blend-mode: normal;
   }
 
+  /* Cursor pressed effect */
   .custom-cursor-dot-pressed {
     width: 12px;
     height: 12px;
+
     box-shadow:
       0 0 14px rgba(255, 0, 0, 1),
       0 0 34px rgba(255, 0, 0, 0.65);
   }
 }
 
-@media (hover: none) and (pointer: coarse) {
+/* Hide custom cursor on touch devices */
+@media (hover: none), (pointer: coarse) {
   .custom-cursor-dot {
-    display: none;
+    display: none !important;
   }
 }
 
-/* Main animated background */
+/* ========================================
+   MAIN ANIMATED BACKGROUND
+======================================== */
+
 .animated-bg {
   position: relative;
+
   isolation: isolate;
+
   overflow: hidden;
+
   background: #d9d9d9;
 
   --cursor-x: 50%;
   --cursor-y: 50%;
+
   --cursor-follow-x: 50%;
   --cursor-follow-y: 50%;
 }
 
-/* Base moving line grid */
+/* ========================================
+   BASE MOVING LINE GRID
+======================================== */
+
 .animated-bg::before {
   content: "";
+
   position: absolute;
+
   inset: 0;
+
   z-index: -5;
+
   pointer-events: none;
+
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.085) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.085) 1px, transparent 1px);
+    linear-gradient(
+      rgba(0, 0, 0, 0.085) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.085) 1px,
+      transparent 1px
+    );
+
   background-size: 36px 36px;
+
   animation: gridDrift 24s linear infinite;
+
   opacity: 0.75;
 }
 
-/* Moving dotted grid */
+/* ========================================
+   MOVING DOTTED GRID
+======================================== */
+
 .animated-bg::after {
   content: "";
-  position: absolute;
-  inset: -20%;
-  z-index: -4;
-  pointer-events: none;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1px, transparent 1.2px);
-  background-size: 18px 18px;
-  animation: dottedGridDrift 24s linear infinite;
-  opacity: 0.42;
-}
 
-/* Red grid highlight only on the grid lines */
-.animated-bg .red-grid-highlight {
   position: absolute;
-  inset: 0;
-  z-index: -3;
+
+  inset: -20%;
+
+  z-index: -4;
+
   pointer-events: none;
 
   background-image:
-    linear-gradient(rgba(255, 0, 0, 0.5) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.5) 1px, transparent 1px);
+    radial-gradient(
+      rgba(0, 0, 0, 0.12) 1px,
+      transparent 1.2px
+    );
+
+  background-size: 18px 18px;
+
+  animation: dottedGridDrift 24s linear infinite;
+
+  opacity: 0.42;
+}
+
+/* ========================================
+   RED GRID HIGHLIGHT
+   OPTIMIZED FOR FAST CURSOR MOVEMENT
+======================================== */
+
+.animated-bg .red-grid-highlight {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -3;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 0, 0, 0.5) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.5) 1px,
+      transparent 1px
+    );
 
   background-size: 36px 36px;
+
   animation: gridDrift 24s linear infinite;
 
   opacity: 0;
 
+  /*
+   * The highlight follows CSS variables updated
+   * by your React component.
+   *
+   * No mask transition is applied, so the
+   * browser does not intentionally delay
+   * changes to the highlight position.
+   */
+
   mask-image: radial-gradient(
-    circle 125px at var(--cursor-follow-x) var(--cursor-follow-y),
+    circle 125px at
+    var(--cursor-follow-x)
+    var(--cursor-follow-y),
     black 0%,
     black 18%,
     rgba(0, 0, 0, 0.45) 40%,
@@ -136,7 +241,9 @@ body {
   );
 
   -webkit-mask-image: radial-gradient(
-    circle 125px at var(--cursor-follow-x) var(--cursor-follow-y),
+    circle 125px at
+    var(--cursor-follow-x)
+    var(--cursor-follow-y),
     black 0%,
     black 18%,
     rgba(0, 0, 0, 0.45) 40%,
@@ -144,22 +251,28 @@ body {
     transparent 78%
   );
 
-  transition:
-    opacity 0.25s ease,
-    mask-image 0.16s linear,
-    -webkit-mask-image 0.16s linear;
+  /* Only fade opacity, never cursor position */
+  transition: opacity 180ms ease;
 }
 
+/* Show red highlight when hovered */
 .animated-bg.is-hovered .red-grid-highlight {
   opacity: 0.65;
 }
 
-/* Soft edge depth */
+/* ========================================
+   SOFT EDGE DEPTH
+======================================== */
+
 .animated-bg .bg-vignette {
   position: absolute;
+
   inset: 0;
+
   z-index: -1;
+
   pointer-events: none;
+
   background:
     radial-gradient(
       circle at center,
@@ -168,6 +281,10 @@ body {
       rgba(0, 0, 0, 0.08) 100%
     );
 }
+
+/* ========================================
+   ANIMATIONS
+======================================== */
 
 @keyframes gridDrift {
   0% {
@@ -191,21 +308,29 @@ body {
 
 @keyframes loaderNeedle {
   0% {
-    transform: translate(-50%, -100%) rotate(-35deg);
+    transform:
+      translate(-50%, -100%)
+      rotate(-35deg);
   }
 
   50% {
-    transform: translate(-50%, -100%) rotate(35deg);
+    transform:
+      translate(-50%, -100%)
+      rotate(35deg);
   }
 
   100% {
-    transform: translate(-50%, -100%) rotate(-35deg);
+    transform:
+      translate(-50%, -100%)
+      rotate(-35deg);
   }
 }
 
-/* Custom Scrollbar */
+/* ========================================
+   CUSTOM SCROLLBAR
+======================================== */
 
-/* Firefox fallback */
+/* Firefox */
 html {
   scrollbar-width: thin;
   scrollbar-color: #ef4444 transparent;
@@ -218,25 +343,53 @@ html {
 
 ::-webkit-scrollbar-track {
   background-color: transparent;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    #000 0px,
-    #000 3px,
-    transparent 3px,
-    transparent 9px
-  );
+
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      #000 0px,
+      #000 3px,
+      transparent 3px,
+      transparent 9px
+    );
+
   background-size: 2px 9px;
+
   background-repeat: repeat-y;
+
   background-position: center;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #ef4444;
+
   border: 3px solid transparent;
+
   background-clip: content-box;
+
   border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #dc2626;
+}
+
+/* ========================================
+   REDUCED MOTION ACCESSIBILITY
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-bg::before,
+  .animated-bg::after,
+  .animated-bg .red-grid-highlight {
+    animation: none !important;
+  }
+
+  .animated-bg .red-grid-highlight {
+    transition: none !important;
+  }
+
+  .custom-cursor-dot {
+    transition: none !important;
+  }
 }

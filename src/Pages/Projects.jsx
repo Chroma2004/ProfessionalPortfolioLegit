@@ -4,11 +4,19 @@ import { useLocation } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import ProjectModal from '../Components/ProjectModal';
 
+// ============================================================
+// ILLUSTRATION IMPORTS
+// ============================================================
+
 import illust2 from '../assets/Illustrations/ILLUST2.png';
 import illust4 from '../assets/Illustrations/ILLUST4.png';
 import illust5Jpeg from '../assets/Illustrations/ILLUST5.jpeg';
 import illust5Png from '../assets/Illustrations/ILLUST5.png';
 import illust6 from '../assets/Illustrations/ILLUST6.png';
+
+// ============================================================
+// PIXEL ART IMPORTS
+// ============================================================
 
 import px1 from '../assets/Illustrations/COMS1.1.mp4';
 import px2 from '../assets/Illustrations/PX2.PNG';
@@ -25,6 +33,10 @@ import px51 from '../assets/Illustrations/PX5.1.jpg';
 import px52 from '../assets/Illustrations/PX5.2.jpg';
 import px53 from '../assets/Illustrations/PX5.3.jpg';
 
+// ============================================================
+// GRAPHIC DESIGN IMPORTS
+// ============================================================
+
 import gpx1 from '../assets/GPX/GPX1.png';
 import gpx2 from '../assets/GPX/GPX2.png';
 import gpx3 from '../assets/GPX/GPX3.png';
@@ -35,7 +47,34 @@ import gpx7 from '../assets/GPX/GPX7.png';
 import gpx8 from '../assets/GPX/GPX8.png';
 import gpx9 from '../assets/GPX/GPX9.png';
 import gpx10 from '../assets/GPX/GPX10.png';
-import gpx11 from '../assets/GPX/GPX11.jpg';
+import gpx11 from '../assets/GPX/GPX11.png';
+import gpx12 from '../assets/GPX/GPX12.png';
+import gpx13 from '../assets/GPX/GPX13.png';
+import gpx14 from '../assets/GPX/GPX14.png';
+
+// ============================================================
+// RECRUITMENT POSTER IMPORTS
+// ============================================================
+
+import recruitment1 from '../assets/RecruitmentPosters/1.png';
+import recruitment2 from '../assets/RecruitmentPosters/2.png';
+import recruitment3 from '../assets/RecruitmentPosters/3.png';
+import recruitment4 from '../assets/RecruitmentPosters/4.png';
+import recruitment5 from '../assets/RecruitmentPosters/5.png';
+import recruitment6 from '../assets/RecruitmentPosters/6.png';
+import recruitment7 from '../assets/RecruitmentPosters/7.png';
+import recruitment8 from '../assets/RecruitmentPosters/8.png';
+import recruitment9 from '../assets/RecruitmentPosters/9.png';
+import recruitment10 from '../assets/RecruitmentPosters/10.png';
+import recruitment11 from '../assets/RecruitmentPosters/11.png';
+import recruitment12 from '../assets/RecruitmentPosters/12.png';
+import recruitment13 from '../assets/RecruitmentPosters/13.png';
+import recruitment14 from '../assets/RecruitmentPosters/14.png';
+import recruitment15 from '../assets/RecruitmentPosters/15.png';
+
+// ============================================================
+// WEB SYSTEM IMPORTS
+// ============================================================
 
 import internPortfolioPreview from '../assets/System/InternPortfolio.png';
 import trackEdPreview from '../assets/System/TrackEd.png';
@@ -43,16 +82,104 @@ import ctrlAltDelightPreview from '../assets/System/Ctrl+Alt+Delight.png';
 import photo2yPreview from '../assets/System/Photo2y.png';
 import photo2yPreview2 from '../assets/System/Photo2y2.png';
 
+// ============================================================
+// PODCAST VIDEO IMPORTS
+// DARK VERSION ONLY
+// ============================================================
+
+import podDark from '../assets/VideoEdit/PodDark.mp4';
+
+// ============================================================
+// RECRUITMENT VIDEO IMPORTS
+// DARK VERSION ONLY
+// ============================================================
+
+import videoEditDark from '../assets/VideoEdit/VideoEditDark.mp4';
+
+// ============================================================
+// ENGAGEMENT VIDEO IMPORTS
+// DARK VERSION ONLY
+// ============================================================
+
+import engagementVideoDark from '../assets/VideoEdit/EngagementVideoDark.mp4';
+
+// ============================================================
+// EVENT VIDEO EDIT IMPORTS
+// ============================================================
+
+import employeeDay from '../assets/VideoEdit/EmployeeDay.mp4';
+import mentalHealth from '../assets/VideoEdit/MentalHealth.mp4';
+import movieNight from '../assets/VideoEdit/MovieNight.mp4';
+
+// ============================================================
+// VIDEO MEDIA COLLECTIONS
+// ============================================================
+
+const podcastVideoMedia = [
+  {
+    type: 'video',
+    src: podDark,
+    alt: 'Podcast Video Showcase',
+    label: 'Podcast Video Showcase',
+  },
+];
+
+const recruitmentVideoMedia = [
+  {
+    type: 'video',
+    src: videoEditDark,
+    alt: 'Recruitment Video Showcase',
+    label: 'Recruitment Video Showcase',
+  },
+];
+
+const engagementVideoMedia = [
+  {
+    type: 'video',
+    src: engagementVideoDark,
+    alt: 'Engagement Video Showcase',
+    label: 'Engagement Video Showcase',
+  },
+];
+
+const eventVideoMedia = [
+  {
+    type: 'video',
+    src: employeeDay,
+    alt: 'Employee Day',
+    label: 'Employee Day',
+  },
+  {
+    type: 'video',
+    src: mentalHealth,
+    alt: 'Mental Health',
+    label: 'Mental Health',
+  },
+  {
+    type: 'video',
+    src: movieNight,
+    alt: 'Movie Night',
+    label: 'Movie Night',
+  },
+];
+
+// ============================================================
+// PROJECTS COMPONENT
+// ============================================================
+
 function Projects() {
   const location = useLocation();
 
   const [isAtBottom, setIsAtBottom] = useState(false);
   const [isSocialOnDark, setIsSocialOnDark] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [displayedFilter, setDisplayedFilter] = useState('All');
+
+  const [activeFilter, setActiveFilter] = useState('Illustrations');
+  const [displayedFilter, setDisplayedFilter] = useState('Illustrations');
+
   const [animatingFilter, setAnimatingFilter] = useState(null);
   const [projectCardStage, setProjectCardStage] = useState('idle');
+
   const [isDesktopMotion, setIsDesktopMotion] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -62,12 +189,19 @@ function Projects() {
     return localStorage.getItem('portfolio-theme') === 'dark';
   });
 
+  // ============================================================
+  // REFS
+  // ============================================================
+
   const pageRef = useRef(null);
   const footerRef = useRef(null);
+
   const projectCardRefs = useRef([]);
   const projectCardTitleRefs = useRef({});
+
   const cursorGridAnimationRef = useRef(null);
   const cursorGridFrameRef = useRef(0);
+
   const filterCollapseTimeoutRef = useRef(null);
   const filterEnterTimeoutRef = useRef(null);
 
@@ -81,25 +215,20 @@ function Projects() {
     y: 0,
   });
 
+  // ============================================================
+  // EMAIL
+  // ============================================================
+
   const email = 'michaelrhoigonzales@gmail.com';
 
   const emailLink = `mailto:${email}?subject=Portfolio Inquiry&body=Hi Michael,%0D%0A%0D%0AI saw your portfolio and would like to connect with you.%0D%0A%0D%0A`;
 
+  // ============================================================
+  // FILTERS
+  // ============================================================
+
   const filters = useMemo(
     () => [
-      {
-        label: 'All',
-        icon: (
-          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
-            <path
-              d="M4 5H20M4 12H20M4 19H20"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-            />
-          </svg>
-        ),
-      },
       {
         label: 'Illustrations',
         icon: (
@@ -191,21 +320,56 @@ function Projects() {
           </svg>
         ),
       },
+      {
+        label: 'Others',
+        icon: (
+          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+            <path
+              d="M4 4H10V10H4V4ZM14 4H20V10H14V4ZM4 14H10V20H4V14ZM14 14H20V20H14V14Z"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ),
+      },
+      {
+        label: 'All',
+        icon: (
+          <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+            <path
+              d="M4 5H20M4 12H20M4 19H20"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+            />
+          </svg>
+        ),
+      },
     ],
     []
   );
 
+  // ============================================================
+  // PROJECT DATA
+  // ============================================================
+
   const projects = useMemo(
     () => [
+      // ======================================================
+      // 01 DIGITAL PROJECTS
+      // ======================================================
+
       {
         title: 'Digital Projects',
-        role: 'Digital Illustration / Visual Design',
+        role: 'Digital Illustration',
         category: 'Illustrations',
+
         description:
           'A digital illustration collection where I explored colors, character moments, backgrounds, and storytelling through Procreate.',
+
         tools: ['Procreate'],
-        details:
-          'This collection helped me practice digital drawing with a stronger focus on mood, color, composition, and storytelling. Most of the pieces were made as personal studies where I tried to keep every artwork expressive and cohesive.',
+
         preview: {
           type: 'image',
           src: illust2,
@@ -213,63 +377,55 @@ function Projects() {
           label: 'ILLUST2',
           previewPosition: 'object-[right_18%]',
         },
+
         media: [
           {
             type: 'image',
             src: illust2,
             alt: 'Digital Illustration Preview',
             label: 'Digital Illustration',
-            details:
-              'A digital illustration study focused on character styling, color balance, and clean visual composition.',
-            tools: ['Procreate'],
           },
           {
             type: 'image',
             src: illust4,
             alt: 'Storytelling Illustration',
             label: 'Storytelling Illustration',
-            details:
-              'An illustration study where I explored a storytelling style and tried to capture a specific mood through composition, pose, and visual atmosphere.',
-            tools: ['Procreate'],
           },
           {
             type: 'image',
             src: illust5Jpeg,
             alt: 'Background Drawing',
             label: 'Background Drawing',
-            details:
-              'A background drawing exploration where I practiced building atmosphere, depth, and environmental details.',
-            tools: ['Procreate'],
           },
           {
             type: 'image',
             src: illust5Png,
             alt: 'Animal Illustration',
             label: 'Animal Illustration',
-            details:
-              'An animal illustration study focused on shape, expression, and soft visual details using Procreate.',
-            tools: ['Procreate'],
           },
           {
             type: 'image',
             src: illust6,
             alt: 'Color and Element Study',
             label: 'Color and Element Study',
-            details:
-              'A color and element exploration that pushed me to combine different styles in one canvas while keeping the final artwork cohesive.',
-            tools: ['Procreate'],
           },
         ],
       },
+
+      // ======================================================
+      // 02 PIXEL ART PROJECTS
+      // ======================================================
+
       {
         title: 'Pixel Art Projects',
-        role: 'Pixel Art / Retro Visual Design',
+        role: 'Pixel Art',
         category: 'Illustrations',
+
         description:
           'A pixel art collection focused on animation, moody scenes, and game-style mockups inspired by retro visuals.',
-        tools: ['Procreate'],
-        details:
-          'This project helped me explore pixel-based artwork, from small animated commissions to game-style mockups. I focused on mood, readability, and making each scene feel like it could belong in a playable world.',
+
+        tools: ['Procreate', 'Aseprite'],
+
         preview: {
           type: 'image',
           src: px2,
@@ -277,171 +433,127 @@ function Projects() {
           label: 'PX2',
           previewPosition: 'object-right',
         },
+
         media: [
           {
             type: 'video',
             src: px1,
             alt: 'Pixel Art Animation Commission',
             label: 'Pixel Art Animation Commission',
-            details:
-              'A pixel art commission that pushed me to practice animation, timing, and small-frame movement while keeping the artwork readable and expressive.',
-            tools: ['Procreate', 'Aseprite'],
           },
           {
             type: 'image',
             src: px2,
             alt: 'Train on a Wheat Field',
             label: 'Train on a Wheat Field',
-            details:
-              'A moody pixel art illustration where I explored atmosphere, quiet scenery, and a softer visual direction using a train and wheat field composition.',
-            tools: ['Procreate'],
           },
           {
             type: 'stack',
             label: 'PX3 Game Concept',
-            details:
-              'An original game mockup concept where I explored how my own idea could look as a pixel-style game scene.',
-            tools: ['Procreate'],
             items: [
               {
                 type: 'image',
                 src: px3,
                 alt: 'PX3 Game Concept',
                 label: 'PX3 Game Concept',
-                details:
-                  'An original game mockup concept where I explored how my own idea could look as a pixel-style game scene.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px31,
                 alt: 'PX3.1 Game Concept',
                 label: 'PX3.1 Game Concept',
-                details:
-                  'A continuation of the original PX3 game mockup concept, focused on scene variation and visual consistency.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px32,
                 alt: 'PX3.2 Game Concept',
                 label: 'PX3.2 Game Concept',
-                details:
-                  'A continuation of the original PX3 game mockup concept, focused on scene variation and visual consistency.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px33,
                 alt: 'PX3.3 Game Concept',
                 label: 'PX3.3 Game Concept',
-                details:
-                  'A continuation of the original PX3 game mockup concept, focused on scene variation and visual consistency.',
-                tools: ['Procreate'],
               },
             ],
           },
           {
             type: 'stack',
             label: 'PX4 Game Redesign Concept',
-            details:
-              'A “what if” redesign concept where I reimagined an idea as a pixel-style game mockup with a retro interface and playful scene direction.',
-            tools: ['Procreate'],
             items: [
               {
                 type: 'image',
                 src: px4,
                 alt: 'PX4 Game Redesign Concept',
                 label: 'PX4 Game Redesign Concept',
-                details:
-                  'A “what if” redesign concept where I reimagined an idea as a pixel-style game mockup with a retro interface and playful scene direction.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px41,
                 alt: 'PX4.1 Game Redesign Concept',
                 label: 'PX4.1 Game Redesign Concept',
-                details:
-                  'A variation of the PX4 game redesign concept, focused on expanding the mockup’s visual direction.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px42,
                 alt: 'PX4.2 Game Redesign Concept',
                 label: 'PX4.2 Game Redesign Concept',
-                details:
-                  'A variation of the PX4 game redesign concept, focused on expanding the mockup’s visual direction.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px43,
                 alt: 'PX4.3 Game Redesign Concept',
                 label: 'PX4.3 Game Redesign Concept',
-                details:
-                  'A variation of the PX4 game redesign concept, focused on expanding the mockup’s visual direction.',
-                tools: ['Procreate'],
               },
             ],
           },
           {
             type: 'stack',
             label: 'PX5 Game Redesign Concept',
-            details:
-              'A “what if” redesign concept where I explored how an existing idea could feel like a pixel-style game world.',
-            tools: ['Procreate'],
             items: [
               {
                 type: 'image',
                 src: px5,
                 alt: 'PX5 Game Redesign Concept',
                 label: 'PX5 Game Redesign Concept',
-                details:
-                  'A “what if” redesign concept where I explored how an existing idea could feel like a pixel-style game world.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px51,
                 alt: 'PX5.1 Game Redesign Concept',
                 label: 'PX5.1 Game Redesign Concept',
-                details:
-                  'A variation of the PX5 game redesign concept, focused on testing layout, scene rhythm, and pixel UI direction.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px52,
                 alt: 'PX5.2 Game Redesign Concept',
                 label: 'PX5.2 Game Redesign Concept',
-                details:
-                  'A variation of the PX5 game redesign concept, focused on testing layout, scene rhythm, and pixel UI direction.',
-                tools: ['Procreate'],
               },
               {
                 type: 'image',
                 src: px53,
                 alt: 'PX5.3 Game Redesign Concept',
                 label: 'PX5.3 Game Redesign Concept',
-                details:
-                  'A variation of the PX5 game redesign concept, focused on testing layout, scene rhythm, and pixel UI direction.',
-                tools: ['Procreate'],
               },
             ],
           },
         ],
       },
+
+      // ======================================================
+      // 03 POSTERS
+      // ======================================================
+
       {
-        title: 'GPX Design Projects',
-        role: 'Graphic Design / Poster Design',
+        title: 'Posters',
+        role: 'Graphic Design',
         category: 'GPX Design',
+
         description:
           'A collection of graphic design works where I practiced posters, typography, image treatment, and layout design across different visual styles.',
-        tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Canva'],
-        details:
-          'This collection shows my practice in graphic design through poster layouts, typography experiments, image filters, and product-style compositions. Each piece helped me build confidence with visual hierarchy and stronger design decisions.',
+
+        tools: ['Adobe Photoshop', 'Adobe Illustrator'],
+
         preview: {
           type: 'image',
           src: gpx1,
@@ -449,129 +561,162 @@ function Projects() {
           label: 'Goodbye Eri Poster',
           previewPosition: 'object-right',
         },
+
         media: [
           {
             type: 'image',
             src: gpx1,
             alt: 'Goodbye Eri Poster',
             label: 'Goodbye Eri Poster',
-            details:
-              'An exploration poster where I played with layout, visual elements, and composition. This piece helped shape my Photoshop skills and made me more comfortable building stronger poster layouts.',
-            tools: ['Adobe Photoshop'],
           },
           {
             type: 'image',
             src: gpx2,
             alt: 'Music Poster',
             label: 'Music Poster',
-            details:
-              'A music poster exploration where I practiced Photoshop techniques, image treatment, and composition to create a stronger graphic poster style.',
-            tools: ['Adobe Photoshop'],
           },
           {
             type: 'image',
             src: gpx3,
             alt: 'Photoshop Exploration Poster',
             label: 'Photoshop Exploration Poster',
-            details:
-              'A Photoshop exploration poster where I practiced layout, image treatment, and composition using references and assets from Envato and Pinterest.',
-            tools: ['Adobe Photoshop', 'Envato', 'Pinterest'],
           },
           {
             type: 'image',
             src: gpx4,
             alt: 'Nothing Headphone 1 Poster',
             label: 'Nothing Headphone 1 Poster',
-            details:
-              'A product design poster for Nothing Headphone 1, created to practice product-focused layout, clean composition, and a stronger commercial poster style.',
-            tools: ['Adobe Photoshop'],
           },
           {
             type: 'image',
             src: gpx5,
             alt: 'Academic Poster',
             label: 'Academic Poster',
-            details:
-              'An academic organization poster made in Canva. This helped me learn the basic fundamentals of Canva while practicing layout, hierarchy, and clean academic poster design.',
-            tools: ['Canva'],
           },
           {
             type: 'image',
             src: gpx6,
             alt: 'Photoshop Poster Exploration',
             label: 'Photoshop Poster Exploration',
-            details:
-              'A graphic poster exploration where I practiced Photoshop techniques, image treatment, and composition to create a stronger visual design.',
-            tools: ['Adobe Photoshop'],
           },
           {
             type: 'image',
             src: gpx7,
             alt: 'Movie Poster Plainclothes',
             label: 'Movie Poster (Plainclothes)',
-            details:
-              'A practice movie poster for Plainclothes, focused on creating a visually impactful composition through mood, contrast, and poster-style image treatment.',
-            tools: ['Adobe Photoshop'],
           },
           {
             type: 'image',
             src: gpx8,
             alt: 'Ribs by Lorde Poster',
             label: 'Ribs by Lorde Poster',
-            details:
-              'A music poster inspired by Ribs by Lorde, where I explored Photoshop techniques and Illustrator typography to create a more expressive GPX design.',
-            tools: ['Adobe Photoshop', 'Adobe Illustrator'],
           },
           {
             type: 'image',
             src: gpx9,
             alt: 'GPX Technique Exploration',
             label: 'GPX',
-            details:
-              'A GPX exploration where I practiced Photoshop image filters and text design in Adobe Illustrator to create a stronger mixed-tool graphic style.',
-            tools: ['Adobe Photoshop', 'Adobe Illustrator'],
           },
           {
             type: 'image',
             src: gpx10,
             alt: 'Photoshop Poster Exploration',
             label: 'Photoshop Poster Exploration',
-            details:
-              'A graphic poster exploration where I practiced Photoshop techniques, image treatment, and composition to create a stronger visual design.',
-            tools: ['Adobe Photoshop'],
           },
           {
             type: 'image',
             src: gpx11,
             alt: 'Academic Activity',
             label: 'Academic Activity',
-            details:
-              'An academic activity made while learning Photoshop as part of our subject. This helped me practice color techniques, editing basics, and visual control inside Photoshop.',
-            tools: ['Adobe Photoshop'],
+          },
+          {
+            type: 'image',
+            src: gpx12,
+            alt: 'Graphic Design Poster 12',
+            label: 'Graphic Design Poster 12',
+          },
+          {
+            type: 'image',
+            src: gpx13,
+            alt: 'Graphic Design Poster 13',
+            label: 'Graphic Design Poster 13',
+          },
+          {
+            type: 'image',
+            src: gpx14,
+            alt: 'Graphic Design Poster 14',
+            label: 'Graphic Design Poster 14',
           },
         ],
       },
+
+      // ======================================================
+      // 04 RECRUITMENT POSTERS
+      // ======================================================
+
       {
-        title: 'Internship Graphics',
-        role: 'Graphic Design / Internship Visual Works',
+        title: 'Recruitment Posters',
+        role: 'Recruitment Materials',
         category: 'GPX Design',
+
         description:
-          'A collection of graphic design works created during internship tasks, focusing on workplace visuals, announcements, layouts, and design support materials.',
-        tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Canva'],
-        details:
-          'This project highlights internship-related graphic design works created for workplace communication and visual support. The focus is on producing clear, presentable, and practical designs that support announcements, internal materials, and creative office-related visuals.',
-        media: [],
+          'A collection of recruitment posters created to promote job opportunities, hiring events, and career-related announcements.',
+
+        tools: ['Adobe Photoshop', 'Canva', 'AI Assistance'],
+
+        preview: {
+          type: 'image',
+          src: recruitment1,
+          alt: 'Recruitment Posters Preview',
+          label: 'Recruitment Posters',
+          previewPosition: 'object-center',
+        },
+
+        media: [
+          recruitment1,
+          recruitment2,
+          recruitment3,
+          recruitment4,
+          recruitment5,
+          recruitment6,
+          recruitment7,
+          recruitment8,
+          recruitment9,
+          recruitment10,
+          recruitment11,
+          recruitment12,
+          recruitment13,
+          recruitment14,
+          recruitment15,
+        ].map((src, index) => ({
+          type: 'image',
+          src,
+          alt: `Recruitment Poster ${index + 1}`,
+          label: `Recruitment Poster ${String(index + 1).padStart(2, '0')}`,
+        })),
       },
+
+      // ======================================================
+      // 05 INTERN PORTFOLIO
+      // ======================================================
+
       {
         title: 'InternPortfolio',
-        role: 'Personal Portfolio / Internship Application Website',
+        role: 'Internship Application Website',
         category: 'WebSystem',
+
         description:
           'A personal portfolio website I built and used for my internship applications.',
-        tools: ['React', 'Tailwind CSS', 'Visual Studio Code', 'DeepseekAI'],
-        details:
-          'InternPortfolio is my previous portfolio website that I used for internship applications. I built it to present my works, skills, and creative direction in a simple but personal way, while also improving how I structure frontend layouts.',
+
+        tools: [
+          'React',
+          'Tailwind CSS',
+          'Visual Studio Code',
+          'DeepseekAI',
+        ],
+
         liveLink: 'https://chromaportfolio.vercel.app/',
+
         preview: {
           type: 'image',
           src: internPortfolioPreview,
@@ -579,18 +724,32 @@ function Projects() {
           label: 'InternPortfolio',
           previewPosition: 'object-right',
         },
+
         media: [],
       },
+
+      // ======================================================
+      // 06 TRACKED
+      // ======================================================
+
       {
         title: 'TrackED',
-        role: 'Capstone Project / Web-Based Tracking System',
+        role: 'Web-Based Tracking System',
         category: 'WebSystem',
+
         description:
           'A capstone project for Cavite State University - Imus Campus, built to help professors and students monitor campus-related academic status and records.',
-        tools: ['React', 'Tailwind CSS', 'MySQL', 'Hostinger', 'VSCode'],
-        details:
-          'TrackED is a capstone project for Cavite State University - Imus Campus. The system was designed to help both professors and students monitor academic status, records, and progress in a more organized way. Working on this project helped me polish my UX thinking and frontend development skills.',
+
+        tools: [
+          'React',
+          'Tailwind CSS',
+          'MySQL',
+          'Hostinger',
+          'VSCode',
+        ],
+
         liveLink: 'https://trackedproject.vercel.app/',
+
         preview: {
           type: 'image',
           src: trackEdPreview,
@@ -598,14 +757,22 @@ function Projects() {
           label: 'TrackED',
           previewPosition: 'object-right',
         },
+
         media: [],
       },
+
+      // ======================================================
+      // 07 CTRL + ALT + DELIGHT
+      // ======================================================
+
       {
         title: 'Ctrl + Alt + Delight',
-        role: 'Kiosk/POS System / Cookie Ordering System',
+        role: 'Cookie Ordering System',
         category: 'WebSystem',
+
         description:
           'A kiosk and POS system made for an academic project, focused on ordering flow, product display, and a cleaner user experience.',
+
         tools: [
           'React',
           'Tailwind CSS',
@@ -614,9 +781,9 @@ function Projects() {
           'PHP',
           'Visual Studio Code',
         ],
-        details:
-          'Ctrl + Alt + Delight is a kiosk and POS system created for an academic project. I designed it around a cookie ordering experience, focusing on a clear menu layout, smooth ordering flow, and a playful interface. This project helped me improve my UX design decisions and frontend layout skills.',
+
         liveLink: 'https://ctrl-alt-delight-eta.vercel.app/',
+
         preview: {
           type: 'image',
           src: ctrlAltDelightPreview,
@@ -624,18 +791,26 @@ function Projects() {
           label: 'Ctrl + Alt + Delight',
           previewPosition: 'object-right',
         },
+
         media: [],
       },
+
+      // ======================================================
+      // 08 PHOTO2Y
+      // ======================================================
+
       {
         title: 'Photo2y',
-        role: 'Passion Project / Photobooth Web App',
+        role: 'Photobooth Web App',
         category: 'WebSystem',
+
         description:
           'A fun passion project and simple photobooth web app made for taking playful photo strips with filters, stickers, and customizable strip designs.',
+
         tools: ['React', 'Tailwind CSS', 'Camera API', 'Vite'],
-        details:
-          'Photo2y is a fun passion project where I built a simple but playful photobooth web app. The goal was to create an easy photo-taking experience with live camera preview, photo strip layouts, filters, stickers, downloadable strips, and customization options. This project helped me improve how I handle camera features, mobile responsiveness, canvas-based downloads, and interactive UI details in React.',
+
         liveLink: 'https://photo2y.vercel.app/',
+
         preview: {
           type: 'image',
           src: photo2yPreview,
@@ -643,47 +818,176 @@ function Projects() {
           label: 'Photo2y',
           previewPosition: 'object-right',
         },
+
         media: [
           {
             type: 'image',
             src: photo2yPreview,
-            alt: 'Photo2y main photobooth preview',
+            alt: 'Photo2y Main Preview',
             label: 'Photo2y Main Preview',
-            details:
-              'A preview of the Photo2y photobooth interface, showing the playful visual style and photo strip experience.',
-            tools: ['React', 'Tailwind CSS', 'Camera API'],
           },
           {
             type: 'image',
             src: photo2yPreview2,
-            alt: 'Photo2y customization preview',
+            alt: 'Photo2y Customization Preview',
             label: 'Photo2y Customization Preview',
-            details:
-              'A preview of the customization side of Photo2y, including strip styling, stickers, and interactive photo strip editing.',
-            tools: ['React', 'Tailwind CSS', 'Canvas'],
           },
         ],
       },
+
+      // ======================================================
+      // 09 PODCAST VIDEOS
+      // FIRST PROJECT UNDER VIDEO EDIT
+      // ======================================================
+
       {
-        title: 'Promotional Video',
-        role: 'Video Editing / Promotional Content',
+        title: 'Podcast Videos',
+        role: 'Podcast Video Editing',
         category: 'Video Edit',
+
         description:
-          'An upcoming promotional video project focused on clean pacing, visual rhythm, and engaging storytelling.',
-        tools: ['CapCut', 'VN Editor', 'Canva Video Editor'],
-        details:
-          'This upcoming video editing project will focus on creating a polished promotional video with clean cuts, smooth pacing, strong visual rhythm, and a clear storytelling flow.',
+          'A showcase of podcast video editing focused on conversational storytelling, visual presentation, pacing, and engaging video content.',
+
+        tools: ['CapCut'],
+
+        preview: {
+          type: 'video',
+          src: podDark,
+          alt: 'Podcast Video Preview',
+          label: 'Podcast Videos',
+          previewPosition: 'object-center',
+        },
+
+        media: podcastVideoMedia,
+      },
+
+      // ======================================================
+      // 10 RECRUITMENT VIDEOS
+      // ======================================================
+
+      {
+        title: 'Recruitment Videos',
+        role: 'Promotional Video Editing',
+        category: 'Video Edit',
+
+        description:
+          'A collection of recruitment video edits created to promote job opportunities, hiring events, and career-related announcements through short-form visual content.',
+
+        tools: [
+          'CapCut',
+          'AI Assistance',
+          'Canva Video Editor',
+        ],
+
+        preview: {
+          type: 'video',
+          src: videoEditDark,
+          alt: 'Recruitment Video Preview',
+          label: 'Recruitment Videos',
+          previewPosition: 'object-center',
+        },
+
+        media: recruitmentVideoMedia,
+      },
+
+      // ======================================================
+      // 11 ENGAGEMENT VIDEOS
+      // ======================================================
+
+      {
+        title: 'Engagement Videos',
+        role: 'Social Media Video Editing',
+        category: 'Video Edit',
+
+        description:
+          'A collection of social media video edits focused on employee engagement, interactive content, entertainment, and creative storytelling.',
+
+        tools: [
+          'CapCut',
+          'AI Assistance',
+          'Canva Video Editor',
+        ],
+
+        preview: {
+          type: 'video',
+          src: engagementVideoDark,
+          alt: 'Engagement Video Preview',
+          label: 'Engagement Videos',
+          previewPosition: 'object-center',
+        },
+
+        media: engagementVideoMedia,
+      },
+
+      // ======================================================
+      // 12 EVENT VIDEO EDITS
+      // ======================================================
+
+      {
+        title: 'Event Video Edits',
+        role: 'Event Video Editing',
+        category: 'Video Edit',
+
+        description:
+          'A collection of event video edits highlighting employee activities, workplace initiatives, and memorable moments through visual storytelling.',
+
+        tools: [
+          'CapCut',
+          'AI Assistance',
+          'Canva Video Editor',
+        ],
+
+        preview: {
+          type: 'video',
+          src: employeeDay,
+          alt: 'Event Video Edits Preview',
+          label: 'Event Video Edits',
+          previewPosition: 'object-center',
+        },
+
+        media: eventVideoMedia,
+      },
+
+      // ======================================================
+      // 13 OTHERS
+      // ======================================================
+
+      {
+        title: 'Others',
+        role: 'Other Creative Works',
+        category: 'Others',
+
+        description:
+          'A collection of personal projects, creative experiments, and other works that explore different styles and ideas.',
+
+        tools: [
+          'Adobe Photoshop',
+          'Adobe Illustrator',
+          'Canva',
+          'Procreate',
+        ],
+
         media: [],
       },
     ],
     []
   );
 
+  // ============================================================
+  // FILTERED PROJECTS
+  // ============================================================
+
   const filteredProjects = useMemo(() => {
     if (displayedFilter === 'All') return projects;
 
-    return projects.filter((project) => project.category === displayedFilter);
+    return projects.filter(
+      (project) => project.category === displayedFilter
+    );
   }, [displayedFilter, projects]);
+
+  // ============================================================
+  // SOCIAL LINKS
+  // ============================================================
 
   const socialLinks = useMemo(
     () => [
@@ -715,6 +1019,10 @@ function Projects() {
     [emailLink]
   );
 
+  // ============================================================
+  // REDUCED MOTION
+  // ============================================================
+
   useEffect(() => {
     const reducedMotionQuery = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
@@ -726,15 +1034,27 @@ function Projects() {
 
     updateReducedMotion();
 
-    reducedMotionQuery.addEventListener('change', updateReducedMotion);
+    reducedMotionQuery.addEventListener(
+      'change',
+      updateReducedMotion
+    );
 
     return () => {
-      reducedMotionQuery.removeEventListener('change', updateReducedMotion);
+      reducedMotionQuery.removeEventListener(
+        'change',
+        updateReducedMotion
+      );
     };
   }, []);
 
+  // ============================================================
+  // DESKTOP MOTION
+  // ============================================================
+
   useEffect(() => {
-    const desktopMotionQuery = window.matchMedia('(min-width: 768px)');
+    const desktopMotionQuery = window.matchMedia(
+      '(min-width: 768px)'
+    );
 
     const handleMotionMode = () => {
       setIsDesktopMotion(desktopMotionQuery.matches);
@@ -742,26 +1062,47 @@ function Projects() {
 
     handleMotionMode();
 
-    desktopMotionQuery.addEventListener('change', handleMotionMode);
+    desktopMotionQuery.addEventListener(
+      'change',
+      handleMotionMode
+    );
 
     return () => {
-      desktopMotionQuery.removeEventListener('change', handleMotionMode);
+      desktopMotionQuery.removeEventListener(
+        'change',
+        handleMotionMode
+      );
     };
   }, []);
+
+  // ============================================================
+  // NAVIGATION FROM HOME / HEADER
+  // ============================================================
 
   useEffect(() => {
     const incomingFilter = location.state?.filter;
     const incomingProjectTitle = location.state?.projectTitle;
-    const shouldScrollToProject = location.state?.scrollToProject;
 
-    if (!incomingFilter && !incomingProjectTitle) return;
+    const shouldScrollToProject =
+      location.state?.scrollToProject;
+
+    if (!incomingFilter && !incomingProjectTitle) {
+      setActiveFilter('Illustrations');
+      setDisplayedFilter('Illustrations');
+      setAnimatingFilter(null);
+      setProjectCardStage('idle');
+
+      return;
+    }
 
     clearTimeout(filterCollapseTimeoutRef.current);
     clearTimeout(filterEnterTimeoutRef.current);
 
-    const validFilter = filters.some((filter) => filter.label === incomingFilter)
+    const validFilter = filters.some(
+      (filter) => filter.label === incomingFilter
+    )
       ? incomingFilter
-      : 'All';
+      : 'Illustrations';
 
     setActiveFilter(validFilter);
     setDisplayedFilter(validFilter);
@@ -770,9 +1111,39 @@ function Projects() {
 
     if (!shouldScrollToProject || !incomingProjectTitle) return;
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const targetCard = projectCardTitleRefs.current[incomingProjectTitle];
+    // Maintain compatibility with Home page project links.
+
+    const projectTitleAliases = {
+      'Internship Graphics': 'Recruitment Posters',
+
+      'Podcast': 'Podcast Videos',
+      'Podcast Video': 'Podcast Videos',
+      'Podcast Video Edits': 'Podcast Videos',
+      'Podcast Showcase': 'Podcast Videos',
+
+      'Promotional Video': 'Recruitment Videos',
+      'Recruitment Video': 'Recruitment Videos',
+
+      'Engagement Video': 'Engagement Videos',
+
+      'Individual Videos': 'Event Video Edits',
+      'Event Videos': 'Event Video Edits',
+      'Employee Day': 'Event Video Edits',
+      'Mental Health': 'Event Video Edits',
+      'Movie Night': 'Event Video Edits',
+    };
+
+    const targetTitle =
+      projectTitleAliases[incomingProjectTitle] ||
+      incomingProjectTitle;
+
+    let firstFrame;
+    let secondFrame;
+
+    firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        const targetCard =
+          projectCardTitleRefs.current[targetTitle];
 
         if (!targetCard) return;
 
@@ -782,23 +1153,51 @@ function Projects() {
         });
       });
     });
-  }, [location.state, filters, prefersReducedMotion]);
+
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+    };
+  }, [
+    location.key,
+    location.state,
+    filters,
+    prefersReducedMotion,
+  ]);
+
+  // ============================================================
+  // THEME
+  // ============================================================
 
   useEffect(() => {
     const syncTheme = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
+      setIsDarkMode(
+        document.documentElement.classList.contains('dark')
+      );
     };
 
     syncTheme();
 
-    window.addEventListener('portfolio-theme-change', syncTheme);
+    window.addEventListener(
+      'portfolio-theme-change',
+      syncTheme
+    );
+
     window.addEventListener('storage', syncTheme);
 
     return () => {
-      window.removeEventListener('portfolio-theme-change', syncTheme);
+      window.removeEventListener(
+        'portfolio-theme-change',
+        syncTheme
+      );
+
       window.removeEventListener('storage', syncTheme);
     };
   }, []);
+
+  // ============================================================
+  // CURSOR GRID
+  // ============================================================
 
   useEffect(() => {
     const pageElement = pageRef.current;
@@ -818,10 +1217,19 @@ function Projects() {
       y: centerY,
     };
 
-    pageElement.style.setProperty('--projects-cursor-x', `${centerX}px`);
-    pageElement.style.setProperty('--projects-cursor-y', `${centerY}px`);
+    pageElement.style.setProperty(
+      '--projects-cursor-x',
+      `${centerX}px`
+    );
 
-    if (!isDesktopMotion || prefersReducedMotion) return undefined;
+    pageElement.style.setProperty(
+      '--projects-cursor-y',
+      `${centerY}px`
+    );
+
+    if (!isDesktopMotion || prefersReducedMotion) {
+      return undefined;
+    }
 
     const handleMouseMove = (event) => {
       cursorGridTargetRef.current = {
@@ -832,9 +1240,14 @@ function Projects() {
 
     const animateCursorGrid = () => {
       cursorGridCurrentRef.current.x +=
-        (cursorGridTargetRef.current.x - cursorGridCurrentRef.current.x) * 0.06;
+        (cursorGridTargetRef.current.x -
+          cursorGridCurrentRef.current.x) *
+        0.06;
+
       cursorGridCurrentRef.current.y +=
-        (cursorGridTargetRef.current.y - cursorGridCurrentRef.current.y) * 0.06;
+        (cursorGridTargetRef.current.y -
+          cursorGridCurrentRef.current.y) *
+        0.06;
 
       cursorGridFrameRef.current += 1;
 
@@ -850,20 +1263,36 @@ function Projects() {
         );
       }
 
-      cursorGridAnimationRef.current = requestAnimationFrame(animateCursorGrid);
+      cursorGridAnimationRef.current =
+        requestAnimationFrame(animateCursorGrid);
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    cursorGridAnimationRef.current = requestAnimationFrame(animateCursorGrid);
+    window.addEventListener(
+      'mousemove',
+      handleMouseMove,
+      { passive: true }
+    );
+
+    cursorGridAnimationRef.current =
+      requestAnimationFrame(animateCursorGrid);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener(
+        'mousemove',
+        handleMouseMove
+      );
 
       if (cursorGridAnimationRef.current) {
-        cancelAnimationFrame(cursorGridAnimationRef.current);
+        cancelAnimationFrame(
+          cursorGridAnimationRef.current
+        );
       }
     };
   }, [isDesktopMotion, prefersReducedMotion]);
+
+  // ============================================================
+  // SCROLL STATE
+  // ============================================================
 
   useEffect(() => {
     let ticking = false;
@@ -879,10 +1308,12 @@ function Projects() {
         const viewportWidth = window.innerWidth;
 
         if (footerElement) {
-          const footerRect = footerElement.getBoundingClientRect();
+          const footerRect =
+            footerElement.getBoundingClientRect();
 
           const isMobile = viewportWidth < 640;
           const socialCheckX = viewportWidth - 32;
+
           const socialCheckY = isMobile
             ? viewportHeight - 92
             : viewportHeight / 2;
@@ -896,10 +1327,15 @@ function Projects() {
           setIsSocialOnDark(isOverFooter);
         }
 
-        const scrollPosition = window.scrollY + viewportHeight;
-        const pageHeight = document.documentElement.scrollHeight;
+        const scrollPosition =
+          window.scrollY + viewportHeight;
 
-        setIsAtBottom(scrollPosition >= pageHeight - 100);
+        const pageHeight =
+          document.documentElement.scrollHeight;
+
+        setIsAtBottom(
+          scrollPosition >= pageHeight - 100
+        );
 
         ticking = false;
       });
@@ -907,17 +1343,39 @@ function Projects() {
 
     handleScrollState();
 
-    window.addEventListener('scroll', handleScrollState, { passive: true });
-    window.addEventListener('resize', handleScrollState);
+    window.addEventListener(
+      'scroll',
+      handleScrollState,
+      { passive: true }
+    );
+
+    window.addEventListener(
+      'resize',
+      handleScrollState
+    );
 
     return () => {
-      window.removeEventListener('scroll', handleScrollState);
-      window.removeEventListener('resize', handleScrollState);
+      window.removeEventListener(
+        'scroll',
+        handleScrollState
+      );
+
+      window.removeEventListener(
+        'resize',
+        handleScrollState
+      );
     };
   }, []);
 
+  // ============================================================
+  // MODAL
+  // ============================================================
+
   useEffect(() => {
     if (!selectedProject) return undefined;
+
+    const previousOverflow =
+      document.body.style.overflow;
 
     const handleEscapeKey = (event) => {
       if (event.key === 'Escape') {
@@ -926,13 +1384,124 @@ function Projects() {
     };
 
     document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleEscapeKey);
+
+    window.addEventListener(
+      'keydown',
+      handleEscapeKey
+    );
 
     return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleEscapeKey);
+      document.body.style.overflow =
+        previousOverflow;
+
+      window.removeEventListener(
+        'keydown',
+        handleEscapeKey
+      );
     };
   }, [selectedProject]);
+
+  // ============================================================
+  // VIDEO PLAYER RESTRICTIONS
+  // ============================================================
+
+  useEffect(() => {
+    if (!selectedProject) return undefined;
+
+    const protectedVideos = new Map();
+
+    const preventVideoContextMenu = (event) => {
+      event.preventDefault();
+    };
+
+    const configureVideoPlayers = () => {
+      const videos = document.querySelectorAll(
+        'video[controls]'
+      );
+
+      videos.forEach((video) => {
+        if (protectedVideos.has(video)) return;
+
+        protectedVideos.set(video, {
+          controlsList: video.getAttribute('controlsList'),
+          disablePictureInPicture:
+            video.disablePictureInPicture,
+          disableRemotePlayback:
+            video.disableRemotePlayback,
+          hadProtectedClass:
+            video.classList.contains(
+              'portfolio-protected-video'
+            ),
+        });
+
+        video.setAttribute(
+          'controlsList',
+          'nodownload noremoteplayback'
+        );
+
+        video.disablePictureInPicture = true;
+        video.disableRemotePlayback = true;
+
+        video.classList.add(
+          'portfolio-protected-video'
+        );
+
+        video.addEventListener(
+          'contextmenu',
+          preventVideoContextMenu
+        );
+      });
+    };
+
+    configureVideoPlayers();
+
+    const observer = new MutationObserver(
+      configureVideoPlayers
+    );
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      observer.disconnect();
+
+      protectedVideos.forEach((previous, video) => {
+        if (previous.controlsList === null) {
+          video.removeAttribute('controlsList');
+        } else {
+          video.setAttribute(
+            'controlsList',
+            previous.controlsList
+          );
+        }
+
+        video.disablePictureInPicture =
+          previous.disablePictureInPicture;
+
+        video.disableRemotePlayback =
+          previous.disableRemotePlayback;
+
+        if (!previous.hadProtectedClass) {
+          video.classList.remove(
+            'portfolio-protected-video'
+          );
+        }
+
+        video.removeEventListener(
+          'contextmenu',
+          preventVideoContextMenu
+        );
+      });
+
+      protectedVideos.clear();
+    };
+  }, [selectedProject]);
+
+  // ============================================================
+  // CLEANUP
+  // ============================================================
 
   useEffect(() => {
     return () => {
@@ -940,10 +1509,16 @@ function Projects() {
       clearTimeout(filterEnterTimeoutRef.current);
 
       if (cursorGridAnimationRef.current) {
-        cancelAnimationFrame(cursorGridAnimationRef.current);
+        cancelAnimationFrame(
+          cursorGridAnimationRef.current
+        );
       }
     };
   }, []);
+
+  // ============================================================
+  // CARD ANIMATIONS
+  // ============================================================
 
   const setCardBehindDistances = () => {
     const firstCard = projectCardRefs.current[0];
@@ -952,33 +1527,49 @@ function Projects() {
 
     const firstCardTop = firstCard.offsetTop;
 
-    projectCardRefs.current.forEach((cardElement, index) => {
-      if (!cardElement) return;
+    projectCardRefs.current.forEach(
+      (cardElement, index) => {
+        if (!cardElement) return;
 
-      const distanceToFirstCard = firstCardTop - cardElement.offsetTop;
+        const distanceToFirstCard =
+          firstCardTop - cardElement.offsetTop;
 
-      cardElement.style.setProperty(
-        '--project-card-behind-y',
-        `${distanceToFirstCard}px`
-      );
+        cardElement.style.setProperty(
+          '--project-card-behind-y',
+          `${distanceToFirstCard}px`
+        );
 
-      cardElement.style.setProperty('--project-card-index', index);
-    });
+        cardElement.style.setProperty(
+          '--project-card-index',
+          index
+        );
+      }
+    );
   };
 
   const handleFilterClick = (filterLabel) => {
-    if (animatingFilter || activeFilter === filterLabel) return;
+    if (
+      animatingFilter ||
+      activeFilter === filterLabel
+    ) {
+      return;
+    }
 
     clearTimeout(filterCollapseTimeoutRef.current);
     clearTimeout(filterEnterTimeoutRef.current);
 
-    if (!isDesktopMotion || prefersReducedMotion) {
+    if (
+      !isDesktopMotion ||
+      prefersReducedMotion
+    ) {
+      projectCardRefs.current = [];
+      projectCardTitleRefs.current = {};
+
       setActiveFilter(filterLabel);
       setDisplayedFilter(filterLabel);
       setAnimatingFilter(null);
       setProjectCardStage('idle');
-      projectCardRefs.current = [];
-      projectCardTitleRefs.current = {};
+
       return;
     }
 
@@ -987,36 +1578,56 @@ function Projects() {
     setAnimatingFilter(filterLabel);
     setProjectCardStage('collapsing');
 
-    filterCollapseTimeoutRef.current = setTimeout(() => {
-      setActiveFilter(filterLabel);
-      setDisplayedFilter(filterLabel);
-      projectCardRefs.current = [];
-      projectCardTitleRefs.current = {};
-      setProjectCardStage('preparingEnter');
+    filterCollapseTimeoutRef.current = setTimeout(
+      () => {
+        projectCardRefs.current = [];
+        projectCardTitleRefs.current = {};
 
-      requestAnimationFrame(() => {
-        setCardBehindDistances();
+        setActiveFilter(filterLabel);
+        setDisplayedFilter(filterLabel);
+
+        setProjectCardStage('preparingEnter');
 
         requestAnimationFrame(() => {
-          setProjectCardStage('entering');
-        });
-      });
+          setCardBehindDistances();
 
-      filterEnterTimeoutRef.current = setTimeout(() => {
-        setProjectCardStage('idle');
-        setAnimatingFilter(null);
-      }, 680);
-    }, 620);
+          requestAnimationFrame(() => {
+            setProjectCardStage('entering');
+          });
+        });
+
+        filterEnterTimeoutRef.current = setTimeout(
+          () => {
+            setProjectCardStage('idle');
+            setAnimatingFilter(null);
+          },
+          680
+        );
+      },
+      620
+    );
   };
+
+  // ============================================================
+  // PROJECT PREVIEWS
+  // ============================================================
 
   const getProjectPreviewMedia = (project) => {
     if (project.preview) return project.preview;
 
-    if (!Array.isArray(project.media) || project.media.length === 0) return null;
+    if (
+      !Array.isArray(project.media) ||
+      project.media.length === 0
+    ) {
+      return null;
+    }
 
     const firstMedia = project.media[0];
 
-    if (firstMedia.type === 'stack' && Array.isArray(firstMedia.items)) {
+    if (
+      firstMedia.type === 'stack' &&
+      Array.isArray(firstMedia.items)
+    ) {
       return firstMedia.items[0] || null;
     }
 
@@ -1032,17 +1643,22 @@ function Projects() {
       previewMedia.previewPosition || 'object-center';
 
     return (
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-[1] block w-[48%] overflow-hidden opacity-28 transition-opacity duration-300 md:opacity-42 md:group-hover:opacity-58 sm:w-[46%] [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)]">
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-[1] block w-[48%] overflow-hidden opacity-28 transition-opacity duration-300 sm:w-[46%] md:opacity-42 md:group-hover:opacity-58 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)]">
         {previewMedia.type === 'video' ? (
           <video
             src={previewMedia.src}
             className={`h-full w-full object-cover ${previewPositionClass}`}
             muted
             playsInline
-            preload="none"
-          >
-            <track kind="captions" />
-          </video>
+            preload="metadata"
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload noremoteplayback"
+            onContextMenu={(event) =>
+              event.preventDefault()
+            }
+            aria-hidden="true"
+          />
         ) : (
           <img
             src={previewMedia.src}
@@ -1057,17 +1673,53 @@ function Projects() {
     );
   };
 
+  // ============================================================
+  // PROJECT CLICK HANDLER
+  // ============================================================
+
+  const handleProjectClick = (project) => {
+    if (project.category === 'WebSystem' && project.liveLink) {
+      window.open(
+        project.liveLink,
+        '_blank',
+        'noopener,noreferrer'
+      );
+
+      return;
+    }
+
+    setSelectedProject(project);
+  };
+
+  // ============================================================
+  // FLOATING ARROW
+  // ============================================================
+
   const handleFloatingArrowClick = () => {
     window.scrollTo({
-      top: isAtBottom ? 0 : document.documentElement.scrollHeight,
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      top: isAtBottom
+        ? 0
+        : document.documentElement.scrollHeight,
+
+      behavior: prefersReducedMotion
+        ? 'auto'
+        : 'smooth',
     });
   };
 
-  const getFilterButtonClass = (isActive, isAnimating) => {
+  // ============================================================
+  // FILTER BUTTON CLASSES
+  // ============================================================
+
+  const getFilterButtonClass = (
+    isActive,
+    isAnimating
+  ) => {
     if (isAnimating) {
       return `group relative flex items-center gap-2 overflow-hidden border-2 px-4 py-3 text-[10px] font-black uppercase tracking-[0.16em] transition-colors duration-300 ${
-        isDarkMode ? 'border-white text-black' : 'border-black text-white'
+        isDarkMode
+          ? 'border-white text-black'
+          : 'border-black text-white'
       }`;
     }
 
@@ -1086,8 +1738,17 @@ function Projects() {
     }`;
   };
 
+  // ============================================================
+  // PROJECT CARD ANIMATION CLASSES
+  // ============================================================
+
   const getProjectCardAnimationClass = (index) => {
-    if (!isDesktopMotion || prefersReducedMotion) return '';
+    if (
+      !isDesktopMotion ||
+      prefersReducedMotion
+    ) {
+      return '';
+    }
 
     if (projectCardStage === 'preparingEnter') {
       return index === 0
@@ -1110,6 +1771,10 @@ function Projects() {
     return '';
   };
 
+  // ============================================================
+  // SOCIAL ICON CLASSES
+  // ============================================================
+
   const socialIconClass = `group flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:text-[#FF0000] sm:h-10 sm:w-10 sm:hover:-translate-x-1 sm:hover:translate-y-0 lg:h-auto lg:w-auto ${
     isSocialOnDark
       ? 'text-[#FF0000]'
@@ -1118,13 +1783,24 @@ function Projects() {
         : 'text-black'
   }`;
 
+  // ============================================================
+  // RENDER
+  // ============================================================
+
   return (
     <div
       ref={pageRef}
       className={`relative min-h-screen select-none overflow-x-hidden transition-colors duration-500 ${
-        isDarkMode ? 'bg-black text-white' : 'bg-[#d9d9d9] text-black'
+        isDarkMode
+          ? 'bg-black text-white'
+          : 'bg-[#d9d9d9] text-black'
       }`}
     >
+
+      {/* ====================================================== */}
+      {/* BACKGROUND GRID */}
+      {/* ====================================================== */}
+
       <div
         className={`pointer-events-none fixed inset-0 z-0 sm:animate-[projectsGridDrift_46s_linear_infinite] motion-reduce:animate-none ${
           isDarkMode
@@ -1133,7 +1809,15 @@ function Projects() {
         } bg-[size:34px_34px] sm:bg-[size:38px_38px]`}
       />
 
+      {/* ====================================================== */}
+      {/* CURSOR GRID */}
+      {/* ====================================================== */}
+
       <div className="pointer-events-none fixed inset-0 z-[1] hidden animate-[projectsGridDrift_46s_linear_infinite] bg-[linear-gradient(rgba(255,0,0,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,0,0.12)_1px,transparent_1px)] bg-[size:38px_38px] opacity-55 [mask-image:radial-gradient(circle_at_var(--projects-cursor-x,50%)_var(--projects-cursor-y,50%),black_0,black_44px,transparent_118px)] [-webkit-mask-image:radial-gradient(circle_at_var(--projects-cursor-x,50%)_var(--projects-cursor-y,50%),black_0,black_44px,transparent_118px)] motion-reduce:hidden md:block" />
+
+      {/* ====================================================== */}
+      {/* DOT TEXTURE */}
+      {/* ====================================================== */}
 
       <div
         className={`pointer-events-none fixed inset-0 z-[2] hidden sm:block ${
@@ -1150,6 +1834,10 @@ function Projects() {
             : 'bg-[radial-gradient(circle,rgba(0,0,0,0.22)_1.25px,transparent_1.5px)] opacity-[0.14]'
         } bg-[size:20px_20px] [mask-image:radial-gradient(circle_at_8%_18%,black_0,black_70px,transparent_235px),radial-gradient(circle_at_92%_72%,black_0,black_70px,transparent_255px)] [-webkit-mask-image:radial-gradient(circle_at_8%_18%,black_0,black_70px,transparent_235px),radial-gradient(circle_at_92%_72%,black_0,black_70px,transparent_255px)]`}
       />
+
+      {/* ====================================================== */}
+      {/* ANIMATIONS AND VIDEO PLAYER STYLES */}
+      {/* ====================================================== */}
 
       <style>
         {`
@@ -1170,7 +1858,11 @@ function Projects() {
 
           .project-card-preparing-behind {
             opacity: 1;
-            transform: translate3d(0, var(--project-card-behind-y), 0);
+            transform: translate3d(
+              0,
+              var(--project-card-behind-y),
+              0
+            );
           }
 
           @keyframes projectFirstCardCover {
@@ -1198,12 +1890,20 @@ function Projects() {
 
             78% {
               opacity: 1;
-              transform: translate3d(0, var(--project-card-behind-y), 0);
+              transform: translate3d(
+                0,
+                var(--project-card-behind-y),
+                0
+              );
             }
 
             100% {
               opacity: 0;
-              transform: translate3d(0, var(--project-card-behind-y), 0);
+              transform: translate3d(
+                0,
+                var(--project-card-behind-y),
+                0
+              );
             }
           }
 
@@ -1222,7 +1922,11 @@ function Projects() {
           @keyframes projectCardSlideFromBehind {
             0% {
               opacity: 1;
-              transform: translate3d(0, var(--project-card-behind-y), 0);
+              transform: translate3d(
+                0,
+                var(--project-card-behind-y),
+                0
+              );
             }
 
             100% {
@@ -1230,6 +1934,34 @@ function Projects() {
               transform: translate3d(0, 0, 0);
             }
           }
+
+          /* ================================================ */
+          /* HIDE VIDEO THREE-DOT MENU */
+          /* ================================================ */
+
+          .portfolio-protected-video::-webkit-media-controls-overflow-button {
+            display: none !important;
+          }
+
+          /* ================================================ */
+          /* HIDE VIDEO DOWNLOAD BUTTON */
+          /* ================================================ */
+
+          .portfolio-protected-video::-webkit-media-controls-download-button {
+            display: none !important;
+          }
+
+          /* ================================================ */
+          /* HIDE PICTURE-IN-PICTURE BUTTON */
+          /* ================================================ */
+
+          .portfolio-protected-video::-webkit-media-controls-picture-in-picture-button {
+            display: none !important;
+          }
+
+          /* ================================================ */
+          /* REDUCED MOTION */
+          /* ================================================ */
 
           @media (prefers-reduced-motion: reduce) {
             * {
@@ -1242,40 +1974,60 @@ function Projects() {
         `}
       </style>
 
+      {/* ====================================================== */}
+      {/* PROJECTS SECTION */}
+      {/* ====================================================== */}
+
       <section className="relative z-10 px-5 pb-16 pt-32 sm:px-8">
         <div className="mx-auto max-w-5xl">
+
+          {/* PAGE HEADING */}
+
           <div className="mb-12 text-center">
             <h1
-              className={`font-snellroundhand mb-6 text-6xl leading-none tracking-wide transition-colors duration-500 md:mb-7 md:text-7xl ${
-                isDarkMode ? 'text-white' : 'text-black'
+              className={`mb-6 font-snellroundhand text-6xl leading-none tracking-wide transition-colors duration-500 md:mb-7 md:text-7xl ${
+                isDarkMode
+                  ? 'text-white'
+                  : 'text-black'
               }`}
             >
               Projects
             </h1>
-
-            <p
-              className={`text-xs font-bold transition-colors duration-500 ${
-                isDarkMode ? 'text-white/70' : 'text-black'
-              }`}
-            >
-              My Creative Works..
-            </p>
           </div>
+
+          {/* ================================================== */}
+          {/* FILTER BUTTONS */}
+          {/* ================================================== */}
 
           <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
             {filters.map((filter) => {
-              const isActive = activeFilter === filter.label;
-              const isAnimating = animatingFilter === filter.label;
-              const filterFillClass = isDarkMode ? 'bg-white' : 'bg-black';
+              const isActive =
+                activeFilter === filter.label;
+
+              const isAnimating =
+                animatingFilter === filter.label;
+
+              const filterFillClass = isDarkMode
+                ? 'bg-white'
+                : 'bg-black';
 
               return (
                 <button
                   key={filter.label}
                   type="button"
-                  onClick={() => handleFilterClick(filter.label)}
+                  onClick={() =>
+                    handleFilterClick(filter.label)
+                  }
                   disabled={Boolean(animatingFilter)}
-                  className={getFilterButtonClass(isActive, isAnimating)}
+                  aria-pressed={isActive}
+                  className={getFilterButtonClass(
+                    isActive,
+                    isAnimating
+                  )}
                 >
+
+                  {/* CIRCLE FILL */}
+
                   <span
                     className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-[width] duration-300 ease-out ${filterFillClass} ${
                       isAnimating
@@ -1285,6 +2037,8 @@ function Projects() {
                           : 'w-0 md:group-hover:w-[190%]'
                     }`}
                   />
+
+                  {/* FILTER ICON */}
 
                   <span
                     className={`relative z-10 transition-colors duration-300 ${
@@ -1298,126 +2052,189 @@ function Projects() {
                     {filter.icon}
                   </span>
 
-                  <span className="relative z-10">{filter.label}</span>
+                  {/* FILTER LABEL */}
+
+                  <span className="relative z-10">
+                    {filter.label}
+                  </span>
                 </button>
               );
             })}
           </div>
 
+          {/* ================================================== */}
+          {/* PROJECT CARDS */}
+          {/* ================================================== */}
+
           <div
             className={`grid gap-4 ${
-              projectCardStage !== 'idle' ? 'pointer-events-none' : ''
+              projectCardStage !== 'idle'
+                ? 'pointer-events-none'
+                : ''
             }`}
           >
             {filteredProjects.length > 0 ? (
-              filteredProjects.map((project, index) => {
-                const isFirstCard = index === 0;
-                const firstCardCoverClass =
-                  projectCardStage !== 'idle' && isFirstCard
-                    ? isDarkMode
-                      ? 'bg-black'
-                      : 'bg-[#d9d9d9]'
-                    : 'bg-transparent';
+              filteredProjects.map(
+                (project, index) => {
+                  const isFirstCard = index === 0;
 
-                return (
-                  <button
-                    key={`${displayedFilter}-${project.title}`}
-                    ref={(element) => {
-                      projectCardRefs.current[index] = element;
+                  const firstCardCoverClass =
+                    projectCardStage !== 'idle' &&
+                    isFirstCard
+                      ? isDarkMode
+                        ? 'bg-black'
+                        : 'bg-[#d9d9d9]'
+                      : 'bg-transparent';
 
-                      if (element) {
-                        projectCardTitleRefs.current[project.title] = element;
+                  const isWebSystem =
+                    project.category === 'WebSystem' &&
+                    Boolean(project.liveLink);
+
+                  const isVideoProject =
+                    project.category === 'Video Edit';
+
+                  const mediaCount =
+                    project.media?.length || 0;
+
+                  return (
+                    <button
+                      key={`${displayedFilter}-${project.title}`}
+                      ref={(element) => {
+                        projectCardRefs.current[index] = element;
+
+                        if (element) {
+                          projectCardTitleRefs.current[
+                            project.title
+                          ] = element;
+                        } else {
+                          delete projectCardTitleRefs.current[
+                            project.title
+                          ];
+                        }
+                      }}
+                      type="button"
+                      onClick={() =>
+                        handleProjectClick(project)
                       }
-                    }}
-                    type="button"
-                    onClick={() => setSelectedProject(project)}
-                    className={`group relative overflow-hidden border-2 p-5 text-left transition-colors duration-300 md:p-6 md:will-change-transform ${firstCardCoverClass} ${getProjectCardAnimationClass(
-                      index
-                    )} ${
-                      isDarkMode
-                        ? 'border-white text-white md:hover:text-black'
-                        : 'border-black text-black md:hover:text-white'
-                    }`}
-                    style={{
-                      '--project-card-index': index,
-                      '--project-card-behind-y': '0px',
-                      zIndex:
-                        projectCardStage !== 'idle'
-                          ? isFirstCard
-                            ? 100
-                            : 100 - index
-                          : filteredProjects.length - index,
-                      animationDelay:
-                        projectCardStage === 'entering'
-                          ? isFirstCard
-                            ? '0ms'
-                            : `${Math.min(index * 28, 90)}ms`
-                          : isFirstCard
-                            ? '0ms'
-                            : `${Math.min(index * 34, 100)}ms`,
-                    }}
-                  >
-                    <span
-                      className={`absolute left-1/2 top-1/2 z-0 aspect-square w-0 -translate-x-1/2 -translate-y-1/2 rounded-full transition-[width] duration-500 ease-out md:group-hover:w-[160%] ${
-                        isDarkMode ? 'bg-white' : 'bg-black'
+                      aria-label={
+                        isWebSystem
+                          ? `Open ${project.title} live website in a new tab`
+                          : `Preview ${project.title}`
+                      }
+                      className={`group relative overflow-hidden border-2 p-5 text-left transition-colors duration-300 md:p-6 md:will-change-transform ${firstCardCoverClass} ${getProjectCardAnimationClass(
+                        index
+                      )} ${
+                        isDarkMode
+                          ? 'border-white text-white md:hover:text-black'
+                          : 'border-black text-black md:hover:text-white'
                       }`}
-                    />
+                      style={{
+                        '--project-card-index': index,
+                        '--project-card-behind-y': '0px',
 
-                    {renderProjectPreview(project)}
+                        zIndex:
+                          projectCardStage !== 'idle'
+                            ? isFirstCard
+                              ? 100
+                              : 100 - index
+                            : filteredProjects.length - index,
 
-                    <div className="relative z-10 flex max-w-[64%] items-start gap-6 sm:max-w-[64%] md:max-w-[68%]">
-                      <div>
-                        <div className="mb-3 flex flex-wrap items-center gap-2">
-                          <p className="text-xs font-bold text-[#FF0000]">
-                            [*] {String(index + 1).padStart(2, '0')}
+                        animationDelay:
+                          projectCardStage === 'entering'
+                            ? isFirstCard
+                              ? '0ms'
+                              : `${Math.min(index * 28, 90)}ms`
+                            : isFirstCard
+                              ? '0ms'
+                              : `${Math.min(index * 34, 100)}ms`,
+                      }}
+                    >
+
+                      {/* HOVER FILL */}
+
+                      <span
+                        className={`absolute left-1/2 top-1/2 z-0 aspect-square w-0 -translate-x-1/2 -translate-y-1/2 rounded-full transition-[width] duration-500 ease-out md:group-hover:w-[160%] ${
+                          isDarkMode
+                            ? 'bg-white'
+                            : 'bg-black'
+                        }`}
+                      />
+
+                      {/* IMAGE / VIDEO PREVIEW */}
+
+                      {renderProjectPreview(project)}
+
+                      {/* CARD CONTENT */}
+
+                      <div className="relative z-10 flex max-w-[64%] items-start gap-6 sm:max-w-[64%] md:max-w-[68%]">
+                        <div>
+
+                          {/* NUMBER AND STATUS */}
+
+                          <div className="mb-3 flex flex-wrap items-center gap-2">
+                            <p className="text-xs font-bold text-[#FF0000]">
+                              [*]{' '}
+                              {String(index + 1).padStart(2, '0')}
+                            </p>
+
+                            {project.liveLink ? (
+                              <span className="border border-[#FF0000] px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#FF0000]">
+                                Live Link ↗
+                              </span>
+                            ) : isVideoProject && mediaCount > 0 ? (
+                              <span className="border border-[#FF0000] px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#FF0000]">
+                                {mediaCount === 1
+                                  ? 'Video Showcase'
+                                  : `${mediaCount} Videos`}
+                              </span>
+                            ) : mediaCount > 0 ? (
+                              <span className="border border-[#FF0000] px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#FF0000]">
+                                {mediaCount}{' '}
+                                {mediaCount === 1
+                                  ? 'Work'
+                                  : 'Works'}
+                              </span>
+                            ) : (
+                              <span className="border border-[#FF0000] px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#FF0000]">
+                                Upcoming
+                              </span>
+                            )}
+                          </div>
+
+                          {/* PROJECT TITLE */}
+
+                          <h2
+                            className={`text-lg font-bold sm:text-xl ${
+                              project.titleClassName || ''
+                            }`}
+                          >
+                            {project.title}
+                          </h2>
+
+                          {/* PROJECT ROLE */}
+
+                          <p className="mt-1 text-xs font-bold opacity-70">
+                            {project.role}
                           </p>
-
-                          {project.liveLink ? (
-                            <span className="border border-[#FF0000] px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#FF0000]">
-                              Live Link
-                            </span>
-                          ) : project.media && project.media.length > 0 ? (
-                            <span className="border border-[#FF0000] px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#FF0000]">
-                              {project.media.length} Works
-                            </span>
-                          ) : (
-                            <span className="border border-[#FF0000] px-2 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#FF0000]">
-                              Upcoming
-                            </span>
-                          )}
                         </div>
-
-                        <h2
-                          className={`text-lg font-bold sm:text-xl ${
-                            project.titleClassName || ''
-                          }`}
-                        >
-                          {project.title}
-                        </h2>
-
-                        <p className="mt-1 text-xs font-bold opacity-70">
-                          {project.role}
-                        </p>
-
-                        {project.description ? (
-                          <p className="mt-5 max-w-2xl text-sm leading-relaxed">
-                            {project.description}
-                          </p>
-                        ) : null}
                       </div>
-                    </div>
-                  </button>
-                );
-              })
+                    </button>
+                  );
+                }
+              )
             ) : (
               <div
                 className={`border-2 border-dotted p-8 text-center transition-colors duration-500 ${
-                  isDarkMode ? 'border-white' : 'border-black'
+                  isDarkMode
+                    ? 'border-white'
+                    : 'border-black'
                 }`}
               >
                 <p
                   className={`text-sm font-black uppercase tracking-[0.2em] transition-colors duration-500 ${
-                    isDarkMode ? 'text-white' : 'text-black'
+                    isDarkMode
+                      ? 'text-white'
+                      : 'text-black'
                   }`}
                 >
                   No projects found
@@ -1428,10 +2245,18 @@ function Projects() {
         </div>
       </section>
 
+      {/* ====================================================== */}
+      {/* PROJECT PREVIEW MODAL */}
+      {/* ====================================================== */}
+
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
       />
+
+      {/* ====================================================== */}
+      {/* SOCIAL LINKS */}
+      {/* ====================================================== */}
 
       <div
         className={`fixed bottom-6 right-5 z-50 flex items-center gap-2 rounded-full border-2 px-3 py-2 backdrop-blur-sm transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:right-5 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:flex-col sm:gap-4 sm:px-3 sm:py-5 lg:right-6 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none ${
@@ -1446,8 +2271,16 @@ function Projects() {
           <a
             key={social.label}
             href={social.href}
-            target={social.label === 'Email' ? undefined : '_blank'}
-            rel={social.label === 'Email' ? undefined : 'noopener noreferrer'}
+            target={
+              social.label === 'Email'
+                ? undefined
+                : '_blank'
+            }
+            rel={
+              social.label === 'Email'
+                ? undefined
+                : 'noopener noreferrer'
+            }
             aria-label={social.label}
             className={socialIconClass}
             draggable="false"
@@ -1464,9 +2297,17 @@ function Projects() {
         ))}
       </div>
 
+      {/* ====================================================== */}
+      {/* FLOATING SCROLL ARROW */}
+      {/* ====================================================== */}
+
       <button
         type="button"
-        aria-label={isAtBottom ? 'Scroll to top' : 'Scroll to bottom'}
+        aria-label={
+          isAtBottom
+            ? 'Scroll to top'
+            : 'Scroll to bottom'
+        }
         onClick={handleFloatingArrowClick}
         className={`fixed bottom-6 left-1/2 z-50 flex h-11 w-11 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black backdrop-blur-sm transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[#FF0000] ${
           isDarkMode
@@ -1482,14 +2323,23 @@ function Projects() {
       >
         <span
           className={`relative z-10 leading-none transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            isAtBottom ? 'rotate-0' : 'translate-y-[1px]'
+            isAtBottom
+              ? 'rotate-0'
+              : 'translate-y-[1px]'
           }`}
         >
           {isAtBottom ? '↑' : '↓'}
         </span>
       </button>
 
-      <div className="relative z-10" ref={footerRef}>
+      {/* ====================================================== */}
+      {/* FOOTER */}
+      {/* ====================================================== */}
+
+      <div
+        className="relative z-10"
+        ref={footerRef}
+      >
         <Footer />
       </div>
     </div>

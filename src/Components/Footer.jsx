@@ -36,6 +36,10 @@ function Footer() {
 
   const emailLink = `mailto:${email}?subject=Portfolio Inquiry&body=Hi Michael,%0D%0A%0D%0AI saw your portfolio and would like to connect with you.%0D%0A%0D%0A`;
 
+  // ============================================================
+  // CREATIVE TOOLKIT
+  // ============================================================
+
   const skills = [
     {
       name: 'Figma',
@@ -68,7 +72,7 @@ function Footer() {
       type: 'asset',
     },
     {
-      name: 'Video Editing',
+      name: 'CapCut',
       icon: videoIcon,
       color: '#FF0000',
       type: 'asset',
@@ -103,12 +107,11 @@ function Footer() {
       color: '#06B6D4',
       type: 'asset',
     },
-    {
-      name: 'Bubble.io',
-      color: '#FFFFFF',
-      type: 'bubble',
-    },
   ];
+
+  // ============================================================
+  // SECTION TITLE
+  // ============================================================
 
   const SectionTitle = ({ icon, children }) => (
     <h3 className="mb-3 flex items-center gap-2 text-xs uppercase tracking-wide text-white">
@@ -117,37 +120,9 @@ function Footer() {
     </h3>
   );
 
-  const BubbleIcon = () => (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-4 w-4"
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle
-        cx="11"
-        cy="13"
-        r="6.8"
-        stroke="currentColor"
-        strokeWidth="1.7"
-      />
-      <circle cx="8.5" cy="10.5" r="1.15" fill="currentColor" />
-      <circle
-        cx="17.8"
-        cy="7"
-        r="2.2"
-        stroke="currentColor"
-        strokeWidth="1.6"
-      />
-      <circle
-        cx="18"
-        cy="18"
-        r="1.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-    </svg>
-  );
+  // ============================================================
+  // SKILLS ENTRANCE ANIMATION
+  // ============================================================
 
   useEffect(() => {
     const footerElement = footerRef.current;
@@ -182,6 +157,10 @@ function Footer() {
     };
   }, [hasAnimatedSkills, skills.length]);
 
+  // ============================================================
+  // CURSOR FOLLOWING GLOW
+  // ============================================================
+
   useEffect(() => {
     const footerElement = footerRef.current;
 
@@ -206,9 +185,14 @@ function Footer() {
 
     const animateGlow = () => {
       footerGlowCurrentRef.current.x +=
-        (footerGlowTargetRef.current.x - footerGlowCurrentRef.current.x) * 0.08;
+        (footerGlowTargetRef.current.x -
+          footerGlowCurrentRef.current.x) *
+        0.08;
+
       footerGlowCurrentRef.current.y +=
-        (footerGlowTargetRef.current.y - footerGlowCurrentRef.current.y) * 0.08;
+        (footerGlowTargetRef.current.y -
+          footerGlowCurrentRef.current.y) *
+        0.08;
 
       footerElement.style.setProperty(
         '--footer-cursor-x',
@@ -220,23 +204,51 @@ function Footer() {
         `${footerGlowCurrentRef.current.y}px`
       );
 
-      footerGlowAnimationRef.current = requestAnimationFrame(animateGlow);
+      footerGlowAnimationRef.current =
+        requestAnimationFrame(animateGlow);
     };
 
-    footerGlowAnimationRef.current = requestAnimationFrame(animateGlow);
+    footerGlowAnimationRef.current =
+      requestAnimationFrame(animateGlow);
 
-    footerElement.addEventListener('mousemove', handleMouseMove);
-    footerElement.addEventListener('mouseenter', handleMouseEnter);
-    footerElement.addEventListener('mouseleave', handleMouseLeave);
+    footerElement.addEventListener(
+      'mousemove',
+      handleMouseMove
+    );
+
+    footerElement.addEventListener(
+      'mouseenter',
+      handleMouseEnter
+    );
+
+    footerElement.addEventListener(
+      'mouseleave',
+      handleMouseLeave
+    );
 
     return () => {
       cancelAnimationFrame(footerGlowAnimationRef.current);
 
-      footerElement.removeEventListener('mousemove', handleMouseMove);
-      footerElement.removeEventListener('mouseenter', handleMouseEnter);
-      footerElement.removeEventListener('mouseleave', handleMouseLeave);
+      footerElement.removeEventListener(
+        'mousemove',
+        handleMouseMove
+      );
+
+      footerElement.removeEventListener(
+        'mouseenter',
+        handleMouseEnter
+      );
+
+      footerElement.removeEventListener(
+        'mouseleave',
+        handleMouseLeave
+      );
     };
   }, []);
+
+  // ============================================================
+  // COPY EMAIL
+  // ============================================================
 
   const handleCopyEmail = async () => {
     try {
@@ -252,6 +264,10 @@ function Footer() {
     }
   };
 
+  // ============================================================
+  // RENDER
+  // ============================================================
+
   return (
     <footer
       ref={footerRef}
@@ -261,15 +277,23 @@ function Footer() {
         '--footer-cursor-y': '80%',
       }}
     >
-      {/* Subtle moving red halftone gradient background */}
+      {/* ======================================================
+          BACKGROUND HALFTONE
+      ====================================================== */}
+
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[68%] opacity-55">
         <div className="absolute inset-0 animate-[footerHalftoneDrift_24s_linear_infinite] bg-[radial-gradient(circle_at_center,rgba(255,0,0,0.34)_1.25px,transparent_1.45px)] bg-[length:14px_14px] [mask-image:linear-gradient(to_top,black,rgba(0,0,0,0.58),rgba(0,0,0,0.18),transparent)]" />
 
         <div className="absolute inset-x-0 bottom-0 h-full animate-[footerGlowPulse_10s_ease-in-out_infinite] bg-[radial-gradient(ellipse_at_bottom,rgba(255,0,0,0.28),rgba(255,0,0,0.09)_38%,transparent_74%)]" />
       </div>
 
-      {/* Cursor-following red glow */}
+      {/* CURSOR GLOW */}
+
       <div className="footer-cursor-glow pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-700" />
+
+      {/* ======================================================
+          ANIMATIONS
+      ====================================================== */}
 
       <style>
         {`
@@ -329,7 +353,14 @@ function Footer() {
         `}
       </style>
 
+      {/* ======================================================
+          FOOTER CONTENT
+      ====================================================== */}
+
       <div className="relative z-10 mx-auto max-w-6xl">
+
+        {/* ABOUT ME HEADING */}
+
         <div className="flex items-center justify-center gap-4 sm:gap-6">
           <img
             src={saturnImage}
@@ -343,11 +374,20 @@ function Footer() {
           </h2>
         </div>
 
+        {/* ====================================================
+            INFORMATION GRID
+        ==================================================== */}
+
         <div className="mt-14 grid gap-10 text-[11px] font-bold leading-relaxed sm:grid-cols-2 md:mt-16 lg:grid-cols-3 lg:gap-x-16 lg:gap-y-12">
+
+          {/* CONTACT */}
+
           <div>
             <SectionTitle icon="☎">Contact</SectionTitle>
 
-            <p className="text-white/80">Michael Rhoi Gonzales</p>
+            <p className="text-white/80">
+              Michael Rhoi Gonzales
+            </p>
 
             <p className="text-white/80">
               UX Designer / Product Designer / Graphic Designer / Video Editor
@@ -364,8 +404,12 @@ function Footer() {
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                aria-label={hasCopiedEmail ? 'Email copied' : 'Copy email'}
-                title={hasCopiedEmail ? 'Copied' : 'Copy email'}
+                aria-label={
+                  hasCopiedEmail ? 'Email copied' : 'Copy email'
+                }
+                title={
+                  hasCopiedEmail ? 'Copied' : 'Copy email'
+                }
                 className={`group relative flex h-6 w-6 items-center justify-center transition-all duration-300 ${
                   hasCopiedEmail
                     ? 'text-[#FF0000] drop-shadow-[0_0_8px_rgba(255,0,0,0.75)]'
@@ -396,7 +440,14 @@ function Footer() {
                     strokeLinejoin="round"
                     className="h-3.5 w-3.5 transition-transform duration-300 group-hover:scale-110"
                   >
-                    <rect x="9" y="9" width="11" height="11" rx="2" />
+                    <rect
+                      x="9"
+                      y="9"
+                      width="11"
+                      height="11"
+                      rx="2"
+                    />
+
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                   </svg>
                 )}
@@ -404,24 +455,50 @@ function Footer() {
             </div>
           </div>
 
-          <div>
-            <SectionTitle icon="★">Core Strengths</SectionTitle>
+          {/* ==================================================
+              CORE STRENGTHS
+          ================================================== */}
 
-            <p className="text-white/80">Creative Direction</p>
-            <p className="text-white/80">User-Centered Thinking</p>
-            <p className="text-white/80">Problem Solving</p>
-            <p className="text-white/80">Visual Attention to Detail</p>
+          <div>
+            <SectionTitle icon="★">
+              Core Strengths
+            </SectionTitle>
+
+            <p className="text-white/80">
+              User-Centered Thinking
+            </p>
+
+            <p className="text-white/80">
+              Problem Solving
+            </p>
+
+            <p className="text-white/80">
+              Visual Attention to Detail
+            </p>
           </div>
 
-          <div>
-            <SectionTitle icon="文">Languages</SectionTitle>
+          {/* LANGUAGES */}
 
-            <p className="text-white/80">English</p>
-            <p className="text-white/80">Filipino / Tagalog</p>
+          <div>
+            <SectionTitle icon="文">
+              Languages
+            </SectionTitle>
+
+            <p className="text-white/80">
+              English
+            </p>
+
+            <p className="text-white/80">
+              Filipino / Tagalog
+            </p>
           </div>
 
+          {/* EDUCATION */}
+
           <div>
-            <SectionTitle icon="⌂">Education</SectionTitle>
+            <SectionTitle icon="⌂">
+              Education
+            </SectionTitle>
 
             <p className="text-white/80">
               Cavite State University — Imus Campus
@@ -437,36 +514,72 @@ function Footer() {
             </p>
           </div>
 
-          <div>
-            <SectionTitle icon="↗">Experience</SectionTitle>
+          {/* EXPERIENCE */}
 
-            <p className="text-white/80">Web and Landing Page Design</p>
-            <p className="text-white/80">User Interface Design</p>
-            <p className="text-white/80">Brand and Graphic Design</p>
-            <p className="text-white/80">Short-Form Video Editing</p>
-            <p className="text-white/80">Frontend Development</p>
+          <div>
+            <SectionTitle icon="↗">
+              Experience
+            </SectionTitle>
+
+            <p className="text-white/80">
+              Web and Landing Page Design
+            </p>
+
+            <p className="text-white/80">
+              User Interface Design
+            </p>
+
+            <p className="text-white/80">
+              Brand and Graphic Design
+            </p>
+
+            <p className="text-white/80">
+              Short-Form Video Editing
+            </p>
+
+            <p className="text-white/80">
+              Frontend Development
+            </p>
           </div>
 
+          {/* ==================================================
+              CREATIVE TOOLKIT
+          ================================================== */}
+
           <div>
-            <SectionTitle icon="⌘">Creative Toolkit</SectionTitle>
+            <SectionTitle icon="⌘">
+              Creative Toolkit
+            </SectionTitle>
 
             <div className="flex flex-wrap gap-2">
+
               {skills.map((skill, index) => {
-                const isActive = activeSkillIndex === index;
-                const isHovered = hoveredSkillIndex === index;
-                const shouldHighlight = isHovered || isActive;
+                const isActive =
+                  activeSkillIndex === index;
+
+                const isHovered =
+                  hoveredSkillIndex === index;
+
+                const shouldHighlight =
+                  isHovered || isActive;
 
                 return (
                   <span
                     key={skill.name}
-                    onMouseEnter={() => setHoveredSkillIndex(index)}
-                    onMouseLeave={() => setHoveredSkillIndex(null)}
+                    onMouseEnter={() =>
+                      setHoveredSkillIndex(index)
+                    }
+                    onMouseLeave={() =>
+                      setHoveredSkillIndex(null)
+                    }
                     className={`group flex h-9 items-center justify-center gap-2 border px-2.5 text-[10px] transition-all duration-300 ${
                       isActive
                         ? 'scale-110 border-[#FF0000] text-[#FF0000] shadow-[0_0_14px_rgba(255,0,0,0.55)]'
                         : 'border-white/80 text-white hover:border-[#FF0000] hover:text-[#FF0000]'
                     }`}
                   >
+                    {/* TOOL ICON */}
+
                     <span
                       className={`flex h-5 w-5 items-center justify-center transition-all duration-300 ${
                         shouldHighlight
@@ -474,32 +587,37 @@ function Footer() {
                           : 'grayscale'
                       }`}
                     >
-                      {skill.type === 'bubble' ? (
-                        <span className="text-white">
-                          <BubbleIcon />
-                        </span>
-                      ) : (
-                        <img
-                          src={skill.icon}
-                          alt={skill.name}
-                          className="h-4 w-4 object-contain"
-                          draggable="false"
-                        />
-                      )}
+                      <img
+                        src={skill.icon}
+                        alt={skill.name}
+                        className="h-4 w-4 object-contain"
+                        draggable="false"
+                      />
                     </span>
 
-                    <span>{skill.name}</span>
+                    {/* TOOL NAME */}
+
+                    <span>
+                      {skill.name}
+                    </span>
+
                   </span>
                 );
               })}
+
             </div>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-white/20 pt-6 text-[10px] font-bold uppercase tracking-wide text-white/40 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p>Michael Rhoi Gonzales</p>
+        {/* ====================================================
+            FOOTER BOTTOM
+        ==================================================== */}
 
+        <div className="mt-16 flex flex-col gap-4 border-t border-white/20 pt-6 text-[10px] font-bold uppercase tracking-wide text-white/40 sm:flex-row sm:items-end sm:justify-between">
+
+          {/* EMAIL ONLY */}
+
+          <div>
             <a
               href={emailLink}
               className="block transition-colors duration-300 hover:text-[#FF0000]"
@@ -508,12 +626,24 @@ function Footer() {
             </a>
           </div>
 
-          <p>@Chroma</p>
+          {/* BRAND */}
+
+          <p>
+            @Chroma
+          </p>
+
+          {/* TAGLINE */}
 
           <div className="sm:text-right">
-            <p>Portfolio</p>
-            <p>Creative Work with a Human Touch</p>
+            <p>
+              Portfolio
+            </p>
+
+            <p>
+              A Little Piece of Me in Every Design
+            </p>
           </div>
+
         </div>
       </div>
     </footer>

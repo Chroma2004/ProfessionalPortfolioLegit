@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Header({ onNavigate, isTransitioning }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,6 +17,7 @@ function Header({ onNavigate, isTransitioning }) {
   });
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const closeMenuTimeoutRef = useRef(null);
   const closeResetTimeoutRef = useRef(null);
@@ -98,18 +99,20 @@ function Header({ onNavigate, isTransitioning }) {
     const originY = buttonRect.top + buttonRect.height / 2;
     const nextMode = !isDarkMode;
     const isTurningDark = nextMode;
-    const shouldUseLightMobileTransition = isMobileScreen || prefersReducedMotion;
+    const shouldUseLightMobileTransition =
+      isMobileScreen || prefersReducedMotion;
     const transitionDuration = shouldUseLightMobileTransition ? 360 : 950;
 
     setIsBulbFlickering(true);
 
     clearTimeout(bulbResetTimeoutRef.current);
 
-    document.documentElement.dataset.themeTransition = shouldUseLightMobileTransition
-      ? 'mobile-soft'
-      : isTurningDark
-        ? 'to-dark'
-        : 'to-light';
+    document.documentElement.dataset.themeTransition =
+      shouldUseLightMobileTransition
+        ? 'mobile-soft'
+        : isTurningDark
+          ? 'to-dark'
+          : 'to-light';
 
     window.dispatchEvent(
       new CustomEvent('portfolio-theme-transition-start', {
@@ -235,11 +238,34 @@ function Header({ onNavigate, isTransitioning }) {
     }, 220);
   };
 
+  // Navigate to Illustrations when PROJECTS is selected.
+  const navigateToPage = (path) => {
+    if (path === '/projects') {
+      // Preserve the existing app-level transition if supplied.
+      // The Projects page will default to Illustrations.
+      if (onNavigate) {
+        onNavigate(path);
+      } else {
+        navigate(path, {
+          state: { filter: 'Illustrations' },
+        });
+      }
+
+      return;
+    }
+
+    if (onNavigate) {
+      onNavigate(path);
+    } else {
+      navigate(path);
+    }
+  };
+
   const handleDesktopNavigate = (path) => {
     if (isTransitioning) return;
 
     closeMenu();
-    onNavigate(path);
+    navigateToPage(path);
   };
 
   const handleMobileNavigate = (path) => {
@@ -252,7 +278,7 @@ function Header({ onNavigate, isTransitioning }) {
 
     mobileNavigateTimeoutRef.current = setTimeout(() => {
       setIsMenuOpen(false);
-      onNavigate(path);
+      navigateToPage(path);
 
       mobileNavigateResetTimeoutRef.current = setTimeout(() => {
         setAnimatingPath(null);
@@ -594,6 +620,7 @@ function Header({ onNavigate, isTransitioning }) {
           </span>
         </button>
 
+        {/* DESKTOP NAVIGATION */}
         <div className="hidden items-center gap-2 md:flex">
           <button
             type="button"
@@ -621,22 +648,10 @@ function Header({ onNavigate, isTransitioning }) {
 
           <button
             type="button"
-            onClick={() => handleDesktopNavigate('/design-process')}
-            className={getDesktopLinkClass('/design-process')}
-          >
-            My Design Process
-          </button>
-
-          <span className={`translate-y-[2px] font-black ${mutedTextClass}`}>
-            *
-          </span>
-
-          <button
-            type="button"
             onClick={() => handleDesktopNavigate('/contact')}
             className={getDesktopLinkClass('/contact')}
           >
-            CONTACT
+            CONNECT WITH ME
           </button>
 
           <button
@@ -651,6 +666,7 @@ function Header({ onNavigate, isTransitioning }) {
           </button>
         </div>
 
+        {/* MOBILE CONTROLS */}
         <div className="flex items-center gap-3 md:hidden">
           {renderMobileLightBulbButton()}
 
@@ -704,6 +720,7 @@ function Header({ onNavigate, isTransitioning }) {
         </div>
       </nav>
 
+      {/* MOBILE BACKDROP */}
       <div
         className={`fixed inset-0 z-40 backdrop-blur-[2px] transition-opacity duration-300 md:hidden ${
           isDarkMode ? 'bg-white/10' : 'bg-black/30'
@@ -715,6 +732,7 @@ function Header({ onNavigate, isTransitioning }) {
         onClick={closeMenu}
       />
 
+      {/* MOBILE SIDEBAR */}
       <aside
         className={`fixed right-0 top-0 z-50 h-screen w-[82%] max-w-[340px] border-l-2 px-5 py-6 shadow-2xl transition-transform duration-300 ease-out md:hidden ${
           isDarkMode
@@ -775,6 +793,7 @@ function Header({ onNavigate, isTransitioning }) {
           </div>
         </div>
 
+        {/* MOBILE NAVIGATION */}
         <div className="flex flex-col gap-3 text-xs tracking-wide">
           <button
             type="button"
@@ -822,28 +841,6 @@ function Header({ onNavigate, isTransitioning }) {
 
           <button
             type="button"
-            onClick={() => handleMobileNavigate('/design-process')}
-            className={getMobileLinkClass('/design-process')}
-          >
-            <span
-              className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-out ${menuFillClass} ${
-                animatingPath === '/design-process'
-                  ? 'w-[180%]'
-                  : 'w-0 md:group-hover:w-[180%]'
-              }`}
-            />
-
-            <span className="relative z-10 flex items-center justify-between px-4 py-4">
-              My Design Process
-
-              <span className="transition-transform duration-300 ease-out md:group-hover:translate-x-1">
-                →
-              </span>
-            </span>
-          </button>
-
-          <button
-            type="button"
             onClick={() => handleMobileNavigate('/contact')}
             className={getMobileLinkClass('/contact')}
           >
@@ -865,6 +862,7 @@ function Header({ onNavigate, isTransitioning }) {
           </button>
         </div>
 
+        {/* MOBILE FOOTER */}
         <div
           className={`absolute bottom-6 left-5 right-5 border-t-2 border-dotted pt-4 text-[10px] font-black uppercase tracking-wide ${
             isDarkMode
