@@ -5,21 +5,48 @@ import Footer from '../Components/Footer';
 import HomeContact from '../Components/HomeContact';
 import HomeCreativeWorks from '../Components/HomeCreativeWorks';
 
-import projectPreview4 from '../assets/project-preview-4.png';
+// ============================================================
+// DIGITAL ILLUSTRATION IMPORTS
+// ============================================================
 
-import illust5 from '../assets/Illustrations/ILLUST5.jpeg';
+import illust2 from '../assets/Illustrations/ILLUST2.webp';
+import illust4 from '../assets/Illustrations/ILLUST4.webp';
+import illust5 from '../assets/Illustrations/ILLUST5.webp';
+import illust6 from '../assets/Illustrations/ILLUST6.webp';
+import illust7 from '../assets/Illustrations/ILLUST7.webp';
+
+// ============================================================
+// PIXEL ART IMPORTS
+// ============================================================
+
 import px1 from '../assets/Illustrations/COMS1.1.mp4';
-import px2 from '../assets/Illustrations/PX2.PNG';
+import px2 from '../assets/Illustrations/PX2.webp';
 
-import gpx1 from '../assets/GPX/GPX1.png';
-import gpx2 from '../assets/GPX/GPX2.png';
-import gpx3 from '../assets/GPX/GPX3.png';
-import gpx4 from '../assets/GPX/GPX4.png';
-import gpx5 from '../assets/GPX/GPX5.png';
+// ============================================================
+// GRAPHIC DESIGN IMPORTS
+// ============================================================
 
-import trackEdPreview from '../assets/System/TrackEd.png';
-import photo2yPreview from '../assets/System/Photo2y.png';
-import photo2yPreview2 from '../assets/System/Photo2y2.png';
+import gpx1 from '../assets/GPX/GPX1.webp';
+import gpx2 from '../assets/GPX/GPX2.webp';
+import gpx3 from '../assets/GPX/GPX3.webp';
+import gpx4 from '../assets/GPX/GPX4.webp';
+import gpx5 from '../assets/GPX/GPX5.webp';
+
+// ============================================================
+// WEB SYSTEM IMPORTS
+// ============================================================
+
+import trackEdPreview from '../assets/System/TrackEd.webp';
+import photo2yPreview from '../assets/System/Photo2y.webp';
+import photo2yPreview2 from '../assets/System/Photo2y2.webp';
+
+// ============================================================
+// VIDEO EDIT IMPORTS
+// ============================================================
+
+import podDark from '../assets/VideoEdit/PodDark.mp4';
+import videoEditDark from '../assets/VideoEdit/VideoEditDark.mp4';
+import engagementVideoDark from '../assets/VideoEdit/EngagementVideoDark.mp4';
 
 // ============================================================
 // CONSTANTS
@@ -44,8 +71,6 @@ const emailLink = `mailto:${email}?subject=${encodeURIComponent(
 const DEFAULT_SLIDESHOW_INTERVAL = 1900;
 const OTHER_WORKS_SLIDESHOW_INTERVAL = 2000;
 
-// Higher = more responsive cursor following.
-// 0.35 provides smooth movement with less delay.
 const CURSOR_FOLLOW_SPEED = 0.35;
 
 // ============================================================
@@ -53,7 +78,9 @@ const CURSOR_FOLLOW_SPEED = 0.35;
 // ============================================================
 
 function CornerDecorations({ isDarkMode }) {
-  const borderColor = isDarkMode ? 'border-white' : 'border-black';
+  const borderColor = isDarkMode
+    ? 'border-white'
+    : 'border-black';
 
   const baseClass =
     'pointer-events-none absolute z-20 h-7 w-7 transition-colors duration-500 sm:h-8 sm:w-8';
@@ -84,12 +111,106 @@ function CornerDecorations({ isDarkMode }) {
 }
 
 // ============================================================
+// OPTIMIZED PREVIEW IMAGE
+// ============================================================
+
+function PreviewImage({ src, alt }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      onLoad={() => setIsLoaded(true)}
+      onError={() => setIsLoaded(false)}
+      className={`h-full w-full object-contain transition-opacity duration-300 ease-out ${
+        isLoaded ? 'opacity-100' : 'opacity-0'
+      }`}
+      draggable="false"
+      decoding="async"
+      loading="eager"
+    />
+  );
+}
+
+// ============================================================
+// OPTIMIZED PREVIEW VIDEO
+// ============================================================
+
+function PreviewVideo({ src, alt }) {
+  const videoRef = useRef(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    if (!videoElement) return undefined;
+
+    const playVideo = () => {
+      const playPromise = videoElement.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        videoElement.pause();
+      } else {
+        playVideo();
+      }
+    };
+
+    document.addEventListener(
+      'visibilitychange',
+      handleVisibilityChange
+    );
+
+    if (!document.hidden) {
+      playVideo();
+    }
+
+    return () => {
+      document.removeEventListener(
+        'visibilitychange',
+        handleVisibilityChange
+      );
+
+      videoElement.pause();
+    };
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      aria-label={alt}
+      muted
+      autoPlay
+      loop
+      playsInline
+      preload="metadata"
+      disablePictureInPicture
+      disableRemotePlayback
+      controlsList="nodownload noremoteplayback"
+      onContextMenu={(event) => event.preventDefault()}
+      onLoadedData={() => setIsLoaded(true)}
+      className={`h-full w-full object-contain transition-opacity duration-300 ease-out ${
+        isLoaded ? 'opacity-100' : 'opacity-0'
+      }`}
+    />
+  );
+}
+
+// ============================================================
 // HOME COMPONENT
 // ============================================================
 
 function Home() {
   const [animatingProject, setAnimatingProject] = useState(null);
   const [introProjectIndex, setIntroProjectIndex] = useState(null);
+
   const [isSocialOnDark, setIsSocialOnDark] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(false);
 
@@ -114,21 +235,41 @@ function Home() {
   const [hoveredProject, setHoveredProject] = useState(null);
   const [previewSlideIndex, setPreviewSlideIndex] = useState(0);
 
-  const [isDesktopPreviewEnabled, setIsDesktopPreviewEnabled] =
-    useState(false);
+  const [
+    isDesktopPreviewEnabled,
+    setIsDesktopPreviewEnabled,
+  ] = useState(false);
 
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [
+    prefersReducedMotion,
+    setPrefersReducedMotion,
+  ] = useState(false);
+
+  // ============================================================
+  // REFS
+  // ============================================================
 
   const homeRef = useRef(null);
   const footerRef = useRef(null);
   const previewBoxRef = useRef(null);
+
   const introHasPlayedRef = useRef(false);
 
   const previewAnimationRef = useRef(null);
   const previewSlideTimerRef = useRef(null);
 
-  const previewTargetRef = useRef({ x: 0, y: 0 });
-  const previewCurrentRef = useRef({ x: 0, y: 0 });
+  const navigationTimerRef = useRef(null);
+  const navigationResetTimerRef = useRef(null);
+
+  const previewTargetRef = useRef({
+    x: 0,
+    y: 0,
+  });
+
+  const previewCurrentRef = useRef({
+    x: 0,
+    y: 0,
+  });
 
   const navigate = useNavigate();
 
@@ -137,16 +278,41 @@ function Home() {
   // ============================================================
 
   const projects = useMemo(() => {
+    // ==========================================================
+    // DIGITAL ART PREVIEWS
+    // ILLUST2, ILLUST4, ILLUST5, ILLUST6, ILLUST7
+    // ==========================================================
+
     const digitalArtPreviews = [
       {
         type: 'image',
+        src: illust2,
+        alt: 'Digital Illustration 2',
+      },
+      {
+        type: 'image',
+        src: illust4,
+        alt: 'Digital Illustration 4',
+      },
+      {
+        type: 'image',
         src: illust5,
-        alt: 'Digital Illustration Preview',
+        alt: 'Digital Illustration 5',
+      },
+      {
+        type: 'image',
+        src: illust6,
+        alt: 'Digital Illustration 6',
+      },
+      {
+        type: 'image',
+        src: illust7,
+        alt: 'Digital Illustration 7',
       },
       {
         type: 'video',
         src: px1,
-        alt: 'Digital Art Animation Preview',
+        alt: 'Pixel Art Animation Preview',
       },
       {
         type: 'image',
@@ -154,6 +320,10 @@ function Home() {
         alt: 'Pixel Art Preview',
       },
     ];
+
+    // ==========================================================
+    // POSTER PREVIEWS
+    // ==========================================================
 
     const posterPreviews = [
       {
@@ -183,13 +353,32 @@ function Home() {
       },
     ];
 
+    // ==========================================================
+    // VIDEO EDIT PREVIEWS
+    // DARK VERSIONS ONLY
+    // ==========================================================
+
     const videoPreviews = [
       {
         type: 'video',
-        src: px1,
-        alt: 'Video Editing Preview',
+        src: podDark,
+        alt: 'Podcast Video Preview',
+      },
+      {
+        type: 'video',
+        src: videoEditDark,
+        alt: 'Recruitment Video Preview',
+      },
+      {
+        type: 'video',
+        src: engagementVideoDark,
+        alt: 'Engagement Video Preview',
       },
     ];
+
+    // ==========================================================
+    // WEB SYSTEM PREVIEWS
+    // ==========================================================
 
     const webSystemPreviews = [
       {
@@ -209,24 +398,29 @@ function Home() {
       },
     ];
 
-    // Combine all available previews for Other Works.
+    // ==========================================================
+    // COMBINED PREVIEWS
+    // ==========================================================
+
     const combinedPreviews = [
       ...digitalArtPreviews,
       ...posterPreviews,
       ...videoPreviews,
       ...webSystemPreviews,
-      {
-        type: 'image',
-        src: projectPreview4,
-        alt: 'Other Creative Works Preview',
-      },
     ];
 
     // Remove duplicate media.
+
     const uniqueCombinedPreviews = combinedPreviews.filter(
       (item, index, array) =>
-        array.findIndex((preview) => preview.src === item.src) === index
+        array.findIndex(
+          (preview) => preview.src === item.src
+        ) === index
     );
+
+    // ==========================================================
+    // FEATURED PROJECTS
+    // ==========================================================
 
     return [
       {
@@ -238,28 +432,28 @@ function Home() {
       },
       {
         title: 'Posters',
-        targetProjectTitle: 'GPX Design Projects',
+        targetProjectTitle: 'Posters',
         path: '/projects',
         filter: 'GPX Design',
         previewItems: posterPreviews,
       },
       {
         title: 'Video Edits',
-        targetProjectTitle: 'Video Edits',
+        targetProjectTitle: 'Podcast Videos',
         path: '/projects',
         filter: 'Video Edit',
         previewItems: videoPreviews,
       },
       {
         title: 'Web Systems',
-        targetProjectTitle: 'Web Systems',
+        targetProjectTitle: 'TrackED',
         path: '/projects',
         filter: 'WebSystem',
         previewItems: webSystemPreviews,
       },
       {
         title: 'Other Works',
-        targetProjectTitle: 'Other Works',
+        targetProjectTitle: null,
         path: '/projects',
         filter: 'All',
         previewItems: uniqueCombinedPreviews,
@@ -312,15 +506,23 @@ function Home() {
     );
 
     const updateReducedMotion = () => {
-      setPrefersReducedMotion(reducedMotionQuery.matches);
+      setPrefersReducedMotion(
+        reducedMotionQuery.matches
+      );
     };
 
     updateReducedMotion();
 
-    reducedMotionQuery.addEventListener('change', updateReducedMotion);
+    reducedMotionQuery.addEventListener(
+      'change',
+      updateReducedMotion
+    );
 
     return () => {
-      reducedMotionQuery.removeEventListener('change', updateReducedMotion);
+      reducedMotionQuery.removeEventListener(
+        'change',
+        updateReducedMotion
+      );
     };
   }, []);
 
@@ -332,7 +534,12 @@ function Home() {
     let timeoutId;
 
     const handleThemeSpread = (event) => {
-      const { x, y, nextTheme, direction } = event.detail;
+      const {
+        x,
+        y,
+        nextTheme,
+        direction,
+      } = event.detail;
 
       setThemeSpread({
         isActive: true,
@@ -373,17 +580,33 @@ function Home() {
 
   useEffect(() => {
     const syncTheme = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'));
+      setIsDarkMode(
+        document.documentElement.classList.contains('dark')
+      );
     };
 
     syncTheme();
 
-    window.addEventListener('portfolio-theme-change', syncTheme);
-    window.addEventListener('storage', syncTheme);
+    window.addEventListener(
+      'portfolio-theme-change',
+      syncTheme
+    );
+
+    window.addEventListener(
+      'storage',
+      syncTheme
+    );
 
     return () => {
-      window.removeEventListener('portfolio-theme-change', syncTheme);
-      window.removeEventListener('storage', syncTheme);
+      window.removeEventListener(
+        'portfolio-theme-change',
+        syncTheme
+      );
+
+      window.removeEventListener(
+        'storage',
+        syncTheme
+      );
     };
   }, []);
 
@@ -392,18 +615,32 @@ function Home() {
   // ============================================================
 
   useEffect(() => {
-    const desktopPreviewQuery = window.matchMedia('(min-width: 768px)');
+    const desktopPreviewQuery = window.matchMedia(
+      '(min-width: 768px) and (hover: hover) and (pointer: fine)'
+    );
 
     const checkDesktopPreview = () => {
-      setIsDesktopPreviewEnabled(desktopPreviewQuery.matches);
+      setIsDesktopPreviewEnabled(
+        desktopPreviewQuery.matches
+      );
+
+      if (!desktopPreviewQuery.matches) {
+        setHoveredProject(null);
+      }
     };
 
     checkDesktopPreview();
 
-    desktopPreviewQuery.addEventListener('change', checkDesktopPreview);
+    desktopPreviewQuery.addEventListener(
+      'change',
+      checkDesktopPreview
+    );
 
     return () => {
-      desktopPreviewQuery.removeEventListener('change', checkDesktopPreview);
+      desktopPreviewQuery.removeEventListener(
+        'change',
+        checkDesktopPreview
+      );
     };
   }, []);
 
@@ -414,7 +651,11 @@ function Home() {
   useEffect(() => {
     const homeElement = homeRef.current;
 
-    if (!homeElement || !isDesktopPreviewEnabled || prefersReducedMotion) {
+    if (
+      !homeElement ||
+      !isDesktopPreviewEnabled ||
+      prefersReducedMotion
+    ) {
       return undefined;
     }
 
@@ -429,25 +670,40 @@ function Home() {
       }
 
       animationFrame = requestAnimationFrame(() => {
-        homeElement.style.setProperty('--home-cursor-x', `${mouseX}px`);
-        homeElement.style.setProperty('--home-cursor-y', `${mouseY}px`);
+        homeElement.style.setProperty(
+          '--home-cursor-x',
+          `${mouseX}px`
+        );
+
+        homeElement.style.setProperty(
+          '--home-cursor-y',
+          `${mouseY}px`
+        );
 
         animationFrame = null;
       });
     };
 
-    window.addEventListener('pointermove', handleMouseMove, {
-      passive: true,
-    });
+    window.addEventListener(
+      'pointermove',
+      handleMouseMove,
+      { passive: true }
+    );
 
     return () => {
-      window.removeEventListener('pointermove', handleMouseMove);
+      window.removeEventListener(
+        'pointermove',
+        handleMouseMove
+      );
 
       if (animationFrame !== null) {
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [isDesktopPreviewEnabled, prefersReducedMotion]);
+  }, [
+    isDesktopPreviewEnabled,
+    prefersReducedMotion,
+  ]);
 
   // ============================================================
   // OPTIMIZED FLOATING PROJECT PREVIEW
@@ -467,31 +723,69 @@ function Home() {
 
       if (!previewBoxElement) return;
 
-      // Faster and smoother cursor following.
       previewCurrentRef.current.x +=
-        (previewTargetRef.current.x - previewCurrentRef.current.x) *
-        CURSOR_FOLLOW_SPEED;
+        (
+          previewTargetRef.current.x -
+          previewCurrentRef.current.x
+        ) * CURSOR_FOLLOW_SPEED;
 
       previewCurrentRef.current.y +=
-        (previewTargetRef.current.y - previewCurrentRef.current.y) *
-        CURSOR_FOLLOW_SPEED;
+        (
+          previewTargetRef.current.y -
+          previewCurrentRef.current.y
+        ) * CURSOR_FOLLOW_SPEED;
 
-      previewBoxElement.style.transform = `translate3d(${
-        previewCurrentRef.current.x + 28
-      }px, ${previewCurrentRef.current.y - 136}px, 0)`;
+      const previewWidth = 330;
+      const previewHeight = 260;
 
-      previewAnimationRef.current = requestAnimationFrame(animatePreview);
+      const cursorX = previewCurrentRef.current.x;
+      const cursorY = previewCurrentRef.current.y;
+
+      const preferredX =
+        cursorX + previewWidth + 40 > window.innerWidth
+          ? cursorX - previewWidth - 28
+          : cursorX + 28;
+
+      const previewX = Math.max(
+        12,
+        Math.min(
+          preferredX,
+          window.innerWidth - previewWidth - 12
+        )
+      );
+
+      const previewY = Math.max(
+        12,
+        Math.min(
+          cursorY - 136,
+          window.innerHeight - previewHeight - 12
+        )
+      );
+
+      previewBoxElement.style.transform =
+        `translate3d(${previewX}px, ${previewY}px, 0)`;
+
+      previewAnimationRef.current =
+        requestAnimationFrame(animatePreview);
     };
 
-    previewAnimationRef.current = requestAnimationFrame(animatePreview);
+    previewAnimationRef.current =
+      requestAnimationFrame(animatePreview);
 
     return () => {
       if (previewAnimationRef.current !== null) {
-        cancelAnimationFrame(previewAnimationRef.current);
+        cancelAnimationFrame(
+          previewAnimationRef.current
+        );
+
         previewAnimationRef.current = null;
       }
     };
-  }, [hoveredProject, isDesktopPreviewEnabled, prefersReducedMotion]);
+  }, [
+    hoveredProject,
+    isDesktopPreviewEnabled,
+    prefersReducedMotion,
+  ]);
 
   // ============================================================
   // TYPING ANIMATION
@@ -502,6 +796,7 @@ function Home() {
       setTypedIntroText(formalIntro);
       setTypedRoleText(roleText);
       setActiveTypingLine('done');
+
       return undefined;
     }
 
@@ -519,38 +814,68 @@ function Home() {
       setActiveTypingLine('intro');
 
       while (!cancelled) {
-        for (let index = 1; index <= casualIntro.length; index += 1) {
+        for (
+          let index = 1;
+          index <= casualIntro.length;
+          index += 1
+        ) {
           if (cancelled) return;
 
-          setTypedIntroText(casualIntro.slice(0, index));
+          setTypedIntroText(
+            casualIntro.slice(0, index)
+          );
+
           await wait(65);
         }
+
+        if (cancelled) return;
 
         setTypedRoleText(roleText);
         setActiveTypingLine('done');
 
         await wait(3000);
 
-        for (let index = casualIntro.length; index >= 0; index -= 1) {
+        for (
+          let index = casualIntro.length;
+          index >= 0;
+          index -= 1
+        ) {
           if (cancelled) return;
 
-          setTypedIntroText(casualIntro.slice(0, index));
+          setTypedIntroText(
+            casualIntro.slice(0, index)
+          );
+
           await wait(35);
         }
 
-        for (let index = 1; index <= formalIntro.length; index += 1) {
+        for (
+          let index = 1;
+          index <= formalIntro.length;
+          index += 1
+        ) {
           if (cancelled) return;
 
-          setTypedIntroText(formalIntro.slice(0, index));
+          setTypedIntroText(
+            formalIntro.slice(0, index)
+          );
+
           await wait(55);
         }
 
         await wait(3000);
 
-        for (let index = formalIntro.length; index >= 0; index -= 1) {
+        for (
+          let index = formalIntro.length;
+          index >= 0;
+          index -= 1
+        ) {
           if (cancelled) return;
 
-          setTypedIntroText(formalIntro.slice(0, index));
+          setTypedIntroText(
+            formalIntro.slice(0, index)
+          );
+
           await wait(30);
         }
       }
@@ -579,14 +904,18 @@ function Home() {
 
       scrollFrame = requestAnimationFrame(() => {
         const footerElement = footerRef.current;
+
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
 
         if (footerElement) {
-          const footerRect = footerElement.getBoundingClientRect();
+          const footerRect =
+            footerElement.getBoundingClientRect();
 
           const isMobile = viewportWidth < 640;
-          const socialCheckX = viewportWidth - 32;
+
+          const socialCheckX =
+            viewportWidth - 32;
 
           const socialCheckY = isMobile
             ? viewportHeight - 92
@@ -601,10 +930,15 @@ function Home() {
           setIsSocialOnDark(isOverFooter);
         }
 
-        const scrollPosition = window.scrollY + viewportHeight;
-        const pageHeight = document.documentElement.scrollHeight;
+        const scrollPosition =
+          window.scrollY + viewportHeight;
 
-        setIsAtBottom(scrollPosition >= pageHeight - 100);
+        const pageHeight =
+          document.documentElement.scrollHeight;
+
+        setIsAtBottom(
+          scrollPosition >= pageHeight - 100
+        );
 
         ticking = false;
       });
@@ -612,15 +946,27 @@ function Home() {
 
     handleScrollState();
 
-    window.addEventListener('scroll', handleScrollState, {
-      passive: true,
-    });
+    window.addEventListener(
+      'scroll',
+      handleScrollState,
+      { passive: true }
+    );
 
-    window.addEventListener('resize', handleScrollState);
+    window.addEventListener(
+      'resize',
+      handleScrollState
+    );
 
     return () => {
-      window.removeEventListener('scroll', handleScrollState);
-      window.removeEventListener('resize', handleScrollState);
+      window.removeEventListener(
+        'scroll',
+        handleScrollState
+      );
+
+      window.removeEventListener(
+        'resize',
+        handleScrollState
+      );
 
       if (scrollFrame !== null) {
         cancelAnimationFrame(scrollFrame);
@@ -633,11 +979,16 @@ function Home() {
   // ============================================================
 
   useEffect(() => {
-    if (introHasPlayedRef.current || prefersReducedMotion) {
+    if (
+      introHasPlayedRef.current ||
+      prefersReducedMotion
+    ) {
       return undefined;
     }
 
-    const isMobile = window.matchMedia('(max-width: 639px)').matches;
+    const isMobile = window.matchMedia(
+      '(max-width: 639px)'
+    ).matches;
 
     if (!isMobile) return undefined;
 
@@ -660,9 +1011,14 @@ function Home() {
     );
 
     return () => {
-      timers.forEach((timer) => clearTimeout(timer));
+      timers.forEach((timer) => {
+        clearTimeout(timer);
+      });
     };
-  }, [projects, prefersReducedMotion]);
+  }, [
+    projects,
+    prefersReducedMotion,
+  ]);
 
   // ============================================================
   // PROJECT PREVIEW SLIDES
@@ -670,6 +1026,7 @@ function Home() {
 
   useEffect(() => {
     clearInterval(previewSlideTimerRef.current);
+
     setPreviewSlideIndex(0);
 
     if (
@@ -680,9 +1037,13 @@ function Home() {
       return undefined;
     }
 
-    const currentProject = projects[hoveredProject];
+    const currentProject =
+      projects[hoveredProject];
 
-    if (!currentProject || currentProject.previewItems.length <= 1) {
+    if (
+      !currentProject ||
+      currentProject.previewItems.length <= 1
+    ) {
       return undefined;
     }
 
@@ -691,14 +1052,19 @@ function Home() {
       DEFAULT_SLIDESHOW_INTERVAL;
 
     previewSlideTimerRef.current = setInterval(() => {
+      if (document.hidden) return;
+
       setPreviewSlideIndex(
         (currentIndex) =>
-          (currentIndex + 1) % currentProject.previewItems.length
+          (currentIndex + 1) %
+          currentProject.previewItems.length
       );
     }, slideshowInterval);
 
     return () => {
-      clearInterval(previewSlideTimerRef.current);
+      clearInterval(
+        previewSlideTimerRef.current
+      );
     };
   }, [
     hoveredProject,
@@ -708,10 +1074,50 @@ function Home() {
   ]);
 
   // ============================================================
+  // CLEANUP
+  // ============================================================
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(navigationTimerRef.current);
+
+      clearTimeout(
+        navigationResetTimerRef.current
+      );
+
+      clearInterval(
+        previewSlideTimerRef.current
+      );
+
+      if (previewAnimationRef.current !== null) {
+        cancelAnimationFrame(
+          previewAnimationRef.current
+        );
+      }
+    };
+  }, []);
+
+  // ============================================================
   // PROJECT NAVIGATION
   // ============================================================
 
-  const handleProjectNavigate = (event, project, index) => {
+  const handleProjectNavigate = (
+    event,
+    project,
+    index
+  ) => {
+    // Preserve normal browser behavior for opening new tabs.
+
+    if (
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      event.button !== 0
+    ) {
+      return;
+    }
+
     event.preventDefault();
 
     if (animatingProject !== null) return;
@@ -719,25 +1125,40 @@ function Home() {
     setHoveredProject(null);
     setAnimatingProject(index);
 
-    const navigationDelay = prefersReducedMotion ? 80 : 420;
+    const navigationDelay =
+      prefersReducedMotion ? 80 : 420;
 
-    setTimeout(() => {
+    navigationTimerRef.current = setTimeout(() => {
       navigate(project.path, {
         state: {
           filter: project.filter,
           projectTitle: project.targetProjectTitle,
-          scrollToProject: true,
+          scrollToProject: Boolean(
+            project.targetProjectTitle
+          ),
         },
       });
 
-      setTimeout(() => {
+      navigationResetTimerRef.current = setTimeout(() => {
         setAnimatingProject(null);
       }, 250);
     }, navigationDelay);
   };
 
-  const handleProjectMouseMove = (event, index) => {
-    if (!isDesktopPreviewEnabled || prefersReducedMotion) return;
+  // ============================================================
+  // PROJECT MOUSE MOVEMENT
+  // ============================================================
+
+  const handleProjectMouseMove = (
+    event,
+    index
+  ) => {
+    if (
+      !isDesktopPreviewEnabled ||
+      prefersReducedMotion
+    ) {
+      return;
+    }
 
     if (hoveredProject !== index) {
       setHoveredProject(index);
@@ -749,8 +1170,20 @@ function Home() {
     };
   };
 
-  const handleProjectMouseEnter = (event, index) => {
-    if (!isDesktopPreviewEnabled || prefersReducedMotion) return;
+  // ============================================================
+  // PROJECT MOUSE ENTER
+  // ============================================================
+
+  const handleProjectMouseEnter = (
+    event,
+    index
+  ) => {
+    if (
+      !isDesktopPreviewEnabled ||
+      prefersReducedMotion
+    ) {
+      return;
+    }
 
     previewCurrentRef.current = {
       x: event.clientX,
@@ -762,21 +1195,48 @@ function Home() {
       y: event.clientY,
     };
 
-    const previewBoxElement = previewBoxRef.current;
+    const previewBoxElement =
+      previewBoxRef.current;
 
     if (previewBoxElement) {
-      previewBoxElement.style.transform = `translate3d(${
-        event.clientX + 28
-      }px, ${event.clientY - 136}px, 0)`;
+      const previewWidth = 330;
+      const previewHeight = 260;
+
+      const preferredX =
+        event.clientX + previewWidth + 40 >
+        window.innerWidth
+          ? event.clientX - previewWidth - 28
+          : event.clientX + 28;
+
+      const previewX = Math.max(
+        12,
+        Math.min(
+          preferredX,
+          window.innerWidth - previewWidth - 12
+        )
+      );
+
+      const previewY = Math.max(
+        12,
+        Math.min(
+          event.clientY - 136,
+          window.innerHeight - previewHeight - 12
+        )
+      );
+
+      previewBoxElement.style.transform =
+        `translate3d(${previewX}px, ${previewY}px, 0)`;
     }
 
     setHoveredProject(index);
     setPreviewSlideIndex(0);
   };
 
-  const handleProjectMouseLeave = () => {
-    if (!isDesktopPreviewEnabled || prefersReducedMotion) return;
+  // ============================================================
+  // PROJECT MOUSE LEAVE
+  // ============================================================
 
+  const handleProjectMouseLeave = () => {
     setHoveredProject(null);
     setPreviewSlideIndex(0);
   };
@@ -787,8 +1247,13 @@ function Home() {
 
   const handleFloatingArrowClick = () => {
     window.scrollTo({
-      top: isAtBottom ? 0 : document.documentElement.scrollHeight,
-      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      top: isAtBottom
+        ? 0
+        : document.documentElement.scrollHeight,
+
+      behavior: prefersReducedMotion
+        ? 'auto'
+        : 'smooth',
     });
   };
 
@@ -797,45 +1262,47 @@ function Home() {
   // ============================================================
 
   const renderPreviewMedia = () => {
-    if (hoveredProject === null) return null;
+    if (
+      hoveredProject === null ||
+      !isDesktopPreviewEnabled ||
+      prefersReducedMotion
+    ) {
+      return null;
+    }
 
-    const currentProject = projects[hoveredProject];
+    const currentProject =
+      projects[hoveredProject];
 
-    if (!currentProject?.previewItems?.length) return null;
+    if (!currentProject?.previewItems?.length) {
+      return null;
+    }
 
     const currentPreview =
       currentProject.previewItems[
-        previewSlideIndex % currentProject.previewItems.length
+        previewSlideIndex %
+        currentProject.previewItems.length
       ];
 
     if (!currentPreview) return null;
 
+    const mediaKey =
+      `${hoveredProject}-${previewSlideIndex}-${currentPreview.src}`;
+
     if (currentPreview.type === 'video') {
       return (
-        <video
-          key={`${hoveredProject}-${previewSlideIndex}-${currentPreview.src}`}
+        <PreviewVideo
+          key={mediaKey}
           src={currentPreview.src}
-          className="h-full w-full animate-[previewFade_500ms_ease-out] object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none"
-          muted
-          autoPlay
-          loop
-          playsInline
-          preload="metadata"
-        >
-          <track kind="captions" />
-        </video>
+          alt={currentPreview.alt}
+        />
       );
     }
 
     return (
-      <img
-        key={`${hoveredProject}-${previewSlideIndex}-${currentPreview.src}`}
+      <PreviewImage
+        key={mediaKey}
         src={currentPreview.src}
         alt={currentPreview.alt}
-        className="h-full w-full animate-[previewFade_500ms_ease-out] object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:animate-none"
-        draggable="false"
-        loading="lazy"
-        decoding="async"
       />
     );
   };
@@ -860,11 +1327,18 @@ function Home() {
     <div
       ref={homeRef}
       className={`relative min-h-screen select-none overflow-x-hidden transition-colors duration-500 ${
-        isDarkMode ? 'bg-black text-white' : 'bg-[#d9d9d9] text-black'
+        isDarkMode
+          ? 'bg-black text-white'
+          : 'bg-[#d9d9d9] text-black'
       }`}
     >
+
+      {/* ====================================================== */}
       {/* THEME TRANSITION */}
+      {/* ====================================================== */}
+
       {themeSpread.isActive &&
+        typeof document !== 'undefined' &&
         !document.startViewTransition && (
           <div
             className={`pointer-events-none fixed inset-0 z-[49] motion-reduce:hidden ${
@@ -875,6 +1349,7 @@ function Home() {
             style={{
               '--theme-spread-x': `${themeSpread.x}px`,
               '--theme-spread-y': `${themeSpread.y}px`,
+
               backgroundColor:
                 themeSpread.nextTheme === 'dark'
                   ? '#000000'
@@ -883,19 +1358,28 @@ function Home() {
           />
         )}
 
+      {/* ====================================================== */}
       {/* BACKGROUND GRID */}
+      {/* ====================================================== */}
+
       <div
         className={`pointer-events-none fixed inset-0 z-0 sm:animate-[gridDrift_46s_linear_infinite] motion-reduce:animate-none ${
           isDarkMode
             ? 'bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)]'
-            : 'bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)]'
+            : 'bg-[linear-gradient(rgba(0,0,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.035)_1px,transparent_1px)] sm:bg-[linear-gradient(rgba(0,0,0,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.045)_1px,transparent_1px)]'
         } bg-[size:34px_34px] sm:bg-[size:38px_38px]`}
       />
 
+      {/* ====================================================== */}
       {/* CURSOR GRID */}
+      {/* ====================================================== */}
+
       <div className="pointer-events-none fixed inset-0 z-[1] hidden animate-[gridDrift_46s_linear_infinite] bg-[linear-gradient(rgba(255,0,0,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,0,0.16)_1px,transparent_1px)] bg-[size:38px_38px] opacity-60 [mask-image:radial-gradient(circle_at_var(--home-cursor-x,50%)_var(--home-cursor-y,50%),black_0,black_52px,transparent_126px)] [-webkit-mask-image:radial-gradient(circle_at_var(--home-cursor-x,50%)_var(--home-cursor-y,50%),black_0,black_52px,transparent_126px)] motion-reduce:hidden md:block" />
 
+      {/* ====================================================== */}
       {/* BACKGROUND TEXTURE */}
+      {/* ====================================================== */}
+
       <div
         className={`pointer-events-none fixed inset-0 z-[2] hidden sm:block ${
           isDarkMode
@@ -912,7 +1396,10 @@ function Home() {
         } bg-[size:20px_20px] [mask-image:radial-gradient(circle_at_8%_18%,black_0,black_70px,transparent_235px),radial-gradient(circle_at_92%_72%,black_0,black_70px,transparent_255px)] [-webkit-mask-image:radial-gradient(circle_at_8%_18%,black_0,black_70px,transparent_235px),radial-gradient(circle_at_92%_72%,black_0,black_70px,transparent_255px)]`}
       />
 
+      {/* ====================================================== */}
       {/* ANIMATIONS */}
+      {/* ====================================================== */}
+
       <style>
         {`
           @keyframes gridDrift {
@@ -927,21 +1414,37 @@ function Home() {
 
           @keyframes themeCircleSpread {
             0% {
-              clip-path: circle(0px at var(--theme-spread-x) var(--theme-spread-y));
+              clip-path: circle(
+                0px at
+                var(--theme-spread-x)
+                var(--theme-spread-y)
+              );
             }
 
             100% {
-              clip-path: circle(150vmax at var(--theme-spread-x) var(--theme-spread-y));
+              clip-path: circle(
+                150vmax at
+                var(--theme-spread-x)
+                var(--theme-spread-y)
+              );
             }
           }
 
           @keyframes themeCircleCollapse {
             0% {
-              clip-path: circle(150vmax at var(--theme-spread-x) var(--theme-spread-y));
+              clip-path: circle(
+                150vmax at
+                var(--theme-spread-x)
+                var(--theme-spread-y)
+              );
             }
 
             100% {
-              clip-path: circle(0px at var(--theme-spread-x) var(--theme-spread-y));
+              clip-path: circle(
+                0px at
+                var(--theme-spread-x)
+                var(--theme-spread-y)
+              );
             }
           }
 
@@ -956,17 +1459,32 @@ function Home() {
               transform: scale(1);
             }
           }
+
+          @media (prefers-reduced-motion: reduce) {
+            .home-floating-preview {
+              transition: none !important;
+            }
+          }
         `}
       </style>
 
+      {/* ====================================================== */}
       {/* INTRODUCTION */}
+      {/* ====================================================== */}
+
       <section className="relative z-10 px-5 pt-28 text-center sm:pt-32 md:pt-36">
         <h1
           className={`font-snellroundhand mb-5 text-[4.35rem] leading-[0.88] tracking-wide transition-colors duration-500 sm:mb-6 sm:text-6xl md:mb-7 md:text-7xl lg:mb-8 lg:text-8xl ${
-            isDarkMode ? 'text-white' : 'text-black'
+            isDarkMode
+              ? 'text-white'
+              : 'text-black'
           }`}
         >
-          Portfoli<span className="text-[#FF0000]">.</span>yo
+          Portfoli
+          <span className="text-[#FF0000]">
+            .
+          </span>
+          yo
         </h1>
 
         <p
@@ -980,9 +1498,12 @@ function Home() {
         </p>
 
         <div className="mx-auto mt-7 flex min-h-[112px] max-w-[800px] flex-col items-center justify-center px-1 text-center transition-colors duration-500 sm:min-h-[100px] md:mt-8">
+
           <p
             className={`min-h-[24px] text-[15px] font-black leading-tight sm:text-lg md:text-xl ${
-              isDarkMode ? 'text-white' : 'text-black'
+              isDarkMode
+                ? 'text-white'
+                : 'text-black'
             }`}
           >
             {typedIntroText}
@@ -996,7 +1517,9 @@ function Home() {
 
           <p
             className={`mt-2 max-w-[620px] text-[12px] font-bold leading-[1.5] sm:text-sm ${
-              isDarkMode ? 'text-white/80' : 'text-black/75'
+              isDarkMode
+                ? 'text-white/80'
+                : 'text-black/75'
             }`}
           >
             {descriptionText}
@@ -1004,7 +1527,9 @@ function Home() {
 
           <p
             className={`mt-1 max-w-[700px] text-[10px] font-bold uppercase leading-[1.4] tracking-[0.08em] transition-colors duration-500 sm:text-xs ${
-              isDarkMode ? 'text-white/50' : 'text-black/50'
+              isDarkMode
+                ? 'text-white/50'
+                : 'text-black/50'
             }`}
           >
             {typedRoleText}
@@ -1012,11 +1537,17 @@ function Home() {
         </div>
       </section>
 
+      {/* ====================================================== */}
       {/* FLOATING PROJECT PREVIEW */}
+      {/* ====================================================== */}
+
       <div
         ref={previewBoxRef}
-        className={`pointer-events-none fixed left-0 top-0 z-[9998] hidden h-[260px] w-[330px] overflow-hidden border-2 border-dotted p-2 shadow-2xl backdrop-blur-sm transition-[opacity,scale,background-color,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform md:block ${
-          hoveredProject !== null
+        aria-hidden="true"
+        className={`home-floating-preview pointer-events-none fixed left-0 top-0 z-[9998] hidden h-[260px] w-[330px] overflow-hidden border-2 border-dotted p-2 shadow-2xl backdrop-blur-sm transition-[opacity,scale,background-color,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform md:block ${
+          hoveredProject !== null &&
+          isDesktopPreviewEnabled &&
+          !prefersReducedMotion
             ? 'scale-100 opacity-100'
             : 'scale-95 opacity-0'
         } ${
@@ -1030,7 +1561,10 @@ function Home() {
         </div>
       </div>
 
+      {/* ====================================================== */}
       {/* FLOATING SOCIAL LINKS */}
+      {/* ====================================================== */}
+
       <div
         className={`fixed bottom-6 right-5 z-50 flex items-center gap-2 rounded-full border-2 px-3 py-2 backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:right-5 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:flex-col sm:gap-4 sm:px-3 sm:py-5 lg:right-6 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none ${
           isSocialOnDark
@@ -1044,7 +1578,11 @@ function Home() {
           <a
             key={social.label}
             href={social.href}
-            target={social.label === 'Email' ? undefined : '_blank'}
+            target={
+              social.label === 'Email'
+                ? undefined
+                : '_blank'
+            }
             rel={
               social.label === 'Email'
                 ? undefined
@@ -1066,10 +1604,17 @@ function Home() {
         ))}
       </div>
 
+      {/* ====================================================== */}
       {/* FLOATING SCROLL BUTTON */}
+      {/* ====================================================== */}
+
       <button
         type="button"
-        aria-label={isAtBottom ? 'Scroll to top' : 'Scroll to bottom'}
+        aria-label={
+          isAtBottom
+            ? 'Scroll to top'
+            : 'Scroll to bottom'
+        }
         onClick={handleFloatingArrowClick}
         className={`fixed bottom-6 left-1/2 z-50 flex h-11 w-11 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full border-2 text-xl font-black backdrop-blur-sm transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[#FF0000] ${
           isDarkMode
@@ -1085,36 +1630,56 @@ function Home() {
       >
         <span
           className={`relative z-10 leading-none transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            isAtBottom ? 'rotate-0' : 'translate-y-[1px]'
+            isAtBottom
+              ? 'rotate-0'
+              : 'translate-y-[1px]'
           }`}
         >
           {isAtBottom ? '↑' : '↓'}
         </span>
       </button>
 
+      {/* ====================================================== */}
       {/* FEATURED PROJECTS */}
+      {/* ====================================================== */}
+
       <section
         className={`relative z-10 mx-auto mt-10 min-h-[390px] w-[90%] border-2 border-dotted px-4 pb-24 pt-8 transition-colors duration-500 sm:mt-16 sm:w-[92%] sm:px-6 sm:pb-28 md:mt-20 md:w-[94%] md:min-h-[390px] md:pb-28 md:pt-9 lg:pb-24 ${
-          isDarkMode ? 'border-white' : 'border-black'
+          isDarkMode
+            ? 'border-white'
+            : 'border-black'
         }`}
       >
-        <CornerDecorations isDarkMode={isDarkMode} />
+        <CornerDecorations
+          isDarkMode={isDarkMode}
+        />
+
+        {/* SECTION TITLE */}
 
         <div className="mb-9 text-center sm:mb-14 md:mb-20">
           <h2
             className={`text-xs font-black uppercase tracking-[0.24em] transition-colors duration-500 sm:text-sm ${
-              isDarkMode ? 'text-white' : 'text-black'
+              isDarkMode
+                ? 'text-white'
+                : 'text-black'
             }`}
           >
             FEATURED PROJECTS
           </h2>
         </div>
 
+        {/* PROJECT LINKS */}
+
         <div className="mx-auto flex w-full max-w-[805px] flex-col gap-3 sm:gap-2.5">
           {projects.map((project, index) => {
-            const isAnimating = animatingProject === index;
-            const isIntroAnimating = introProjectIndex === index;
-            const shouldFill = isAnimating || isIntroAnimating;
+            const isAnimating =
+              animatingProject === index;
+
+            const isIntroAnimating =
+              introProjectIndex === index;
+
+            const shouldFill =
+              isAnimating || isIntroAnimating;
 
             return (
               <Link
@@ -1123,21 +1688,38 @@ function Home() {
                 state={{
                   filter: project.filter,
                   projectTitle: project.targetProjectTitle,
-                  scrollToProject: true,
+
+                  scrollToProject: Boolean(
+                    project.targetProjectTitle
+                  ),
                 }}
                 onClick={(event) =>
-                  handleProjectNavigate(event, project, index)
+                  handleProjectNavigate(
+                    event,
+                    project,
+                    index
+                  )
                 }
                 onMouseMove={(event) =>
-                  handleProjectMouseMove(event, index)
+                  handleProjectMouseMove(
+                    event,
+                    index
+                  )
                 }
                 onMouseEnter={(event) =>
-                  handleProjectMouseEnter(event, index)
+                  handleProjectMouseEnter(
+                    event,
+                    index
+                  )
                 }
-                onMouseLeave={handleProjectMouseLeave}
+                onMouseLeave={
+                  handleProjectMouseLeave
+                }
                 draggable="false"
                 className={`group relative flex min-h-[62px] items-center justify-between overflow-hidden border-2 bg-transparent px-4 py-4 text-left text-xs font-black transition-[transform,color,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:min-h-0 sm:px-8 sm:py-5 md:px-16 md:text-sm ${
-                  isDarkMode ? 'border-white' : 'border-black'
+                  isDarkMode
+                    ? 'border-white'
+                    : 'border-black'
                 } ${
                   shouldFill
                     ? isDarkMode
@@ -1148,10 +1730,14 @@ function Home() {
                       : 'text-black md:hover:scale-[1.01] md:hover:text-white'
                 }`}
               >
+
                 {/* HOVER FILL */}
+
                 <span
                   className={`absolute left-1/2 top-1/2 z-0 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isDarkMode ? 'bg-white' : 'bg-black'
+                    isDarkMode
+                      ? 'bg-white'
+                      : 'bg-black'
                   } ${
                     shouldFill
                       ? 'w-[240%] sm:w-[165%] md:w-[155%]'
@@ -1160,7 +1746,9 @@ function Home() {
                 />
 
                 {/* PROJECT TITLE */}
+
                 <span className="relative z-10 flex items-center gap-3 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:translate-x-2">
+
                   <span
                     className={`inline-flex h-4 min-w-6 items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       shouldFill
@@ -1172,19 +1760,26 @@ function Home() {
                   >
                     <span className="relative inline-flex items-center justify-center leading-none">
                       <span>[</span>
+
                       <span className="-mx-[1px] inline-flex translate-y-[2px] items-center justify-center leading-none">
                         *
                       </span>
+
                       <span>]</span>
                     </span>
                   </span>
 
-                  <span className={project.titleClassName || ''}>
+                  <span
+                    className={
+                      project.titleClassName || ''
+                    }
+                  >
                     {project.title}
                   </span>
                 </span>
 
-                {/* ARROW */}
+                {/* PROJECT ARROW */}
+
                 <span
                   className={`relative z-10 text-xl transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] sm:text-2xl ${
                     shouldFill
@@ -1200,16 +1795,33 @@ function Home() {
         </div>
       </section>
 
-      {/* CONTACT SECTION — NO DOTTED RECTANGLE */}
+      {/* ====================================================== */}
+      {/* CONTACT SECTION */}
+      {/* ====================================================== */}
+
       <div className="relative z-10 mx-auto mb-12 mt-10 w-full sm:mb-16 sm:mt-14 md:mt-16">
-        <HomeContact isDarkMode={isDarkMode} compact />
+        <HomeContact
+          isDarkMode={isDarkMode}
+          compact
+        />
       </div>
 
+      {/* ====================================================== */}
       {/* CREATIVE WORKS SECTION */}
-      <HomeCreativeWorks isDarkMode={isDarkMode} />
+      {/* ====================================================== */}
 
+      <HomeCreativeWorks
+        isDarkMode={isDarkMode}
+      />
+
+      {/* ====================================================== */}
       {/* FOOTER */}
-      <div className="relative z-10" ref={footerRef}>
+      {/* ====================================================== */}
+
+      <div
+        className="relative z-10"
+        ref={footerRef}
+      >
         <Footer />
       </div>
     </div>

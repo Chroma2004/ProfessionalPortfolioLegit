@@ -17,6 +17,10 @@
    GLOBAL STYLES
 ======================================== */
 
+html {
+  cursor: auto;
+}
+
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
 
@@ -25,6 +29,12 @@ body {
 
   margin: 0;
   padding: 0;
+}
+
+a,
+button,
+[role="button"] {
+  cursor: pointer;
 }
 
 .font-neonderthaw {
@@ -39,25 +49,35 @@ body {
    RED LASER POINTER CURSOR
 ======================================== */
 
+.custom-cursor-dot {
+  display: none;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  html,
-  body,
-  body * {
+
+  /* Hide native cursor only when the
+     custom cursor is successfully active */
+
+  html.custom-cursor-active,
+  html.custom-cursor-active body,
+  html.custom-cursor-active body * {
     cursor: none !important;
   }
 
   .custom-cursor-dot {
+    display: block;
+
     position: fixed;
 
     left: 0;
     top: 0;
 
-    z-index: 999999;
+    z-index: 2147483647;
 
     width: 8px;
     height: 8px;
 
-    pointer-events: none;
+    pointer-events: none !important;
 
     border-radius: 9999px;
 
@@ -65,20 +85,18 @@ body {
 
     opacity: 0;
 
-    transform:
-      translate3d(50vw, 50vh, 0)
-      translate(-50%, -50%);
+    transform: translate3d(-100px, -100px, 0);
 
     /* GPU acceleration */
+
     will-change: transform;
 
     backface-visibility: hidden;
-
     -webkit-backface-visibility: hidden;
 
     /* Keep appearance animations only */
+
     transition:
-      opacity 120ms ease,
       width 120ms ease,
       height 120ms ease,
       box-shadow 120ms ease;
@@ -90,7 +108,14 @@ body {
     mix-blend-mode: normal;
   }
 
+  /* Show the custom cursor when active */
+
+  html.custom-cursor-active .custom-cursor-dot {
+    opacity: 1;
+  }
+
   /* Cursor pressed effect */
+
   .custom-cursor-dot-pressed {
     width: 12px;
     height: 12px;
@@ -101,7 +126,10 @@ body {
   }
 }
 
-/* Hide custom cursor on touch devices */
+/* ========================================
+   TOUCH DEVICE CURSOR SUPPORT
+======================================== */
+
 @media (hover: none), (pointer: coarse) {
   .custom-cursor-dot {
     display: none !important;
@@ -252,10 +280,12 @@ body {
   );
 
   /* Only fade opacity, never cursor position */
+
   transition: opacity 180ms ease;
 }
 
 /* Show red highlight when hovered */
+
 .animated-bg.is-hovered .red-grid-highlight {
   opacity: 0.65;
 }
@@ -331,12 +361,14 @@ body {
 ======================================== */
 
 /* Firefox */
+
 html {
   scrollbar-width: thin;
   scrollbar-color: #ef4444 transparent;
 }
 
 /* Chrome, Edge, Safari */
+
 ::-webkit-scrollbar {
   width: 14px;
 }

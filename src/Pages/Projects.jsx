@@ -5,100 +5,101 @@ import Footer from '../Components/Footer';
 import ProjectModal from '../Components/ProjectModal';
 
 // ============================================================
-// ILLUSTRATION IMPORTS
+// DIGITAL ILLUSTRATION IMPORTS — WEBP
 // ============================================================
 
-import illust2 from '../assets/Illustrations/ILLUST2.png';
-import illust4 from '../assets/Illustrations/ILLUST4.png';
-import illust5Jpeg from '../assets/Illustrations/ILLUST5.jpeg';
-import illust5Png from '../assets/Illustrations/ILLUST5.png';
-import illust6 from '../assets/Illustrations/ILLUST6.png';
+import illust2 from '../assets/Illustrations/ILLUST2.webp';
+import illust4 from '../assets/Illustrations/ILLUST4.webp';
+import illust5 from '../assets/Illustrations/ILLUST5.webp';
+import illust6 from '../assets/Illustrations/ILLUST6.webp';
+import illust7 from '../assets/Illustrations/ILLUST7.webp';
 
 // ============================================================
-// PIXEL ART IMPORTS
+// PIXEL ART IMPORTS — WEBP
 // ============================================================
 
 import px1 from '../assets/Illustrations/COMS1.1.mp4';
-import px2 from '../assets/Illustrations/PX2.PNG';
-import px3 from '../assets/Illustrations/PX3.PNG';
-import px31 from '../assets/Illustrations/PX3.1.PNG';
-import px32 from '../assets/Illustrations/PX3.2.PNG';
-import px33 from '../assets/Illustrations/PX3.3.PNG';
-import px4 from '../assets/Illustrations/PX4.jpg';
-import px41 from '../assets/Illustrations/PX4.1.jpg';
-import px42 from '../assets/Illustrations/PX4.2.jpg';
-import px43 from '../assets/Illustrations/PX4.3.jpg';
-import px5 from '../assets/Illustrations/PX5.jpg';
-import px51 from '../assets/Illustrations/PX5.1.jpg';
-import px52 from '../assets/Illustrations/PX5.2.jpg';
-import px53 from '../assets/Illustrations/PX5.3.jpg';
+
+import px2 from '../assets/Illustrations/PX2.webp';
+
+import px3 from '../assets/Illustrations/PX3.webp';
+import px31 from '../assets/Illustrations/PX3.1.webp';
+import px32 from '../assets/Illustrations/PX3.2.webp';
+import px33 from '../assets/Illustrations/PX3.3.webp';
+
+import px4 from '../assets/Illustrations/PX4.webp';
+import px41 from '../assets/Illustrations/PX4.1.webp';
+import px42 from '../assets/Illustrations/PX4.2.webp';
+import px43 from '../assets/Illustrations/PX4.3.webp';
+
+import px5 from '../assets/Illustrations/PX5.webp';
+import px51 from '../assets/Illustrations/PX5.1.webp';
+import px52 from '../assets/Illustrations/PX5.2.webp';
+import px53 from '../assets/Illustrations/PX5.3.webp';
 
 // ============================================================
-// GRAPHIC DESIGN IMPORTS
+// GRAPHIC DESIGN IMPORTS — WEBP
 // ============================================================
 
-import gpx1 from '../assets/GPX/GPX1.png';
-import gpx2 from '../assets/GPX/GPX2.png';
-import gpx3 from '../assets/GPX/GPX3.png';
-import gpx4 from '../assets/GPX/GPX4.png';
-import gpx5 from '../assets/GPX/GPX5.png';
-import gpx6 from '../assets/GPX/GPX6.png';
-import gpx7 from '../assets/GPX/GPX7.png';
-import gpx8 from '../assets/GPX/GPX8.png';
-import gpx9 from '../assets/GPX/GPX9.png';
-import gpx10 from '../assets/GPX/GPX10.png';
-import gpx11 from '../assets/GPX/GPX11.png';
-import gpx12 from '../assets/GPX/GPX12.png';
-import gpx13 from '../assets/GPX/GPX13.png';
-import gpx14 from '../assets/GPX/GPX14.png';
+import gpx1 from '../assets/GPX/GPX1.webp';
+import gpx2 from '../assets/GPX/GPX2.webp';
+import gpx3 from '../assets/GPX/GPX3.webp';
+import gpx4 from '../assets/GPX/GPX4.webp';
+import gpx5 from '../assets/GPX/GPX5.webp';
+import gpx6 from '../assets/GPX/GPX6.webp';
+import gpx7 from '../assets/GPX/GPX7.webp';
+import gpx8 from '../assets/GPX/GPX8.webp';
+import gpx9 from '../assets/GPX/GPX9.webp';
+import gpx10 from '../assets/GPX/GPX10.webp';
+import gpx11 from '../assets/GPX/GPX11.webp';
+import gpx12 from '../assets/GPX/GPX12.webp';
+import gpx13 from '../assets/GPX/GPX13.webp';
+import gpx14 from '../assets/GPX/GPX14.webp';
 
 // ============================================================
-// RECRUITMENT POSTER IMPORTS
+// RECRUITMENT POSTER IMPORTS — WEBP
 // ============================================================
 
-import recruitment1 from '../assets/RecruitmentPosters/1.png';
-import recruitment2 from '../assets/RecruitmentPosters/2.png';
-import recruitment3 from '../assets/RecruitmentPosters/3.png';
-import recruitment4 from '../assets/RecruitmentPosters/4.png';
-import recruitment5 from '../assets/RecruitmentPosters/5.png';
-import recruitment6 from '../assets/RecruitmentPosters/6.png';
-import recruitment7 from '../assets/RecruitmentPosters/7.png';
-import recruitment8 from '../assets/RecruitmentPosters/8.png';
-import recruitment9 from '../assets/RecruitmentPosters/9.png';
-import recruitment10 from '../assets/RecruitmentPosters/10.png';
-import recruitment11 from '../assets/RecruitmentPosters/11.png';
-import recruitment12 from '../assets/RecruitmentPosters/12.png';
-import recruitment13 from '../assets/RecruitmentPosters/13.png';
-import recruitment14 from '../assets/RecruitmentPosters/14.png';
-import recruitment15 from '../assets/RecruitmentPosters/15.png';
+import recruitment1 from '../assets/RecruitmentPosters/1.webp';
+import recruitment2 from '../assets/RecruitmentPosters/2.webp';
+import recruitment3 from '../assets/RecruitmentPosters/3.webp';
+import recruitment4 from '../assets/RecruitmentPosters/4.webp';
+import recruitment5 from '../assets/RecruitmentPosters/5.webp';
+import recruitment6 from '../assets/RecruitmentPosters/6.webp';
+import recruitment7 from '../assets/RecruitmentPosters/7.webp';
+import recruitment8 from '../assets/RecruitmentPosters/8.webp';
+import recruitment9 from '../assets/RecruitmentPosters/9.webp';
+import recruitment10 from '../assets/RecruitmentPosters/10.webp';
+import recruitment11 from '../assets/RecruitmentPosters/11.webp';
+import recruitment12 from '../assets/RecruitmentPosters/12.webp';
+import recruitment13 from '../assets/RecruitmentPosters/13.webp';
+import recruitment14 from '../assets/RecruitmentPosters/14.webp';
+import recruitment15 from '../assets/RecruitmentPosters/15.webp';
 
 // ============================================================
-// WEB SYSTEM IMPORTS
+// WEB SYSTEM IMPORTS — WEBP
 // ============================================================
 
-import internPortfolioPreview from '../assets/System/InternPortfolio.png';
-import trackEdPreview from '../assets/System/TrackEd.png';
-import ctrlAltDelightPreview from '../assets/System/Ctrl+Alt+Delight.png';
-import photo2yPreview from '../assets/System/Photo2y.png';
-import photo2yPreview2 from '../assets/System/Photo2y2.png';
+import internPortfolioPreview from '../assets/System/InternPortfolio.webp';
+import trackEdPreview from '../assets/System/TrackEd.webp';
+import ctrlAltDelightPreview from '../assets/System/Ctrl+Alt+Delight.webp';
+import photo2yPreview from '../assets/System/Photo2y.webp';
+import photo2yPreview2 from '../assets/System/Photo2y2.webp';
 
 // ============================================================
-// PODCAST VIDEO IMPORTS
-// DARK VERSION ONLY
+// PODCAST VIDEO IMPORTS — DARK ONLY
 // ============================================================
 
 import podDark from '../assets/VideoEdit/PodDark.mp4';
 
 // ============================================================
-// RECRUITMENT VIDEO IMPORTS
-// DARK VERSION ONLY
+// RECRUITMENT VIDEO IMPORTS — DARK ONLY
 // ============================================================
 
 import videoEditDark from '../assets/VideoEdit/VideoEditDark.mp4';
 
 // ============================================================
-// ENGAGEMENT VIDEO IMPORTS
-// DARK VERSION ONLY
+// ENGAGEMENT VIDEO IMPORTS — DARK ONLY
 // ============================================================
 
 import engagementVideoDark from '../assets/VideoEdit/EngagementVideoDark.mp4';
@@ -110,6 +111,421 @@ import engagementVideoDark from '../assets/VideoEdit/EngagementVideoDark.mp4';
 import employeeDay from '../assets/VideoEdit/EmployeeDay.mp4';
 import mentalHealth from '../assets/VideoEdit/MentalHealth.mp4';
 import movieNight from '../assets/VideoEdit/MovieNight.mp4';
+
+// ============================================================
+// VIEWPORT VISIBILITY HOOK
+// ============================================================
+
+const useMediaVisibility = ({
+  rootMargin = '0px',
+  threshold = 0,
+} = {}) => {
+  const elementRef = useRef(null);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+
+  useEffect(() => {
+    const element = elementRef.current;
+
+    if (!element) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      setHasBeenVisible(true);
+
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible =
+          entry.isIntersecting &&
+          entry.intersectionRatio > 0;
+
+        setIsVisible(visible);
+
+        if (visible) {
+          setHasBeenVisible(true);
+        }
+      },
+      {
+        root: null,
+        rootMargin,
+        threshold,
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [rootMargin, threshold]);
+
+  return {
+    elementRef,
+    isVisible,
+    hasBeenVisible,
+  };
+};
+
+// ============================================================
+// PROGRESSIVE IMAGE COMPONENT
+// ============================================================
+
+const ProgressiveImage = ({
+  src,
+  alt = '',
+  placeholderSrc,
+  className = '',
+  priority = false,
+}) => {
+  const imageRef = useRef(null);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const image = imageRef.current;
+
+    if (
+      image?.complete &&
+      image.naturalWidth > 0
+    ) {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  return (
+    <div className="relative h-full w-full overflow-hidden">
+
+      {/* LOW-RESOLUTION PLACEHOLDER */}
+
+      {placeholderSrc && !hasError && (
+        <img
+          src={placeholderSrc}
+          alt=""
+          aria-hidden="true"
+          draggable="false"
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
+          className={`
+            absolute inset-0
+            ${className}
+            scale-105 blur-xl
+            transition-opacity duration-500
+            motion-reduce:transition-none
+            ${isLoaded ? 'opacity-0' : 'opacity-100'}
+          `}
+        />
+      )}
+
+      {/* DEFAULT LOADING PLACEHOLDER */}
+
+      {!placeholderSrc && !isLoaded && !hasError && (
+        <div
+          aria-hidden="true"
+          className="
+            absolute inset-0
+            animate-pulse
+            bg-current opacity-[0.04]
+            motion-reduce:animate-none
+          "
+        />
+      )}
+
+      {/* FULL-RESOLUTION IMAGE */}
+
+      {!hasError && (
+        <img
+          ref={imageRef}
+          src={src}
+          alt={alt}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding="async"
+          draggable="false"
+          onLoad={() => {
+            setIsLoaded(true);
+          }}
+          onError={() => {
+            setHasError(true);
+          }}
+          className={`
+            ${className}
+            transition-[opacity,filter]
+            duration-500 ease-out
+            motion-reduce:transition-none
+            ${
+              isLoaded
+                ? 'opacity-100 blur-0'
+                : 'opacity-0 blur-sm'
+            }
+          `}
+        />
+      )}
+
+      {/* IMAGE ERROR FALLBACK */}
+
+      {hasError && (
+        <div
+          className="
+            absolute inset-0
+            flex items-center justify-center
+          "
+        >
+          <span className="text-[9px] font-bold uppercase tracking-widest opacity-40">
+            Preview unavailable
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// LAZY VIDEO COMPONENT
+// ============================================================
+
+const LazyVideo = ({
+  src,
+  className = '',
+  poster,
+  autoPlay = false,
+  loop = false,
+  muted = true,
+  controls = false,
+  ariaLabel,
+  ariaHidden = false,
+}) => {
+  const videoRef = useRef(null);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const {
+    elementRef,
+    isVisible,
+    hasBeenVisible,
+  } = useMediaVisibility({
+    rootMargin: '0px',
+    threshold: 0.01,
+  });
+
+  // ==========================================================
+  // PLAYBACK VISIBILITY CONTROL
+  // ==========================================================
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video || !hasBeenVisible) return;
+
+    const motionQuery = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
+    const syncPlayback = () => {
+      if (!isVisible || document.hidden) {
+        video.pause();
+
+        return;
+      }
+
+      if (autoPlay && motionQuery.matches) {
+        video.pause();
+
+        return;
+      }
+
+      if (autoPlay) {
+        video.play().catch(() => {
+          // Browser may restrict automatic playback.
+        });
+      }
+    };
+
+    syncPlayback();
+
+    document.addEventListener(
+      'visibilitychange',
+      syncPlayback
+    );
+
+    motionQuery.addEventListener(
+      'change',
+      syncPlayback
+    );
+
+    return () => {
+      document.removeEventListener(
+        'visibilitychange',
+        syncPlayback
+      );
+
+      motionQuery.removeEventListener(
+        'change',
+        syncPlayback
+      );
+
+      video.pause();
+    };
+  }, [
+    isVisible,
+    hasBeenVisible,
+    autoPlay,
+    src,
+  ]);
+
+  // ==========================================================
+  // CACHED VIDEO DETECTION
+  // ==========================================================
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (
+      video &&
+      video.readyState >= 2
+    ) {
+      setIsLoaded(true);
+    }
+  }, [hasBeenVisible]);
+
+  return (
+    <div
+      ref={elementRef}
+      className="relative h-full w-full overflow-hidden"
+    >
+
+      {/* VIDEO LOADING PLACEHOLDER */}
+
+      {!isLoaded && !hasError && (
+        <div
+          aria-hidden="true"
+          className="
+            absolute inset-0
+            animate-pulse
+            bg-current opacity-[0.04]
+            motion-reduce:animate-none
+          "
+        />
+      )}
+
+      {/* OPTIONAL VIDEO POSTER */}
+
+      {poster && !hasBeenVisible && (
+        <img
+          src={poster}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          draggable="false"
+          className={className}
+        />
+      )}
+
+      {/* VIDEO SOURCE IS ONLY ATTACHED WHEN VISIBLE */}
+
+      {hasBeenVisible && !hasError && (
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
+          muted={muted}
+          loop={loop}
+          controls={controls}
+          playsInline
+          preload="metadata"
+          disablePictureInPicture
+          disableRemotePlayback
+          controlsList="nodownload noremoteplayback"
+          aria-label={ariaLabel}
+          aria-hidden={ariaHidden || undefined}
+          onLoadedData={() => {
+            setIsLoaded(true);
+          }}
+          onCanPlay={() => {
+            setIsLoaded(true);
+          }}
+          onError={() => {
+            setHasError(true);
+          }}
+          onContextMenu={(event) => {
+            event.preventDefault();
+          }}
+          className={`
+            portfolio-protected-video
+            ${className}
+            transition-opacity duration-500
+            motion-reduce:transition-none
+            ${
+              isLoaded || controls || poster
+                ? 'opacity-100'
+                : 'opacity-0'
+            }
+          `}
+        />
+      )}
+
+      {/* VIDEO ERROR FALLBACK */}
+
+      {hasError && (
+        <div
+          className="
+            absolute inset-0
+            flex items-center justify-center
+          "
+        >
+          <span className="text-[9px] font-bold uppercase tracking-widest opacity-40">
+            Video unavailable
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// DIGITAL ILLUSTRATION MEDIA COLLECTION
+//
+// Only existing illustration files are included.
+// ============================================================
+
+const digitalIllustrationMedia = [
+  {
+    type: 'image',
+    src: illust2,
+    alt: 'Digital Illustration 02',
+    label: 'Digital Illustration 02',
+  },
+  {
+    type: 'image',
+    src: illust4,
+    alt: 'Digital Illustration 04',
+    label: 'Digital Illustration 04',
+  },
+  {
+    type: 'image',
+    src: illust5,
+    alt: 'Digital Illustration 05',
+    label: 'Digital Illustration 05',
+  },
+  {
+    type: 'image',
+    src: illust6,
+    alt: 'Digital Illustration 06',
+    label: 'Digital Illustration 06',
+  },
+  {
+    type: 'image',
+    src: illust7,
+    alt: 'Digital Illustration 07',
+    label: 'Digital Illustration 07',
+  },
+];
 
 // ============================================================
 // VIDEO MEDIA COLLECTIONS
@@ -204,6 +620,9 @@ function Projects() {
 
   const filterCollapseTimeoutRef = useRef(null);
   const filterEnterTimeoutRef = useRef(null);
+
+  const filterFirstFrameRef = useRef(null);
+  const filterSecondFrameRef = useRef(null);
 
   const cursorGridTargetRef = useRef({
     x: 0,
@@ -314,7 +733,6 @@ function Projects() {
               d="M17 10L21 7.5V16.5L17 14"
               stroke="currentColor"
               strokeWidth="2.2"
-              strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
@@ -378,38 +796,7 @@ function Projects() {
           previewPosition: 'object-[right_18%]',
         },
 
-        media: [
-          {
-            type: 'image',
-            src: illust2,
-            alt: 'Digital Illustration Preview',
-            label: 'Digital Illustration',
-          },
-          {
-            type: 'image',
-            src: illust4,
-            alt: 'Storytelling Illustration',
-            label: 'Storytelling Illustration',
-          },
-          {
-            type: 'image',
-            src: illust5Jpeg,
-            alt: 'Background Drawing',
-            label: 'Background Drawing',
-          },
-          {
-            type: 'image',
-            src: illust5Png,
-            alt: 'Animal Illustration',
-            label: 'Animal Illustration',
-          },
-          {
-            type: 'image',
-            src: illust6,
-            alt: 'Color and Element Study',
-            label: 'Color and Element Study',
-          },
-        ],
+        media: digitalIllustrationMedia,
       },
 
       // ======================================================
@@ -450,6 +837,7 @@ function Projects() {
           {
             type: 'stack',
             label: 'PX3 Game Concept',
+
             items: [
               {
                 type: 'image',
@@ -480,6 +868,7 @@ function Projects() {
           {
             type: 'stack',
             label: 'PX4 Game Redesign Concept',
+
             items: [
               {
                 type: 'image',
@@ -510,6 +899,7 @@ function Projects() {
           {
             type: 'stack',
             label: 'PX5 Game Redesign Concept',
+
             items: [
               {
                 type: 'image',
@@ -837,7 +1227,6 @@ function Projects() {
 
       // ======================================================
       // 09 PODCAST VIDEOS
-      // FIRST PROJECT UNDER VIDEO EDIT
       // ======================================================
 
       {
@@ -1086,6 +1475,12 @@ function Projects() {
     const shouldScrollToProject =
       location.state?.scrollToProject;
 
+    clearTimeout(filterCollapseTimeoutRef.current);
+    clearTimeout(filterEnterTimeoutRef.current);
+
+    cancelAnimationFrame(filterFirstFrameRef.current);
+    cancelAnimationFrame(filterSecondFrameRef.current);
+
     if (!incomingFilter && !incomingProjectTitle) {
       setActiveFilter('Illustrations');
       setDisplayedFilter('Illustrations');
@@ -1094,9 +1489,6 @@ function Projects() {
 
       return;
     }
-
-    clearTimeout(filterCollapseTimeoutRef.current);
-    clearTimeout(filterEnterTimeoutRef.current);
 
     const validFilter = filters.some(
       (filter) => filter.label === incomingFilter
@@ -1110,8 +1502,6 @@ function Projects() {
     setProjectCardStage('idle');
 
     if (!shouldScrollToProject || !incomingProjectTitle) return;
-
-    // Maintain compatibility with Home page project links.
 
     const projectTitleAliases = {
       'Internship Graphics': 'Recruitment Posters',
@@ -1231,40 +1621,71 @@ function Projects() {
       return undefined;
     }
 
-    const handleMouseMove = (event) => {
-      cursorGridTargetRef.current = {
-        x: event.clientX,
-        y: event.clientY,
-      };
-    };
+    let isAnimating = false;
 
     const animateCursorGrid = () => {
-      cursorGridCurrentRef.current.x +=
-        (cursorGridTargetRef.current.x -
-          cursorGridCurrentRef.current.x) *
-        0.06;
+      const target = cursorGridTargetRef.current;
+      const current = cursorGridCurrentRef.current;
 
-      cursorGridCurrentRef.current.y +=
-        (cursorGridTargetRef.current.y -
-          cursorGridCurrentRef.current.y) *
-        0.06;
+      const differenceX = target.x - current.x;
+      const differenceY = target.y - current.y;
+
+      current.x += differenceX * 0.06;
+      current.y += differenceY * 0.06;
 
       cursorGridFrameRef.current += 1;
 
       if (cursorGridFrameRef.current % 4 === 0) {
         pageElement.style.setProperty(
           '--projects-cursor-x',
-          `${cursorGridCurrentRef.current.x}px`
+          `${current.x}px`
         );
 
         pageElement.style.setProperty(
           '--projects-cursor-y',
-          `${cursorGridCurrentRef.current.y}px`
+          `${current.y}px`
         );
+      }
+
+      if (
+        Math.abs(differenceX) < 0.5 &&
+        Math.abs(differenceY) < 0.5
+      ) {
+        current.x = target.x;
+        current.y = target.y;
+
+        pageElement.style.setProperty(
+          '--projects-cursor-x',
+          `${target.x}px`
+        );
+
+        pageElement.style.setProperty(
+          '--projects-cursor-y',
+          `${target.y}px`
+        );
+
+        isAnimating = false;
+        cursorGridAnimationRef.current = null;
+
+        return;
       }
 
       cursorGridAnimationRef.current =
         requestAnimationFrame(animateCursorGrid);
+    };
+
+    const handleMouseMove = (event) => {
+      cursorGridTargetRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+
+      if (!isAnimating) {
+        isAnimating = true;
+
+        cursorGridAnimationRef.current =
+          requestAnimationFrame(animateCursorGrid);
+      }
     };
 
     window.addEventListener(
@@ -1273,20 +1694,20 @@ function Projects() {
       { passive: true }
     );
 
-    cursorGridAnimationRef.current =
-      requestAnimationFrame(animateCursorGrid);
-
     return () => {
       window.removeEventListener(
         'mousemove',
         handleMouseMove
       );
 
-      if (cursorGridAnimationRef.current) {
+      if (cursorGridAnimationRef.current !== null) {
         cancelAnimationFrame(
           cursorGridAnimationRef.current
         );
       }
+
+      cursorGridAnimationRef.current = null;
+      isAnimating = false;
     };
   }, [isDesktopMotion, prefersReducedMotion]);
 
@@ -1296,13 +1717,14 @@ function Projects() {
 
   useEffect(() => {
     let ticking = false;
+    let scrollFrame = null;
 
     const handleScrollState = () => {
       if (ticking) return;
 
       ticking = true;
 
-      requestAnimationFrame(() => {
+      scrollFrame = requestAnimationFrame(() => {
         const footerElement = footerRef.current;
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
@@ -1338,6 +1760,7 @@ function Projects() {
         );
 
         ticking = false;
+        scrollFrame = null;
       });
     };
 
@@ -1354,6 +1777,15 @@ function Projects() {
       handleScrollState
     );
 
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(handleScrollState)
+        : null;
+
+    if (pageRef.current) {
+      resizeObserver?.observe(pageRef.current);
+    }
+
     return () => {
       window.removeEventListener(
         'scroll',
@@ -1364,6 +1796,12 @@ function Projects() {
         'resize',
         handleScrollState
       );
+
+      resizeObserver?.disconnect();
+
+      if (scrollFrame !== null) {
+        cancelAnimationFrame(scrollFrame);
+      }
     };
   }, []);
 
@@ -1424,10 +1862,13 @@ function Projects() {
 
         protectedVideos.set(video, {
           controlsList: video.getAttribute('controlsList'),
+
           disablePictureInPicture:
             video.disablePictureInPicture,
+
           disableRemotePlayback:
             video.disableRemotePlayback,
+
           hadProtectedClass:
             video.classList.contains(
               'portfolio-protected-video'
@@ -1508,7 +1949,10 @@ function Projects() {
       clearTimeout(filterCollapseTimeoutRef.current);
       clearTimeout(filterEnterTimeoutRef.current);
 
-      if (cursorGridAnimationRef.current) {
+      cancelAnimationFrame(filterFirstFrameRef.current);
+      cancelAnimationFrame(filterSecondFrameRef.current);
+
+      if (cursorGridAnimationRef.current !== null) {
         cancelAnimationFrame(
           cursorGridAnimationRef.current
         );
@@ -1558,6 +2002,9 @@ function Projects() {
     clearTimeout(filterCollapseTimeoutRef.current);
     clearTimeout(filterEnterTimeoutRef.current);
 
+    cancelAnimationFrame(filterFirstFrameRef.current);
+    cancelAnimationFrame(filterSecondFrameRef.current);
+
     if (
       !isDesktopMotion ||
       prefersReducedMotion
@@ -1588,20 +2035,22 @@ function Projects() {
 
         setProjectCardStage('preparingEnter');
 
-        requestAnimationFrame(() => {
-          setCardBehindDistances();
-
+        filterFirstFrameRef.current =
           requestAnimationFrame(() => {
-            setProjectCardStage('entering');
+            setCardBehindDistances();
+
+            filterSecondFrameRef.current =
+              requestAnimationFrame(() => {
+                setProjectCardStage('entering');
+              });
           });
-        });
 
         filterEnterTimeoutRef.current = setTimeout(
           () => {
             setProjectCardStage('idle');
             setAnimatingFilter(null);
           },
-          680
+          740
         );
       },
       620
@@ -1634,40 +2083,61 @@ function Projects() {
     return firstMedia;
   };
 
-  const renderProjectPreview = (project) => {
+  const renderProjectPreview = (project, index) => {
     const previewMedia = getProjectPreviewMedia(project);
 
-    if (!previewMedia) return null;
+    if (!previewMedia?.src) return null;
 
     const previewPositionClass =
       previewMedia.previewPosition || 'object-center';
 
+    const mediaClassName = `
+      block h-full w-full
+      object-cover
+      ${previewPositionClass}
+    `;
+
     return (
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-[1] block w-[48%] overflow-hidden opacity-28 transition-opacity duration-300 sm:w-[46%] md:opacity-42 md:group-hover:opacity-58 [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)] [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)]">
+      <div
+        className="
+          pointer-events-none
+          absolute inset-y-0 right-0 z-[1]
+          block w-[48%]
+          overflow-hidden
+          opacity-28
+          transition-opacity duration-300
+          sm:w-[46%]
+          md:opacity-42
+          md:group-hover:opacity-58
+          [mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)]
+          [-webkit-mask-image:linear-gradient(to_right,transparent_0%,rgba(0,0,0,0.24)_12%,black_28%,black_100%)]
+        "
+      >
         {previewMedia.type === 'video' ? (
-          <video
+
+          <LazyVideo
+            key={previewMedia.src}
             src={previewMedia.src}
-            className={`h-full w-full object-cover ${previewPositionClass}`}
+            poster={previewMedia.poster}
+            className={mediaClassName}
+            autoPlay={false}
+            loop={false}
             muted
-            playsInline
-            preload="metadata"
-            disablePictureInPicture
-            disableRemotePlayback
-            controlsList="nodownload noremoteplayback"
-            onContextMenu={(event) =>
-              event.preventDefault()
-            }
-            aria-hidden="true"
+            controls={false}
+            ariaHidden
           />
+
         ) : (
-          <img
+
+          <ProgressiveImage
+            key={previewMedia.src}
             src={previewMedia.src}
+            placeholderSrc={previewMedia.placeholderSrc}
             alt={previewMedia.alt || project.title}
-            className={`h-full w-full object-cover ${previewPositionClass}`}
-            draggable="false"
-            loading="lazy"
-            decoding="async"
+            className={mediaClassName}
+            priority={index === 0}
           />
+
         )}
       </div>
     );
@@ -1678,7 +2148,10 @@ function Projects() {
   // ============================================================
 
   const handleProjectClick = (project) => {
-    if (project.category === 'WebSystem' && project.liveLink) {
+    if (
+      project.category === 'WebSystem' &&
+      project.liveLink
+    ) {
       window.open(
         project.liveLink,
         '_blank',
@@ -1860,7 +2333,7 @@ function Projects() {
             opacity: 1;
             transform: translate3d(
               0,
-              var(--project-card-behind-y),
+              var(--project-card-behind-y, 0px),
               0
             );
           }
@@ -1892,7 +2365,7 @@ function Projects() {
               opacity: 1;
               transform: translate3d(
                 0,
-                var(--project-card-behind-y),
+                var(--project-card-behind-y, 0px),
                 0
               );
             }
@@ -1901,7 +2374,7 @@ function Projects() {
               opacity: 0;
               transform: translate3d(
                 0,
-                var(--project-card-behind-y),
+                var(--project-card-behind-y, 0px),
                 0
               );
             }
@@ -1924,7 +2397,7 @@ function Projects() {
               opacity: 1;
               transform: translate3d(
                 0,
-                var(--project-card-behind-y),
+                var(--project-card-behind-y, 0px),
                 0
               );
             }
@@ -1935,33 +2408,25 @@ function Projects() {
             }
           }
 
-          /* ================================================ */
           /* HIDE VIDEO THREE-DOT MENU */
-          /* ================================================ */
 
           .portfolio-protected-video::-webkit-media-controls-overflow-button {
             display: none !important;
           }
 
-          /* ================================================ */
           /* HIDE VIDEO DOWNLOAD BUTTON */
-          /* ================================================ */
 
           .portfolio-protected-video::-webkit-media-controls-download-button {
             display: none !important;
           }
 
-          /* ================================================ */
           /* HIDE PICTURE-IN-PICTURE BUTTON */
-          /* ================================================ */
 
           .portfolio-protected-video::-webkit-media-controls-picture-in-picture-button {
             display: none !important;
           }
 
-          /* ================================================ */
           /* REDUCED MOTION */
-          /* ================================================ */
 
           @media (prefers-reduced-motion: reduce) {
             * {
@@ -2113,6 +2578,7 @@ function Projects() {
                         }
                       }}
                       type="button"
+                      disabled={projectCardStage !== 'idle'}
                       onClick={() =>
                         handleProjectClick(project)
                       }
@@ -2121,7 +2587,11 @@ function Projects() {
                           ? `Open ${project.title} live website in a new tab`
                           : `Preview ${project.title}`
                       }
-                      className={`group relative overflow-hidden border-2 p-5 text-left transition-colors duration-300 md:p-6 md:will-change-transform ${firstCardCoverClass} ${getProjectCardAnimationClass(
+                      className={`group relative overflow-hidden border-2 p-5 text-left transition-colors duration-300 md:p-6 ${
+                        projectCardStage !== 'idle'
+                          ? 'md:will-change-transform'
+                          : ''
+                      } ${firstCardCoverClass} ${getProjectCardAnimationClass(
                         index
                       )} ${
                         isDarkMode
@@ -2130,7 +2600,6 @@ function Projects() {
                       }`}
                       style={{
                         '--project-card-index': index,
-                        '--project-card-behind-y': '0px',
 
                         zIndex:
                           projectCardStage !== 'idle'
@@ -2160,9 +2629,9 @@ function Projects() {
                         }`}
                       />
 
-                      {/* IMAGE / VIDEO PREVIEW */}
+                      {/* OPTIMIZED IMAGE / VIDEO PREVIEW */}
 
-                      {renderProjectPreview(project)}
+                      {renderProjectPreview(project, index)}
 
                       {/* CARD CONTENT */}
 
@@ -2249,10 +2718,12 @@ function Projects() {
       {/* PROJECT PREVIEW MODAL */}
       {/* ====================================================== */}
 
-      <ProjectModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
 
       {/* ====================================================== */}
       {/* SOCIAL LINKS */}

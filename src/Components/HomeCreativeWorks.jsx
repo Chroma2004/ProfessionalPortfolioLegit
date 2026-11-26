@@ -1,57 +1,63 @@
-import { useMemo } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
 import { Link } from 'react-router-dom';
 
 // ============================================================
 // RECRUITMENT POSTER IMPORTS
 // ============================================================
 
-import recruitment1 from '../assets/RecruitmentPosters/1.png';
-import recruitment2 from '../assets/RecruitmentPosters/2.png';
-import recruitment3 from '../assets/RecruitmentPosters/3.png';
-import recruitment4 from '../assets/RecruitmentPosters/4.png';
-import recruitment5 from '../assets/RecruitmentPosters/5.png';
-import recruitment8 from '../assets/RecruitmentPosters/8.png';
+import recruitment1 from '../assets/RecruitmentPosters/1.webp';
+import recruitment2 from '../assets/RecruitmentPosters/2.webp';
+import recruitment3 from '../assets/RecruitmentPosters/3.webp';
+import recruitment4 from '../assets/RecruitmentPosters/4.webp';
+import recruitment5 from '../assets/RecruitmentPosters/5.webp';
+import recruitment8 from '../assets/RecruitmentPosters/8.webp';
 
 // ============================================================
 // CREATIVE POSTER IMPORTS
 // ============================================================
 
-import gpx1 from '../assets/GPX/GPX1.png';
-import gpx2 from '../assets/GPX/GPX2.png';
-import gpx3 from '../assets/GPX/GPX3.png';
-import gpx4 from '../assets/GPX/GPX4.png';
-import gpx5 from '../assets/GPX/GPX5.png';
-import gpx6 from '../assets/GPX/GPX6.png';
-import gpx7 from '../assets/GPX/GPX7.png';
-import gpx8 from '../assets/GPX/GPX8.png';
-import gpx9 from '../assets/GPX/GPX9.png';
-import gpx10 from '../assets/GPX/GPX10.png';
-import gpx11 from '../assets/GPX/GPX11.png';
-import gpx12 from '../assets/GPX/GPX12.png';
+import gpx1 from '../assets/GPX/GPX1.webp';
+import gpx2 from '../assets/GPX/GPX2.webp';
+import gpx3 from '../assets/GPX/GPX3.webp';
+import gpx4 from '../assets/GPX/GPX4.webp';
+import gpx5 from '../assets/GPX/GPX5.webp';
+import gpx6 from '../assets/GPX/GPX6.webp';
+import gpx7 from '../assets/GPX/GPX7.webp';
+import gpx8 from '../assets/GPX/GPX8.webp';
+import gpx9 from '../assets/GPX/GPX9.webp';
+import gpx10 from '../assets/GPX/GPX10.webp';
+import gpx11 from '../assets/GPX/GPX11.webp';
+import gpx12 from '../assets/GPX/GPX12.webp';
 
 // ============================================================
 // WEB SYSTEM IMPORTS
 // ============================================================
 
-import photo2yPreview from '../assets/System/Photo2y.png';
-import internPortfolioPreview from '../assets/System/InternPortfolio.png';
+import photo2yPreview from '../assets/System/Photo2y.webp';
+import internPortfolioPreview from '../assets/System/InternPortfolio.webp';
 
 // ============================================================
 // DIGITAL ILLUSTRATION IMPORTS
 // ============================================================
 
-import illust2 from '../assets/Illustrations/ILLUST2.png';
-import illust4 from '../assets/Illustrations/ILLUST4.png';
-import illust5Jpeg from '../assets/Illustrations/ILLUST5.jpeg';
-import illust6 from '../assets/Illustrations/ILLUST6.png';
+import illust2 from '../assets/Illustrations/ILLUST2.webp';
+import illust4 from '../assets/Illustrations/ILLUST4.webp';
+import illust5 from '../assets/Illustrations/ILLUST5.webp';
+import illust6 from '../assets/Illustrations/ILLUST6.webp';
 
 // ============================================================
 // PIXEL ART IMPORTS
 // ============================================================
 
-import px2 from '../assets/Illustrations/PX2.PNG';
-import px3 from '../assets/Illustrations/PX3.PNG';
-import px4 from '../assets/Illustrations/PX4.jpg';
+import px2 from '../assets/Illustrations/PX2.webp';
+import px3 from '../assets/Illustrations/PX3.webp';
+import px4 from '../assets/Illustrations/PX4.webp';
 
 import px1 from '../assets/Illustrations/COMS1.1.mp4';
 
@@ -94,6 +100,443 @@ const getButtonClass = (isDarkMode) =>
       ? 'border-white text-white hover:border-[#FF0000] hover:bg-[#FF0000]'
       : 'border-black text-black hover:border-[#FF0000] hover:bg-[#FF0000] hover:text-white'
   }`;
+
+// ============================================================
+// VIEWPORT LOADING HOOK
+//
+// Detects when an element approaches the viewport.
+// Once activated, its media source remains available.
+// ============================================================
+
+const useNearViewport = (rootMargin = '200px 0px') => {
+  const elementRef = useRef(null);
+
+  const [hasEntered, setHasEntered] = useState(false);
+
+  useEffect(() => {
+    const element = elementRef.current;
+
+    if (!element || hasEntered) return;
+
+    // Fallback for unsupported browsers.
+
+    if (!('IntersectionObserver' in window)) {
+      setHasEntered(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasEntered(true);
+          observer.disconnect();
+        }
+      },
+      {
+        root: null,
+        rootMargin,
+        threshold: 0,
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasEntered, rootMargin]);
+
+  return {
+    elementRef,
+    hasEntered,
+  };
+};
+
+// ============================================================
+// PROGRESSIVE IMAGE COMPONENT
+//
+// - Lazy loading
+// - Async decoding
+// - Loading placeholder
+// - Smooth fade-in
+// - Cached image support
+// - Error fallback
+// ============================================================
+
+const ProgressiveImage = ({
+  src,
+  alt,
+  className = '',
+  wrapperClassName = '',
+  aspectRatio = '4 / 5',
+  priority = false,
+}) => {
+  const imageRef = useRef(null);
+
+  const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    const image = imageRef.current;
+
+    if (!image) return;
+
+    // Handles images already available in browser cache.
+
+    if (image.complete && image.naturalWidth > 0) {
+      setLoaded(true);
+    }
+  }, [src]);
+
+  const handleImageLoad = () => {
+    setLoaded(true);
+    setFailed(false);
+  };
+
+  const handleImageError = () => {
+    setFailed(true);
+    setLoaded(false);
+  };
+
+  return (
+    <div
+      className={`relative w-full overflow-hidden ${wrapperClassName}`}
+      style={{
+        aspectRatio:
+          loaded && !failed ? undefined : aspectRatio,
+      }}
+    >
+      {/* LOADING PLACEHOLDER */}
+
+      {!loaded && !failed && (
+        <div
+          aria-hidden="true"
+          className="portfolio-media-placeholder pointer-events-none absolute inset-0"
+        />
+      )}
+
+      {/* IMAGE ERROR FALLBACK */}
+
+      {failed && (
+        <div
+          role="status"
+          className="absolute inset-0 flex items-center justify-center bg-black/5 px-4 text-center dark:bg-white/5"
+        >
+          <span className="text-[10px] font-bold uppercase tracking-widest opacity-50">
+            Image unavailable
+          </span>
+        </div>
+      )}
+
+      {/* ACTUAL IMAGE */}
+
+      {!failed && (
+        <img
+          ref={imageRef}
+          src={src}
+          alt={alt}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding="async"
+          draggable="false"
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+          className={`
+            block h-auto w-full
+            transition-[opacity,filter,transform]
+            duration-500 ease-out
+            motion-reduce:transition-none
+            ${
+              loaded
+                ? 'opacity-100 blur-0'
+                : 'opacity-0 blur-sm'
+            }
+            ${className}
+          `}
+        />
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// OPTIMIZED VIDEO COMPONENT
+//
+// - Source assigned only near viewport
+// - Autoplay only when visible
+// - Pauses outside viewport
+// - Pauses when browser tab is hidden
+// - Manual playback for event videos
+// - Loading placeholder
+// - Reduced motion support
+// ============================================================
+
+const OptimizedVideo = ({
+  src,
+  ariaLabel,
+  className = '',
+  wrapperClassName = '',
+  aspectRatio = '16 / 9',
+  autoPlay = false,
+  muted = false,
+  loop = false,
+  controls = false,
+  onPlay,
+}) => {
+  const videoRef = useRef(null);
+
+  const { elementRef, hasEntered } =
+    useNearViewport('150px 0px');
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const [isPageVisible, setIsPageVisible] = useState(
+    () =>
+      typeof document === 'undefined' ||
+      !document.hidden
+  );
+
+  const [prefersReducedMotion, setPrefersReducedMotion] =
+    useState(false);
+
+  // ==========================================================
+  // ACTUAL VIEWPORT VISIBILITY
+  // ==========================================================
+
+  useEffect(() => {
+    const element = elementRef.current;
+
+    if (!element) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(
+          entry.isIntersecting &&
+            entry.intersectionRatio >= 0.2
+        );
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: [0, 0.2],
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [elementRef]);
+
+  // ==========================================================
+  // BROWSER TAB VISIBILITY
+  // ==========================================================
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsPageVisible(!document.hidden);
+    };
+
+    document.addEventListener(
+      'visibilitychange',
+      handleVisibilityChange
+    );
+
+    return () => {
+      document.removeEventListener(
+        'visibilitychange',
+        handleVisibilityChange
+      );
+    };
+  }, []);
+
+  // ==========================================================
+  // REDUCED MOTION PREFERENCE
+  // ==========================================================
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    );
+
+    const updatePreference = () => {
+      setPrefersReducedMotion(mediaQuery.matches);
+    };
+
+    updatePreference();
+
+    mediaQuery.addEventListener(
+      'change',
+      updatePreference
+    );
+
+    return () => {
+      mediaQuery.removeEventListener(
+        'change',
+        updatePreference
+      );
+    };
+  }, []);
+
+  // ==========================================================
+  // AUTOMATIC PLAYBACK CONTROL
+  // ==========================================================
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video || !hasEntered) return;
+
+    const shouldPlay =
+      autoPlay &&
+      isVisible &&
+      isPageVisible &&
+      !prefersReducedMotion;
+
+    if (!isVisible || !isPageVisible) {
+      video.pause();
+      return;
+    }
+
+    if (shouldPlay) {
+      video.play().catch(() => {
+        // Autoplay may be blocked by browser policies.
+      });
+    } else if (autoPlay) {
+      video.pause();
+    }
+  }, [
+    hasEntered,
+    isVisible,
+    isPageVisible,
+    autoPlay,
+    prefersReducedMotion,
+    src,
+  ]);
+
+  // ==========================================================
+  // VIDEO CLEANUP
+  // ==========================================================
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    return () => {
+      if (video) {
+        video.pause();
+      }
+    };
+  }, []);
+
+  const handleVideoReady = () => {
+    setIsReady(true);
+    setHasError(false);
+  };
+
+  const handleVideoError = () => {
+    setHasError(true);
+    setIsReady(false);
+  };
+
+  return (
+    <div
+      ref={elementRef}
+      className={`relative w-full overflow-hidden ${wrapperClassName}`}
+      style={{
+        aspectRatio,
+      }}
+    >
+      {/* VIDEO LOADING PLACEHOLDER */}
+
+      {!isReady && !hasError && (
+        <div
+          aria-hidden="true"
+          className="portfolio-media-placeholder pointer-events-none absolute inset-0"
+        >
+          <div className="absolute inset-0 flex items-center justify-center">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="h-7 w-7 opacity-20 sm:h-10 sm:w-10"
+            >
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="14"
+                rx="2"
+              />
+
+              <path d="m10 9 5 3-5 3z" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* VIDEO ERROR FALLBACK */}
+
+      {hasError && (
+        <div
+          role="status"
+          className="absolute inset-0 flex items-center justify-center px-4 text-center"
+        >
+          <span className="text-[10px] font-bold uppercase tracking-widest opacity-50">
+            Video unavailable
+          </span>
+        </div>
+      )}
+
+      {/* VIDEO ONLY MOUNTS NEAR VIEWPORT */}
+
+      {hasEntered && !hasError && (
+        <video
+          ref={videoRef}
+          src={src}
+          muted={muted}
+          loop={loop}
+          controls={controls}
+          playsInline
+          preload="metadata"
+          controlsList="nodownload noremoteplayback"
+          disablePictureInPicture
+          disableRemotePlayback
+          onLoadedData={handleVideoReady}
+          onCanPlay={handleVideoReady}
+          onError={handleVideoError}
+          onPlay={onPlay}
+          onContextMenu={(event) =>
+            event.preventDefault()
+          }
+          aria-label={ariaLabel}
+          className={`
+            absolute inset-0
+            block h-full w-full
+            object-contain
+            transition-[opacity,transform]
+            duration-500 ease-out
+            motion-reduce:transition-none
+            ${
+              isReady || controls
+                ? 'opacity-100'
+                : 'opacity-0'
+            }
+            ${className}
+          `}
+        />
+      )}
+    </div>
+  );
+};
 
 // ============================================================
 // CORNER DECORATIONS
@@ -217,14 +660,6 @@ const ProjectMarquee = ({ title, reverse = false }) => {
 
 // ============================================================
 // STANDARD IMAGE / VIDEO GALLERY
-//
-// MOBILE: 2 COLUMNS
-// TABLET: 2 COLUMNS
-//
-// DESKTOP:
-// RECRUITMENT POSTERS: 3 COLUMNS
-// CREATIVE POSTERS: 4 COLUMNS
-// ILLUSTRATIONS: 2 COLUMNS
 // ============================================================
 
 const ImageGallery = ({
@@ -266,29 +701,27 @@ const ImageGallery = ({
             className="group/image relative flex min-w-0 items-center justify-center overflow-hidden bg-transparent"
           >
             {isVideo ? (
-              <video
+              <OptimizedVideo
+                key={media}
                 src={media}
-                className="block h-auto w-full object-contain shadow-lg transition-transform duration-500 ease-out group-hover/image:scale-[1.025]"
+                autoPlay
                 muted
                 loop
-                autoPlay
-                playsInline
-                preload="metadata"
-                disablePictureInPicture
-                disableRemotePlayback
-                onContextMenu={(event) =>
-                  event.preventDefault()
-                }
-                aria-label={`${title} animated preview ${index + 1}`}
+                aspectRatio="16 / 9"
+                ariaLabel={`${title} animated preview ${index + 1}`}
+                className="shadow-lg group-hover/image:scale-[1.025]"
               />
             ) : (
-              <img
+              <ProgressiveImage
+                key={media}
                 src={media}
                 alt={`${title} preview ${index + 1}`}
-                className="block h-auto w-full object-contain shadow-lg transition-transform duration-500 ease-out group-hover/image:scale-[1.025]"
-                loading="lazy"
-                decoding="async"
-                draggable="false"
+                aspectRatio={
+                  isIllustration
+                    ? '4 / 3'
+                    : '4 / 5'
+                }
+                className="object-contain shadow-lg group-hover/image:scale-[1.025]"
               />
             )}
           </ProjectLink>
@@ -380,7 +813,7 @@ const WebSystemGallery = ({ work, isDarkMode }) => {
             </span>
           </ProjectLink>
 
-          {/* WEBSITE PREVIEW + LIVE LINK */}
+          {/* WEBSITE PREVIEW */}
 
           <div className="group/preview relative w-full overflow-hidden bg-transparent">
             <ProjectLink
@@ -389,13 +822,12 @@ const WebSystemGallery = ({ work, isDarkMode }) => {
               ariaLabel={`View ${system.title} project details`}
               className="group/image block w-full overflow-hidden bg-transparent"
             >
-              <img
+              <ProgressiveImage
+                key={system.image}
                 src={system.image}
                 alt={`${system.title} website preview`}
-                className="block h-auto w-full object-contain shadow-lg transition-transform duration-500 ease-out group-hover/preview:scale-[1.01]"
-                loading="lazy"
-                decoding="async"
-                draggable="false"
+                aspectRatio="16 / 9"
+                className="object-contain shadow-lg group-hover/preview:scale-[1.01]"
               />
             </ProjectLink>
 
@@ -432,8 +864,6 @@ const WebSystemGallery = ({ work, isDarkMode }) => {
                   lg:bottom-7 lg:right-7
                 "
               >
-                {/* LIVE INDICATOR */}
-
                 <span className="relative flex h-2 w-2 shrink-0">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF0000] opacity-75 group-hover/live:bg-white motion-reduce:animate-none" />
 
@@ -441,8 +871,6 @@ const WebSystemGallery = ({ work, isDarkMode }) => {
                 </span>
 
                 <span>Live Link</span>
-
-                {/* EXTERNAL LINK ICON */}
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -462,7 +890,7 @@ const WebSystemGallery = ({ work, isDarkMode }) => {
             )}
           </div>
 
-          {/* VIEW ALL PROJECTS AFTER INTERN PORTFOLIO */}
+          {/* VIEW ALL PROJECTS */}
 
           {system.projectTitle === 'InternPortfolio' && (
             <div className="mt-8 flex justify-center sm:mt-10">
@@ -487,8 +915,8 @@ const WebSystemGallery = ({ work, isDarkMode }) => {
 // ============================================================
 // THEME-BASED VIDEO SHOWCASE
 //
-// AUTOMATICALLY SWITCHES BETWEEN LIGHT AND DARK VIDEO
-// NO NATIVE VIDEO CONTROLS
+// Only loads the selected theme's video.
+// Automatically plays when visible.
 // ============================================================
 
 const ThemeVideoShowcase = ({
@@ -509,28 +937,17 @@ const ThemeVideoShowcase = ({
       ariaLabel={`View ${title}`}
       className="group/video relative block w-full overflow-hidden bg-transparent"
     >
-      <video
+      <OptimizedVideo
         key={selectedVideo}
         src={selectedVideo}
         autoPlay
         muted
         loop
-        playsInline
-        preload="metadata"
-        disablePictureInPicture
-        disableRemotePlayback
-        onContextMenu={(event) =>
-          event.preventDefault()
-        }
-        className="
-          block h-auto w-full
-          object-contain
-          transition-transform duration-500 ease-out
-          group-hover/video:scale-[1.01]
-        "
-        aria-label={`${title} ${
+        aspectRatio="16 / 9"
+        ariaLabel={`${title} ${
           isDarkMode ? 'dark mode' : 'light mode'
         } preview`}
+        className="group-hover/video:scale-[1.01]"
       />
     </ProjectLink>
   );
@@ -539,8 +956,9 @@ const ThemeVideoShowcase = ({
 // ============================================================
 // EVENT VIDEO CARD
 //
-// CLEAN VIDEO PLAYER
-// HIDDEN DOWNLOAD OPTION
+// Loads near viewport.
+// Requires manual playback.
+// Automatically pauses outside viewport.
 // ============================================================
 
 const EventVideoCard = ({
@@ -548,9 +966,24 @@ const EventVideoCard = ({
   index,
   isDarkMode,
 }) => {
+  const handleEventVideoPlay = (event) => {
+    const currentVideo = event.currentTarget;
+
+    const gallery = currentVideo.closest(
+      '[data-event-video-gallery]'
+    );
+
+    gallery
+      ?.querySelectorAll('video')
+      .forEach((otherVideo) => {
+        if (otherVideo !== currentVideo) {
+          otherVideo.pause();
+        }
+      });
+  };
+
   return (
     <article className="group/card w-full min-w-0">
-
       {/* VIDEO PLAYER */}
 
       <div
@@ -565,42 +998,14 @@ const EventVideoCard = ({
           }
         `}
       >
-        <video
+        <OptimizedVideo
+          key={video.src}
           src={video.src}
           controls
-          controlsList="nodownload noremoteplayback"
-          disablePictureInPicture
-          disableRemotePlayback
-          playsInline
-          preload="metadata"
-          onContextMenu={(event) =>
-            event.preventDefault()
-          }
-          className="
-            event-video-player
-            block w-full
-            aspect-video
-            object-contain
-          "
-          aria-label={video.title}
-          onPlay={(event) => {
-            const currentVideo = event.currentTarget;
-
-            // Pause other event videos when a new
-            // event video starts playing.
-
-            const gallery = currentVideo.closest(
-              '[data-event-video-gallery]'
-            );
-
-            gallery
-              ?.querySelectorAll('video')
-              .forEach((otherVideo) => {
-                if (otherVideo !== currentVideo) {
-                  otherVideo.pause();
-                }
-              });
-          }}
+          aspectRatio="16 / 9"
+          ariaLabel={video.title}
+          className="event-video-player"
+          onPlay={handleEventVideoPlay}
         />
       </div>
 
@@ -618,19 +1023,13 @@ const EventVideoCard = ({
           }
         `}
       >
-        {/* VIDEO NUMBER */}
-
         <span className="shrink-0 text-[10px] font-black text-[#FF0000] sm:text-xs">
           {String(index + 1).padStart(2, '0')}
         </span>
 
-        {/* VIDEO NAME */}
-
         <h5 className="min-w-0 flex-1 text-xs font-black uppercase leading-tight tracking-[-0.02em] sm:text-sm md:text-base">
           {video.title}
         </h5>
-
-        {/* VIDEO ICON */}
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -660,10 +1059,6 @@ const EventVideoCard = ({
 
 // ============================================================
 // EVENT VIDEO GALLERY
-//
-// MOBILE: 1 COLUMN
-// TABLET: 2 COLUMNS
-// DESKTOP: 3 COLUMNS
 // ============================================================
 
 const EventVideoGallery = ({
@@ -709,13 +1104,11 @@ const VideoEditShowcase = ({
 }) => {
   return (
     <div className="relative flex w-full flex-col gap-12 bg-transparent p-4 sm:gap-14 sm:p-6 lg:gap-16 lg:p-8">
-
       {work.videoGroups.map((group, index) => (
         <div
           key={group.title}
           className="w-full bg-transparent"
         >
-
           {/* SUBCATEGORY TITLE */}
 
           <ProjectLink
@@ -759,7 +1152,6 @@ const VideoEditShowcase = ({
               isDarkMode={isDarkMode}
             />
           )}
-
         </div>
       ))}
     </div>
@@ -822,7 +1214,6 @@ const ProjectPreviewGrid = ({ work, isDarkMode }) => {
 
   return (
     <div className="relative w-full bg-transparent">
-
       {/* STANDARD IMAGE GALLERY */}
 
       {hasImages && (
@@ -969,7 +1360,7 @@ function HomeCreativeWorks({ isDarkMode = false }) {
             images: [
               illust2,
               illust4,
-              illust5Jpeg,
+              illust5,
               illust6,
             ],
           },
@@ -1076,13 +1467,12 @@ function HomeCreativeWorks({ isDarkMode = false }) {
       aria-labelledby="creative-works-heading"
       className={`relative z-10 mx-auto mt-12 w-[90%] border-2 border-dotted px-4 pb-12 pt-9 transition-colors duration-500 sm:mt-16 sm:w-[92%] sm:px-8 sm:pb-16 sm:pt-12 md:w-[94%] md:px-12 lg:px-16 ${
         isDarkMode
-          ? 'border-white text-white'
-          : 'border-black text-black'
+          ? 'portfolio-dark border-white text-white'
+          : 'portfolio-light border-black text-black'
       }`}
     >
-
       {/* ====================================================== */}
-      {/* ANIMATION AND VIDEO PLAYER STYLES */}
+      {/* ANIMATION AND MEDIA STYLES */}
       {/* ====================================================== */}
 
       <style>
@@ -1122,7 +1512,49 @@ function HomeCreativeWorks({ isDarkMode = false }) {
           }
 
           /* ================================================ */
-          /* HIDE VIDEO THREE-DOT OPTIONS MENU */
+          /* MEDIA LOADING PLACEHOLDERS */
+          /* ================================================ */
+
+          .portfolio-media-placeholder {
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.045);
+          }
+
+          .portfolio-dark .portfolio-media-placeholder {
+            background: rgba(255, 255, 255, 0.045);
+          }
+
+          .portfolio-media-placeholder::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 255, 255, 0.12),
+              transparent
+            );
+            animation: portfolioMediaShimmer 1.8s ease-in-out infinite;
+          }
+
+          .portfolio-dark .portfolio-media-placeholder::after {
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 255, 255, 0.065),
+              transparent
+            );
+          }
+
+          @keyframes portfolioMediaShimmer {
+            100% {
+              transform: translateX(100%);
+            }
+          }
+
+          /* ================================================ */
+          /* HIDE VIDEO OPTIONS MENU */
           /* ================================================ */
 
           .event-video-player::-webkit-media-controls-overflow-button {
@@ -1154,6 +1586,11 @@ function HomeCreativeWorks({ isDarkMode = false }) {
             .project-marquee-reverse {
               animation: none;
               transform: none;
+            }
+
+            .portfolio-media-placeholder::after {
+              animation: none;
+              display: none;
             }
           }
         `}
@@ -1198,7 +1635,6 @@ function HomeCreativeWorks({ isDarkMode = false }) {
             key={work.number}
             className="group w-full"
           >
-
             {/* ANIMATED RED MARQUEE */}
 
             <ProjectMarquee
